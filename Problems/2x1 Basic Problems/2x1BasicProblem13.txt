@@ -43,5 +43,5 @@ C
 		overlaps:Z
 6
 	Z
-		shape:circle
-		angle:0
+		shape:triangle
+		angle:180
