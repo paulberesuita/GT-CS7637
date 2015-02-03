@@ -62,8 +62,7 @@ public class Agent {
     	
     	String solution = "1";
     	
-    	//Testing Git
-        //Testing Git 2
+    	//I am in the master branch
     	//Check which algorithm to use
     	if(problem.getProblemType().toString().equals("2x1")) {
     		
