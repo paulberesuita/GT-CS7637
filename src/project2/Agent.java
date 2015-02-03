@@ -1,5 +1,8 @@
 package project2;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 /**
  * Your Agent for solving Raven's Progressive Matrices. You MUST modify this
  * file.
@@ -51,6 +54,49 @@ public class Agent {
      * @return your Agent's answer to this problem
      */
     public String Solve(RavensProblem problem) {
-        return "1";
+
+
+        String solution = "1";
+
+        //I am in the Phase 1 branch
+        //Check which algorithm to use
+        if(problem.getProblemType().toString().equals("2x1") || problem.getProblemType().toString().equals("2x2")) {
+
+            //Get All figures
+            HashMap<String, RavensFigure> figures = problem.getFigures();
+
+            //Populate frame A figures to array list
+            ArrayList<RavensObject> frameAObjects = figures.get("A").getObjects();
+            FrameA frameA = new FrameA(frameAObjects);
+
+            //Populate frame A figures to array list
+            ArrayList<RavensObject> frameBObjects = figures.get("B").getObjects();
+            FrameB frameB = new FrameB(frameBObjects);
+
+            //Populate frame A figures to array list
+            ArrayList<RavensObject> frameCObjects = figures.get("C").getObjects();
+            FrameC frameC = new FrameC(frameCObjects);
+
+            //Build semantic network for frames A and B
+            SemanticNetworkAB snAB = new SemanticNetworkAB(frameA, frameB);
+
+            snAB.generateTransformations();
+
+            //Generate frame solution
+            FrameGenerated generatedSolution = new FrameGenerated(snAB, frameC);
+            generatedSolution.createFrame();
+
+            //Check against all possible solutions and return
+            String finalSolution = generatedSolution.retrieveSolution(figures);
+
+            solution = finalSolution;
+
+            System.out.println("Finished Problem");
+
+        }
+
+        return solution;
+
+
     }
 }
