@@ -63,6 +63,7 @@ public class Agent {
     	String solution = "1";
     	
     	//Testing Git
+        //Testing Git 2
     	//Check which algorithm to use
     	if(problem.getProblemType().toString().equals("2x1")) {
     		
@@ -92,7 +93,7 @@ public class Agent {
             
             //Check against all possible solutions and return
             String finalSolution = generatedSolution.retrieveSolution(figures);
-                        
+
             solution = finalSolution;
             
             System.out.println("Finished Problem");
