@@ -12,10 +12,12 @@ public class FrameA {
 	}
 
 	public ArrayList<RavensObject> getObjects() {
-		return objectsA;
+
+        return objectsA;
 	}
 
 	public void setObjects(ArrayList<RavensObject> objects) {
-		this.objectsA = objects;
+
+        this.objectsA = objects;
 	}
 }

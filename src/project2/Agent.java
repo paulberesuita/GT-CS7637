@@ -56,26 +56,25 @@ public class Agent {
     public String Solve(RavensProblem problem) {
 
 
+        //Get All figures
+        HashMap<String, RavensFigure> figures = problem.getFigures();
+
+        //Populate frame A figures to array list
+        ArrayList<RavensObject> frameAObjects = figures.get("A").getObjects();
+        FrameA frameA = new FrameA(frameAObjects);
+
+        //Populate frame A figures to array list
+        ArrayList<RavensObject> frameBObjects = figures.get("B").getObjects();
+        FrameB frameB = new FrameB(frameBObjects);
+
+        //Populate frame A figures to array list
+        ArrayList<RavensObject> frameCObjects = figures.get("C").getObjects();
+        FrameC frameC = new FrameC(frameCObjects);
+
         String solution = "1";
 
-        //I am testing commit again
         //Check which algorithm to use
-        if(problem.getProblemType().toString().equals("2x1") || problem.getProblemType().toString().equals("2x2")) {
-
-            //Get All figures
-            HashMap<String, RavensFigure> figures = problem.getFigures();
-
-            //Populate frame A figures to array list
-            ArrayList<RavensObject> frameAObjects = figures.get("A").getObjects();
-            FrameA frameA = new FrameA(frameAObjects);
-
-            //Populate frame A figures to array list
-            ArrayList<RavensObject> frameBObjects = figures.get("B").getObjects();
-            FrameB frameB = new FrameB(frameBObjects);
-
-            //Populate frame A figures to array list
-            ArrayList<RavensObject> frameCObjects = figures.get("C").getObjects();
-            FrameC frameC = new FrameC(frameCObjects);
+        if(problem.getProblemType().toString().equals("2x1")) {
 
             //Build semantic network for frames A and B
             SemanticNetworkAB snAB = new SemanticNetworkAB(frameA, frameB);
@@ -92,6 +91,12 @@ public class Agent {
             solution = finalSolution;
 
             System.out.println("Finished Problem");
+
+        } else if(problem.getProblemType().toString().equals("2x2")) {
+
+            SemanticNetworkABC snABC = new SemanticNetworkABC(frameA, frameB, frameC);
+
+            snABC.generateTransformations();
 
         }
 
