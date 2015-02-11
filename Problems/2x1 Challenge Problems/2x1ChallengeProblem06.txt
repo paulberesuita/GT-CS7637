@@ -1,4 +1,4 @@
-2x1 Basic Problem 13
+2x1 Challenge Problem 06
 2x1
 2
 A
@@ -28,20 +28,20 @@ C
 4
 	Z
 		shape:triangle
-		angle:90
-	Y
-		shape:triangle
-		angle:270
-		overlaps:Z
-5
-	Z
-		shape:triangle
 		angle:0
 	Y
 		shape:triangle
 		angle:180
 		overlaps:Z
+5
+	Z
+		shape:triangle
+		angle:90
+	Y
+		shape:triangle
+		angle:270
+		overlaps:Z
 6
 	Z
-		shape:circle
-		angle:0
+		shape:triangle
+		angle:180
