@@ -58,7 +58,7 @@ public class Agent {
 
         String solution = "1";
 
-        //I am testing commit
+        //I am testing commit again
         //Check which algorithm to use
         if(problem.getProblemType().toString().equals("2x1") || problem.getProblemType().toString().equals("2x2")) {
 
