@@ -96,7 +96,9 @@ public class Agent {
 
             SemanticNetworkABC snABC = new SemanticNetworkABC(frameA, frameB, frameC);
 
-            snABC.generateTransformations();
+            if(problem.getName().equals("2x2 Basic Problem 10")) {
+                snABC.generateTransformations();
+            }
 
         }
 

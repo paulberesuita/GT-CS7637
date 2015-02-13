@@ -44,86 +44,79 @@ public class SemanticNetworkABC {
             indexAndScoreArrayAC.add(frameCObjectCorrespondence);
         }
 
+        ArrayList<CorrespondenceIndexAndScore> tempIndexAndScoreArrayAB = new ArrayList<CorrespondenceIndexAndScore>(indexAndScoreArrayAB);
 
-        //Create Transformations (A to B)
-        for(int i=0; i<indexAndScoreArrayAB.size(); i++) {
-
-            boolean toAdd = false;
+        //Remove duplicate correspondences
+        for(int i=0; i<tempIndexAndScoreArrayAB.size(); i++) {
 
             //Loop again to make sure there not duplicate correspondence; if there are it indicates there is an extra object so remove was performed
-            for(int j=0; j<indexAndScoreArrayAB.size(); j++) {
+            for(int j=0; j<tempIndexAndScoreArrayAB.size(); j++) {
 
-                if(indexAndScoreArrayAB.get(i).getCorrespondingObjectIndex() == indexAndScoreArrayAB.get(j).getCorrespondingObjectIndex()) {
+                if(tempIndexAndScoreArrayAB.get(i).getCorrespondingObjectIndex() == tempIndexAndScoreArrayAB.get(j).getCorrespondingObjectIndex()) {
 
-                    if(indexAndScoreArrayAB.get(i).getScore() >= indexAndScoreArrayAB.get(j).getScore()) {
+                    if(tempIndexAndScoreArrayAB.get(i).getScore() >= tempIndexAndScoreArrayAB.get(j).getScore()) {
 
-                        toAdd = true;
 
                     } else {
 
                         //Remove the extra frame A object
-                        ABRemovals.add(frameA.getObjects().get(indexAndScoreArrayAB.get(i).getFrameAObjectIndex()));
-                        toAdd = false;
+                        ABRemovals.add(frameA.getObjects().get(tempIndexAndScoreArrayAB.get(i).getFrameAObjectIndex()));
 
                         //remove unnecessary object
                         indexAndScoreArrayAB.remove(i);
-
                     }
 
-                } else {
-                    toAdd = true;
-                }
-
-            }
-
-            if(toAdd) {
-                //Create Transformation between nodes; assuming correspondence
-                Change transformation = new Change(frameA.getObjects().get(indexAndScoreArrayAB.get(i).getFrameAObjectIndex()), frameB.getObjects().get(indexAndScoreArrayAB.get(i).getCorrespondingObjectIndex()), frameA, frameB, frameC);
-                boolean differenceExist = transformation.checkDifferencesBetweenNodes();
-                if(differenceExist) {
-                    ABTransformations.add(transformation);
                 }
             }
+
+        }
+
+        //Create Transformations (A to B)
+        for(int i=0; i<indexAndScoreArrayAB.size(); i++) {
+
+            //Create Transformation between nodes; assuming correspondence
+            Change transformation = new Change(frameA.getObjects().get(indexAndScoreArrayAB.get(i).getFrameAObjectIndex()), frameB.getObjects().get(indexAndScoreArrayAB.get(i).getCorrespondingObjectIndex()), frameA, frameB, frameC);
+            boolean differenceExist = transformation.checkDifferencesBetweenNodes();
+            if(differenceExist) {
+                ABTransformations.add(transformation);
+            }
+        }
+
+        ArrayList<CorrespondenceIndexAndScore> tempIndexAndScoreArrayAC = new ArrayList<CorrespondenceIndexAndScore>(indexAndScoreArrayAC);
+
+        //Remove duplicate correspondences
+        for(int i=0; i<tempIndexAndScoreArrayAC.size(); i++) {
+
+            //Loop again to make sure there not duplicate correspondence; if there are it indicates there is an extra object so remove was performed
+            for(int j=0; j<tempIndexAndScoreArrayAC.size(); j++) {
+
+                if(tempIndexAndScoreArrayAC.get(i).getCorrespondingObjectIndex() == tempIndexAndScoreArrayAC.get(j).getCorrespondingObjectIndex()) {
+
+                    if(tempIndexAndScoreArrayAC.get(i).getScore() >= tempIndexAndScoreArrayAC.get(j).getScore()) {
+
+
+                    } else {
+
+                        //Remove the extra frame A object
+                        ACRemovals.add(frameA.getObjects().get(tempIndexAndScoreArrayAC.get(i).getFrameAObjectIndex()));
+
+                        //remove unnecessary object
+                        indexAndScoreArrayAC.remove(i);
+                    }
+
+                }
+            }
+
         }
 
         //Create Transformations (A to C)
         for(int i=0; i<indexAndScoreArrayAC.size(); i++) {
 
-            boolean toAdd = false;
-
-            //Loop again to make sure there not duplicate correspondence; if there are it indicates there is an extra object so remove was performed
-            for(int j=0; j<indexAndScoreArrayAC.size(); j++) {
-
-                if(indexAndScoreArrayAC.get(i).getCorrespondingObjectIndex() == indexAndScoreArrayAC.get(j).getCorrespondingObjectIndex()) {
-
-                    if(indexAndScoreArrayAC.get(i).getScore() >= indexAndScoreArrayAC.get(j).getScore()) {
-
-                        toAdd = true;
-
-                    } else {
-
-                        //Remove the extra frame A object
-                        ACRemovals.add(frameA.getObjects().get(indexAndScoreArrayAC.get(i).getFrameAObjectIndex()));
-                        toAdd = false;
-
-                        //remove unnecessary object
-                        indexAndScoreArrayAC.remove(i);
-
-                    }
-
-                } else {
-                    toAdd = true;
-                }
-
-            }
-
-            if(toAdd) {
-                //Create Transformation between nodes; assuming correspondence
-                Change transformation = new Change(frameA.getObjects().get(indexAndScoreArrayAC.get(i).getFrameAObjectIndex()), frameC.getObjects().get(indexAndScoreArrayAC.get(i).getCorrespondingObjectIndex()), frameA, frameB, frameC);
-                boolean differenceExist = transformation.checkDifferencesBetweenNodes();
-                if(differenceExist) {
-                    ACTransformations.add(transformation);
-                }
+            //Create Transformation between nodes; assuming correspondence
+            Change transformation = new Change(frameA.getObjects().get(indexAndScoreArrayAC.get(i).getFrameAObjectIndex()), frameC.getObjects().get(indexAndScoreArrayAC.get(i).getCorrespondingObjectIndex()), frameA, frameB, frameC);
+            boolean differenceExist = transformation.checkDifferencesBetweenNodes();
+            if(differenceExist) {
+                ACTransformations.add(transformation);
             }
         }
 
