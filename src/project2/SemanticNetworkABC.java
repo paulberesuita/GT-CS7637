@@ -8,120 +8,127 @@ public class SemanticNetworkABC {
     FrameB frameB = null;
     FrameC frameC = null;
 
-    ArrayList<Transformation> allABTransformations = null;
-
     ArrayList<Change> ABTransformations = null;
+    ArrayList<RavensObject> ABRemovals = null;
+
     ArrayList<Change> ACTransformations = null;
+    ArrayList<RavensObject> ACRemovals = null;
 
     public SemanticNetworkABC(FrameA frameA, FrameB frameB, FrameC frameC) {
 
         this.frameA = frameA;
         this.frameB = frameB;
         this.frameC = frameC;
-        allABTransformations = new ArrayList<Transformation>();
+        ABTransformations = new ArrayList<Change>();
+        ABRemovals = new ArrayList<RavensObject>();
+        ACTransformations = new ArrayList<Change>();
+        ACRemovals = new ArrayList<RavensObject>();
 
     }
 
     public void generateTransformations() {
 
-        //Checking transformations for FrameA to FrameB
+        ArrayList<CorrespondenceIndexAndScore> indexAndScoreArrayAB = new ArrayList<CorrespondenceIndexAndScore>();
+        ArrayList<CorrespondenceIndexAndScore> indexAndScoreArrayAC = new ArrayList<CorrespondenceIndexAndScore>();
+
         for(int i=0; i<frameA.getObjects().size(); i++) {
 
-            //Determine if these two objects correspond
-            int frameBObjectCorrespondence = findBestCorrespondence(frameA.getObjects().get(i), frameB.getObjects());
+            //Add corresponding object for frame A object to frame B object
+            CorrespondenceIndexAndScore frameBObjectCorrespondence = Utility.bestCorrespondenceIndex(frameA.getObjects().get(i), frameB.getObjects());
+            frameBObjectCorrespondence.setFrameAObjectIndex(i);
+            indexAndScoreArrayAB.add(frameBObjectCorrespondence);
 
-            System.out.println("Correspondence in Frame B: " + frameBObjectCorrespondence);
-            System.out.println("Frame A object: " 			 + frameA.getObjects().get(i).getName());
-            System.out.println("Frame B object: " 			 + frameB.getObjects().get(frameBObjectCorrespondence).getName());
-
-            //Create Transformation between nodes; assuming correspondence
-            Transformation transformation = new Transformation(frameA.getObjects().get(i), frameB.getObjects().get(frameBObjectCorrespondence), frameA, frameB);
-            transformation.checkDifferencesBetweenNodes();
-            allABTransformations.add(transformation);
-
-
+            //Add corresponding object for frame A object to frame C object
+            CorrespondenceIndexAndScore frameCObjectCorrespondence = Utility.bestCorrespondenceIndex(frameA.getObjects().get(i), frameC.getObjects());
+            frameCObjectCorrespondence.setFrameAObjectIndex(i);
+            indexAndScoreArrayAC.add(frameCObjectCorrespondence);
         }
 
-        //Checking transformations for FrameA to FrameC
-        for(int i=0; i<frameA.getObjects().size(); i++) {
 
-            //Determine if these two objects correspond
-            int frameCObjectCorrespondence = findBestCorrespondence(frameA.getObjects().get(i), frameC.getObjects());
+        //Create Transformations (A to B)
+        for(int i=0; i<indexAndScoreArrayAB.size(); i++) {
 
-            System.out.println("Correspondence in Frame B: " + frameCObjectCorrespondence);
-            System.out.println("Frame A object: " 			 + frameC.getObjects().get(i).getName());
-            System.out.println("Frame B object: " 			 + frameC.getObjects().get(frameCObjectCorrespondence).getName());
+            boolean toAdd = false;
 
-            //Create Transformation between nodes; assuming correspondence
-            Transformation transformation = new Transformation(frameA.getObjects().get(i), frameB.getObjects().get(frameCObjectCorrespondence), frameA, frameB);
-            transformation.checkDifferencesBetweenNodes();
-            allABTransformations.add(transformation);
+            //Loop again to make sure there not duplicate correspondence; if there are it indicates there is an extra object so remove was performed
+            for(int j=0; j<indexAndScoreArrayAB.size(); j++) {
 
+                if(indexAndScoreArrayAB.get(i).getCorrespondingObjectIndex() == indexAndScoreArrayAB.get(j).getCorrespondingObjectIndex()) {
 
-        }
-    }
+                    if(indexAndScoreArrayAB.get(i).getScore() >= indexAndScoreArrayAB.get(j).getScore()) {
 
-    public int findBestCorrespondence(RavensObject objectA, ArrayList<RavensObject> allObjectsB) {
-
-        int count = 0;
-        int previousCount = 0;
-        int solutionIndex = 0;
-
-        for(int i=0; i<allObjectsB.size(); i++) {
-
-            count = 0;
-
-            for(int m=0; m<allObjectsB.get(i).getAttributes().size(); m++) {
-
-                for(int n=0; n<objectA.getAttributes().size(); n++) {
-
-                    System.out.println("Object A Attribute Name: " + objectA.getAttributes().get(n).getName());
-                    System.out.println("Object A Attribute Value: " + objectA.getAttributes().get(n).getValue());
-                    System.out.println("Object B Attribute Name: " + allObjectsB.get(i).getAttributes().get(m).getName());
-                    System.out.println("Object B Attribute Value: " + allObjectsB.get(i).getAttributes().get(m).getValue());
-
-                    if(objectA.getAttributes().get(n).getName().equals(allObjectsB.get(i).getAttributes().get(m).getName()) &&
-                            objectA.getAttributes().get(n).getValue().equals(allObjectsB.get(i).getAttributes().get(m).getValue()) &&
-                            (allObjectsB.get(i).getAttributes().get(m).getName().equals("shape") ||
-                                    allObjectsB.get(i).getAttributes().get(m).getName().equals("size")  ||
-                                    allObjectsB.get(i).getAttributes().get(m).getName().equals("fill")  ||
-                                    allObjectsB.get(i).getAttributes().get(m).getName().equals("angle") ||
-                                    allObjectsB.get(i).getAttributes().get(m).getName().equals("above")   )) {
-
-                        count = count + 5;
-
-                    } else if(objectA.getAttributes().get(n).getName().equals(allObjectsB.get(i).getAttributes().get(m).getName()) &&
-                            !objectA.getAttributes().get(n).getValue().equals(allObjectsB.get(i).getAttributes().get(m).getValue()) &&
-                            allObjectsB.get(i).getAttributes().get(m).getName().equals("angle")) {
-
-                        count = count + 3;
-
-                    } else if(objectA.getAttributes().get(n).getName().equals(allObjectsB.get(i).getAttributes().get(m).getName()) &&
-                            !objectA.getAttributes().get(n).getValue().equals(allObjectsB.get(i).getAttributes().get(m).getValue()) &&
-                            allObjectsB.get(i).getAttributes().get(m).getName().equals("size")) {
-
-                        count = count + 2;
-
-                    } else if(objectA.getAttributes().get(n).getName().equals(allObjectsB.get(i).getAttributes().get(m).getName()) &&
-                            !objectA.getAttributes().get(n).getValue().equals(allObjectsB.get(i).getAttributes().get(m).getValue()) &&
-                            allObjectsB.get(i).getAttributes().get(m).getName().equals("fill")) {
-
-                        count = count + 1;
+                        toAdd = true;
 
                     } else {
-                        count = count + 0;
+
+                        //Remove the extra frame A object
+                        ABRemovals.add(frameA.getObjects().get(indexAndScoreArrayAB.get(i).getFrameAObjectIndex()));
+                        toAdd = false;
+
+                        //remove unnecessary object
+                        indexAndScoreArrayAB.remove(i);
+
                     }
 
+                } else {
+                    toAdd = true;
                 }
+
             }
 
-            if(count > previousCount) {
-                solutionIndex = i;
-                previousCount = count;
+            if(toAdd) {
+                //Create Transformation between nodes; assuming correspondence
+                Change transformation = new Change(frameA.getObjects().get(indexAndScoreArrayAB.get(i).getFrameAObjectIndex()), frameB.getObjects().get(indexAndScoreArrayAB.get(i).getCorrespondingObjectIndex()), frameA, frameB, frameC);
+                boolean differenceExist = transformation.checkDifferencesBetweenNodes();
+                if(differenceExist) {
+                    ABTransformations.add(transformation);
+                }
             }
         }
 
-        return solutionIndex;
+        //Create Transformations (A to C)
+        for(int i=0; i<indexAndScoreArrayAC.size(); i++) {
+
+            boolean toAdd = false;
+
+            //Loop again to make sure there not duplicate correspondence; if there are it indicates there is an extra object so remove was performed
+            for(int j=0; j<indexAndScoreArrayAC.size(); j++) {
+
+                if(indexAndScoreArrayAC.get(i).getCorrespondingObjectIndex() == indexAndScoreArrayAC.get(j).getCorrespondingObjectIndex()) {
+
+                    if(indexAndScoreArrayAC.get(i).getScore() >= indexAndScoreArrayAC.get(j).getScore()) {
+
+                        toAdd = true;
+
+                    } else {
+
+                        //Remove the extra frame A object
+                        ACRemovals.add(frameA.getObjects().get(indexAndScoreArrayAC.get(i).getFrameAObjectIndex()));
+                        toAdd = false;
+
+                        //remove unnecessary object
+                        indexAndScoreArrayAC.remove(i);
+
+                    }
+
+                } else {
+                    toAdd = true;
+                }
+
+            }
+
+            if(toAdd) {
+                //Create Transformation between nodes; assuming correspondence
+                Change transformation = new Change(frameA.getObjects().get(indexAndScoreArrayAC.get(i).getFrameAObjectIndex()), frameC.getObjects().get(indexAndScoreArrayAC.get(i).getCorrespondingObjectIndex()), frameA, frameB, frameC);
+                boolean differenceExist = transformation.checkDifferencesBetweenNodes();
+                if(differenceExist) {
+                    ACTransformations.add(transformation);
+                }
+            }
+        }
+
+        System.out.println("removals have been checked");
 
     }
+
 }
