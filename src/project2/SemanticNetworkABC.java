@@ -44,31 +44,34 @@ public class SemanticNetworkABC {
             indexAndScoreArrayAC.add(frameCObjectCorrespondence);
         }
 
-        ArrayList<CorrespondenceIndexAndScore> tempIndexAndScoreArrayAB = new ArrayList<CorrespondenceIndexAndScore>(indexAndScoreArrayAB);
+        if(frameA.getObjects().size() != frameB.getObjects().size()) {
 
-        //Remove duplicate correspondences
-        for(int i=0; i<tempIndexAndScoreArrayAB.size(); i++) {
+            ArrayList<CorrespondenceIndexAndScore> tempIndexAndScoreArrayAB = new ArrayList<CorrespondenceIndexAndScore>(indexAndScoreArrayAB);
 
-            //Loop again to make sure there not duplicate correspondence; if there are it indicates there is an extra object so remove was performed
-            for(int j=0; j<tempIndexAndScoreArrayAB.size(); j++) {
+            //Remove duplicate correspondences
+            for(int i=0; i<tempIndexAndScoreArrayAB.size(); i++) {
 
-                if(tempIndexAndScoreArrayAB.get(i).getCorrespondingObjectIndex() == tempIndexAndScoreArrayAB.get(j).getCorrespondingObjectIndex()) {
+                //Loop again to make sure there not duplicate correspondence; if there are it indicates there is an extra object so remove was performed
+                for(int j=0; j<tempIndexAndScoreArrayAB.size(); j++) {
 
-                    if(tempIndexAndScoreArrayAB.get(i).getScore() >= tempIndexAndScoreArrayAB.get(j).getScore()) {
+                    if(tempIndexAndScoreArrayAB.get(i).getCorrespondingObjectIndex() == tempIndexAndScoreArrayAB.get(j).getCorrespondingObjectIndex()) {
+
+                        if(tempIndexAndScoreArrayAB.get(i).getScore() >= tempIndexAndScoreArrayAB.get(j).getScore()) {
 
 
-                    } else {
+                        } else {
 
-                        //Remove the extra frame A object
-                        ABRemovals.add(frameA.getObjects().get(tempIndexAndScoreArrayAB.get(i).getFrameAObjectIndex()));
+                            //Remove the extra frame A object
+                            ABRemovals.add(frameA.getObjects().get(tempIndexAndScoreArrayAB.get(i).getFrameAObjectIndex()));
 
-                        //remove unnecessary object
-                        indexAndScoreArrayAB.remove(i);
+                            //remove unnecessary object
+                            indexAndScoreArrayAB.remove(i);
+                        }
+
                     }
-
                 }
-            }
 
+            }
         }
 
         //Create Transformations (A to B)
@@ -82,31 +85,34 @@ public class SemanticNetworkABC {
             }
         }
 
-        ArrayList<CorrespondenceIndexAndScore> tempIndexAndScoreArrayAC = new ArrayList<CorrespondenceIndexAndScore>(indexAndScoreArrayAC);
+        if(frameA.getObjects().size() != frameC.getObjects().size()) {
 
-        //Remove duplicate correspondences
-        for(int i=0; i<tempIndexAndScoreArrayAC.size(); i++) {
+            ArrayList<CorrespondenceIndexAndScore> tempIndexAndScoreArrayAC = new ArrayList<CorrespondenceIndexAndScore>(indexAndScoreArrayAC);
 
-            //Loop again to make sure there not duplicate correspondence; if there are it indicates there is an extra object so remove was performed
-            for(int j=0; j<tempIndexAndScoreArrayAC.size(); j++) {
+            //Remove duplicate correspondences
+            for(int i=0; i<tempIndexAndScoreArrayAC.size(); i++) {
 
-                if(tempIndexAndScoreArrayAC.get(i).getCorrespondingObjectIndex() == tempIndexAndScoreArrayAC.get(j).getCorrespondingObjectIndex()) {
+                //Loop again to make sure there not duplicate correspondence; if there are it indicates there is an extra object so remove was performed
+                for(int j=0; j<tempIndexAndScoreArrayAC.size(); j++) {
 
-                    if(tempIndexAndScoreArrayAC.get(i).getScore() >= tempIndexAndScoreArrayAC.get(j).getScore()) {
+                    if(tempIndexAndScoreArrayAC.get(i).getCorrespondingObjectIndex() == tempIndexAndScoreArrayAC.get(j).getCorrespondingObjectIndex()) {
+
+                        if(tempIndexAndScoreArrayAC.get(i).getScore() >= tempIndexAndScoreArrayAC.get(j).getScore()) {
 
 
-                    } else {
+                        } else {
 
-                        //Remove the extra frame A object
-                        ACRemovals.add(frameA.getObjects().get(tempIndexAndScoreArrayAC.get(i).getFrameAObjectIndex()));
+                            //Remove the extra frame A object
+                            ACRemovals.add(frameA.getObjects().get(tempIndexAndScoreArrayAC.get(i).getFrameAObjectIndex()));
 
-                        //remove unnecessary object
-                        indexAndScoreArrayAC.remove(i);
+                            //remove unnecessary object
+                            indexAndScoreArrayAC.remove(i);
+                        }
+
                     }
-
                 }
-            }
 
+            }
         }
 
         //Create Transformations (A to C)

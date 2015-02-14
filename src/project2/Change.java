@@ -38,13 +38,16 @@ public class Change {
 
         boolean differencesExist = false;
 
+        String firstObjectShapeType = Utility.getShapeOfObject(firstObject);
+        String secondObjectShapeType = Utility.getShapeOfObject(firstObject);
+
         for(int i=0; i< firstObject.getAttributes().size(); i++) {
 
             for(int j=0; j< secondObject.getAttributes().size(); j++) {
 
                 //TODO - NEED TO ONLY ADD THE DIFFERENCES; ELSE EVERYTHING IS THE SAME
 
-                String difference = getDifference(firstObject.getAttributes().get(i).getName(), firstObject.getAttributes().get(i).getValue(), secondObject.getAttributes().get(j).getName(), secondObject.getAttributes().get(j).getValue());
+                String difference = getDifference(firstObject.getAttributes().get(i).getName(), firstObject.getAttributes().get(i).getValue(), secondObject.getAttributes().get(j).getName(), secondObject.getAttributes().get(j).getValue(), firstObjectShapeType, secondObjectShapeType);
 
                 //Only add transformation if there is a difference
                 if(!difference.equals("no match")) {
@@ -61,7 +64,7 @@ public class Change {
 
     }
 
-    public String getDifference(String firstNodeName, String firstNodeValue, String secondNodeName, String secondNodeValue) {
+    public String getDifference(String firstNodeName, String firstNodeValue, String secondNodeName, String secondNodeValue, String firstObjectShapeType, String secondObjectShapeType) {
 
         String difference = "no match";
 
@@ -115,13 +118,56 @@ public class Change {
 
         } else if(firstNodeName.equals("angle") && secondNodeName.equals("angle")) {
 
-            if(firstNodeValue.equals("0") && secondNodeValue.equals("45")) {
-                difference =  "rotate 45";
-            } else if(firstNodeValue.equals("0") && secondNodeValue.equals("90")) {
-                difference =  "rotate 90";
-            } else if(firstNodeValue.equals("0") && secondNodeValue.equals("180")) {
-                difference =  "rotate 180";
+            if(firstObjectShapeType.equals("right-triangle") && secondObjectShapeType.equals("right-triangle")) {
+                if(firstNodeValue.equals("0") && secondNodeValue.equals("90")) {
+                    difference =  "reflect up";
+                } else if(firstNodeValue.equals("0") && secondNodeValue.equals("45")) {
+                    difference =  "rotate 45";
+                } else if(firstNodeValue.equals("0") && secondNodeValue.equals("315")) {
+                    difference =  "rotate -45";
+                } else if(firstNodeValue.equals("0") && secondNodeValue.equals("270")) {
+                    difference =  "reflect right";
+                } else if(firstNodeValue.equals("45") && secondNodeValue.equals("90")) {
+                    difference =  "rotate 45";
+                } else if(firstNodeValue.equals("45") && secondNodeValue.equals("0")) {
+                    difference =  "rotate -45";
+                } else if(firstNodeValue.equals("90") && secondNodeValue.equals("0")) {
+                    difference =  "reflect down";
+                } else if(firstNodeValue.equals("90") && secondNodeValue.equals("135")) {
+                    difference =  "rotate 45";
+                } else if(firstNodeValue.equals("90") && secondNodeValue.equals("45")) {
+                    difference =  "rotate -45";
+                } else if(firstNodeValue.equals("135") && secondNodeValue.equals("180")) {
+                    difference =  "rotate 45";
+                } else if(firstNodeValue.equals("135") && secondNodeValue.equals("90")) {
+                    difference =  "rotate -45";
+                } else if(firstNodeValue.equals("180") && secondNodeValue.equals("90")) {
+                    difference =  "reflect left";
+                } else if(firstNodeValue.equals("180") && secondNodeValue.equals("270")) {
+                    difference =  "reflect down";
+                } else if(firstNodeValue.equals("270") && secondNodeValue.equals("180")) {
+                    difference =  "reflect up";
+                } else if(firstNodeValue.equals("270") && secondNodeValue.equals("0")) {
+                    difference =  "reflect left";
+                }  else {
+                }
             } else {
+                if(firstNodeValue.equals("0") && secondNodeValue.equals("45")) {
+                    difference =  "rotate 45";
+                } else if(firstNodeValue.equals("0") && secondNodeValue.equals("90")) {
+                    difference =  "rotate 90";
+                } else if(firstNodeValue.equals("0") && secondNodeValue.equals("180")) {
+                    difference =  "rotate 180";
+                } else if(firstNodeValue.equals("45") && secondNodeValue.equals("0")) {
+                    difference =  "rotate -45";
+                } else if(firstNodeValue.equals("45") && secondNodeValue.equals("135")) {
+                    difference =  "rotate 90";
+                } else if(firstNodeValue.equals("45") && secondNodeValue.equals("315")) {
+                    difference =  "rotate -90";
+                } else if(firstNodeValue.equals("180") && secondNodeValue.equals("90")) {
+                    difference =  "rotate -90";
+                }  else {
+                }
             }
 
         } else if(firstNodeName.equals("inside") && secondNodeName.equals("inside")) {

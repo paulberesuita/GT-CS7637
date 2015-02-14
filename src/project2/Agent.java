@@ -86,7 +86,8 @@ public class Agent {
             generatedSolution.createFrame();
 
             //Check against all possible solutions and return
-            String finalSolution = generatedSolution.retrieveSolution(figures);
+            String finalSolution = Utility.solution(figures, generatedSolution.generatedFrame);
+//            String finalSolution = generatedSolution.retrieveSolution(figures);
 
             solution = finalSolution;
 
@@ -96,9 +97,11 @@ public class Agent {
 
             SemanticNetworkABC snABC = new SemanticNetworkABC(frameA, frameB, frameC);
 
-            if(problem.getName().equals("2x2 Basic Problem 10")) {
+            if(problem.getName().equals("2x2 Basic Problem 08")) {
                 snABC.generateTransformations();
             }
+
+
 
         }
 
