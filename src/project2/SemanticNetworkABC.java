@@ -161,4 +161,28 @@ public class SemanticNetworkABC {
     public void setACRemovals(ArrayList<RavensObject> ACRemovals) {
         this.ACRemovals = ACRemovals;
     }
+
+    public FrameC getFrameC() {
+        return frameC;
+    }
+
+    public void setFrameC(FrameC frameC) {
+        this.frameC = frameC;
+    }
+
+    public FrameA getFrameA() {
+        return frameA;
+    }
+
+    public void setFrameA(FrameA frameA) {
+        this.frameA = frameA;
+    }
+
+    public FrameB getFrameB() {
+        return frameB;
+    }
+
+    public void setFrameB(FrameB frameB) {
+        this.frameB = frameB;
+    }
 }

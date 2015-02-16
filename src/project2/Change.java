@@ -151,6 +151,17 @@ public class Change {
                     difference =  "reflect left";
                 }  else {
                 }
+            } else if(firstObjectShapeType.equals("Pac-Man") && secondObjectShapeType.equals("Pac-Man")) {
+                if(firstNodeValue.equals("45") && secondNodeValue.equals("135")) {
+                    difference =  "reflect left";
+                } else if(firstNodeValue.equals("135") && secondNodeValue.equals("45")) {
+                    difference =  "reflect right";
+                } else if(firstNodeValue.equals("45") && secondNodeValue.equals("315")) {
+                    difference =  "reflect up";
+                } else if(firstNodeValue.equals("315") && secondNodeValue.equals("45")) {
+                    difference =  "reflect down";
+                }  else {
+                }
             } else {
                 if(firstNodeValue.equals("0") && secondNodeValue.equals("45")) {
                     difference =  "rotate 45";
