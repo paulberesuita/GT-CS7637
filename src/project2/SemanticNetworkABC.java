@@ -130,4 +130,35 @@ public class SemanticNetworkABC {
 
     }
 
+    public ArrayList<Change> getABTransformations() {
+        return ABTransformations;
+    }
+
+    public void setABTransformations(ArrayList<Change> ABTransformations) {
+        this.ABTransformations = ABTransformations;
+    }
+
+    public ArrayList<RavensObject> getABRemovals() {
+        return ABRemovals;
+    }
+
+    public void setABRemovals(ArrayList<RavensObject> ABRemovals) {
+        this.ABRemovals = ABRemovals;
+    }
+
+    public ArrayList<Change> getACTransformations() {
+        return ACTransformations;
+    }
+
+    public void setACTransformations(ArrayList<Change> ACTransformations) {
+        this.ACTransformations = ACTransformations;
+    }
+
+    public ArrayList<RavensObject> getACRemovals() {
+        return ACRemovals;
+    }
+
+    public void setACRemovals(ArrayList<RavensObject> ACRemovals) {
+        this.ACRemovals = ACRemovals;
+    }
 }
