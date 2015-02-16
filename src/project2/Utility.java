@@ -211,4 +211,50 @@ public class Utility {
         return shapeValue;
     }
 
+    public static String performReflection(String value, String objectShape) {
+
+        String result = "";
+
+        int angleValue = Integer.parseInt(value);
+
+        if(359 > angleValue && angleValue > 180){
+
+            if(objectShape.equals("Pac-Man")) {
+                angleValue = angleValue - 90;
+            } else if(objectShape.equals("right-triangle")) {
+                angleValue = angleValue + 90;
+            } else {
+            }
+        } else {
+            if(objectShape.equals("Pac-Man")) {
+                angleValue = angleValue + 90;
+            } else if(objectShape.equals("right-triangle")) {
+                angleValue = angleValue - 90;
+            } else {
+            }
+        }
+
+        if(angleValue >= 360) {
+            angleValue = angleValue - 360;
+        }
+        result = String.valueOf(angleValue);
+
+        return result;
+    }
+
+    public static String performRotation(String currentValue, String rotationValue) {
+
+        String result = "";
+
+        int currentValueInt = Integer.parseInt(currentValue);
+        int rotationValueInt = Integer.parseInt(rotationValue);
+
+        currentValueInt = currentValueInt + (rotationValueInt);
+
+        result = String.valueOf(currentValueInt);
+
+        return result;
+    }
+
+
 }

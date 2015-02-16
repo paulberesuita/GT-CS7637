@@ -1,5 +1,6 @@
 package project2;
 
+import javax.rmi.CORBA.Util;
 import java.util.ArrayList;
 
 public class ImprovedFrameGenerated {
@@ -48,6 +49,7 @@ public class ImprovedFrameGenerated {
         for(int i=0; i<semanticNetwork.getABTransformations().size(); i++) {
 
             int transformationIndex = findBestCorrespondenceForTransformationsFrameC(semanticNetwork.getFrameC(), semanticNetwork.getABTransformations().get(i));
+            String shapeOfFrameDObject = generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(0).getValue();
 
             for(int j=0; j<generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().size(); j++) {
 
@@ -56,20 +58,47 @@ public class ImprovedFrameGenerated {
                     if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getName().equals("angle") &&
                        semanticNetwork.getABTransformations().get(i).getTransformations().get(y).equals("rotate -45")){
 
-                        RavensAttribute attribute = new RavensAttribute("angle", "0");
-                        generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
+                        if(shapeOfFrameDObject.equals("circle")) {
+                            RavensAttribute attribute = new RavensAttribute("angle", generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue());
+                            generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
+                        } else {
+                            RavensAttribute attribute = new RavensAttribute("angle", Utility.performRotation(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue(), "-45"));
+                            generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
+                        }
+
+                    } else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getName().equals("angle") &&
+                            semanticNetwork.getABTransformations().get(i).getTransformations().get(y).equals("rotate 45")){
+
+                        if(shapeOfFrameDObject.equals("circle")) {
+                            RavensAttribute attribute = new RavensAttribute("angle", generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue());
+                            generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
+                        } else {
+                            RavensAttribute attribute = new RavensAttribute("angle", Utility.performRotation(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue(), "45"));
+                            generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
+                        }
 
                     } else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getName().equals("angle") &&
                             semanticNetwork.getABTransformations().get(i).getTransformations().get(y).equals("reflect left")) {
 
-                        int angleValue = Integer.parseInt(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue());
-                        if(359 > angleValue && angleValue > 180){
-                            angleValue = angleValue + 90;
-                        } else {
-                            angleValue = angleValue - 90;
-                        }
+                        RavensAttribute attribute = new RavensAttribute("angle", Utility.performReflection(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue(), shapeOfFrameDObject));
+                        generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
 
-                        RavensAttribute attribute = new RavensAttribute("angle", String.valueOf(angleValue));
+                    } else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getName().equals("angle") &&
+                            semanticNetwork.getABTransformations().get(i).getTransformations().get(y).equals("reflect right")) {
+
+                        RavensAttribute attribute = new RavensAttribute("angle", Utility.performReflection(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue(), shapeOfFrameDObject));
+                        generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
+
+                    } else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getName().equals("fill") &&
+                            semanticNetwork.getABTransformations().get(i).getTransformations().get(y).equals("yes fill")) {
+
+                        RavensAttribute attribute = new RavensAttribute("fill", "yes");
+                        generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
+
+                    } else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getName().equals("fill") &&
+                            semanticNetwork.getABTransformations().get(i).getTransformations().get(y).equals("no fill")) {
+
+                        RavensAttribute attribute = new RavensAttribute("fill", "no");
                         generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
 
                     } else {
@@ -98,10 +127,6 @@ public class ImprovedFrameGenerated {
 
             for(int m=0; m<frameC.getObjects().get(i).getAttributes().size(); m++) {
 
-                //Will check if we have too many attributes for frame C object
-                if(m <= changeTransformation.getFirstObject().getAttributes().size() ) {
-                           count = count - 10;
-                } else {
                     for(int n=0; n<changeTransformation.getFirstObject().getAttributes().size(); n++) {
 
                         if(changeTransformation.getFirstObject().getAttributes().get(n).getName().equals(frameC.getObjects().get(i).getAttributes().get(m).getName()) &&
@@ -150,8 +175,10 @@ public class ImprovedFrameGenerated {
                         }
                     }
 
-                }
             }
+
+            int differentNumberOfAttributes = Math.abs(frameC.getObjects().get(i).getAttributes().size()-changeTransformation.getFirstObject().getAttributes().size());
+            count = count - 10*differentNumberOfAttributes;
 
             if(count > previousCount) {
                 transformationIndex = i;
