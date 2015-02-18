@@ -149,15 +149,13 @@ public class Utility {
                         System.out.println("Current Solution Number Of Attributes: " + frameSolution.get(y).getAttributes().size());
                         for(int n=0; n< frameSolution.get(y).getAttributes().size(); n++) {
 
-                            //Special Case to check for specific fillings
+                            //Special Case to check for specific fill order; sometimes bottom-left, bottom-right, etc are mix in the answers
                             if(generatedFrame.getObjects().get(y).getAttributes().get(m).getName().equals(frameSolution.get(y).getAttributes().get(n).getName()) &&
                                 generatedFrame.getObjects().get(y).getAttributes().get(m).getName().equals("fill")) {
 
 
                                 List<String> generatedFills = Arrays.asList(generatedFrame.getObjects().get(y).getAttributes().get(m).getValue().split(","));
                                 List<String> possibleSolutionFills = Arrays.asList(frameSolution.get(y).getAttributes().get(n).getValue().split(","));
-
-                                System.out.print("split done!");
 
                                 boolean allthere = false;
 
