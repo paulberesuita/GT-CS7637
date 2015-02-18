@@ -1,7 +1,6 @@
 package project2;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 public class Utility {
 
@@ -150,16 +149,46 @@ public class Utility {
                         System.out.println("Current Solution Number Of Attributes: " + frameSolution.get(y).getAttributes().size());
                         for(int n=0; n< frameSolution.get(y).getAttributes().size(); n++) {
 
-                            System.out.println("Generated Frame Object Name: " + generatedFrame.getObjects().get(y).getAttributes().get(m).getName());
-                            System.out.println("Generated Frame Object Value: " + generatedFrame.getObjects().get(y).getAttributes().get(m).getValue());
-
-                            System.out.println("Solution Frame Object Name: " + frameSolution.get(y).getAttributes().get(n).getName());
-                            System.out.println("Solution Frame Object Value: " + frameSolution.get(y).getAttributes().get(n).getValue());
-
+                            //Special Case to check for specific fillings
                             if(generatedFrame.getObjects().get(y).getAttributes().get(m).getName().equals(frameSolution.get(y).getAttributes().get(n).getName()) &&
-                                    generatedFrame.getObjects().get(y).getAttributes().get(m).getValue().equals(frameSolution.get(y).getAttributes().get(n).getValue())) {
-                                count ++;
-                                System.out.println("Increased Count!");
+                                generatedFrame.getObjects().get(y).getAttributes().get(m).getName().equals("fill")) {
+
+
+                                List<String> generatedFills = Arrays.asList(generatedFrame.getObjects().get(y).getAttributes().get(m).getValue().split(","));
+                                List<String> possibleSolutionFills = Arrays.asList(frameSolution.get(y).getAttributes().get(n).getValue().split(","));
+
+                                System.out.print("split done!");
+
+                                boolean allthere = false;
+
+                                for(int l=0; l<generatedFills.size(); l++){
+
+                                    boolean oneThere = false;
+                                    for(int t=0; t<possibleSolutionFills.size(); t++){
+
+                                        if(generatedFills.get(l).equals(possibleSolutionFills.get(t))){
+                                            oneThere = true;
+                                        }
+                                    }
+
+                                    if (oneThere){
+                                        allthere = true;
+                                    } else {
+                                        allthere = false;
+                                        break;
+                                    }
+                                }
+
+                                if (allthere) {
+                                    count ++;
+                                }
+
+                            } else {
+                                if(generatedFrame.getObjects().get(y).getAttributes().get(m).getName().equals(frameSolution.get(y).getAttributes().get(n).getName()) &&
+                                        generatedFrame.getObjects().get(y).getAttributes().get(m).getValue().equals(frameSolution.get(y).getAttributes().get(n).getValue())) {
+                                    count ++;
+                                    System.out.println("Increased Count!");
+                                }
                             }
                         }
                     }

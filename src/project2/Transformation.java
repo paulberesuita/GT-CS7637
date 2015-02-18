@@ -1,319 +1,267 @@
 package project2;
 
-import project2.RavensObject;
-
 import java.util.ArrayList;
 
 public class Transformation {
 
-	RavensObject firstNode = null;
-	RavensObject secondNode = null;
-	ArrayList<String> transformationList = null;
-	ArrayList<String> transformationListAttributeName = null;
-	FrameA frameA = null;
-	FrameB frameB = null;
-
-	public Transformation(RavensObject firstNode, RavensObject secondNode, FrameA frameA, FrameB frameB) {
-		this.firstNode = firstNode;
-		this.secondNode = secondNode;
-		this.frameA = frameA;
-		this.frameB = frameB;
-		transformationList = new ArrayList<String>();
-		transformationListAttributeName = new ArrayList<String>();
-	}
-
-	/* Set of transformations will include flip, fill, partial fill,
-	*  move down, move up, expand, shrink, delete, and
-	* rotate 180/135/90/45 degrees.*/
-	public void checkDifferencesBetweenNodes() {
-
-		//Check if Object got deleted
-		if(secondNode == null) {
-
-			addTransformation("delete");
-			addTransformationAttributeName("delete");
-
-		} else {
-
-			for(int i=0; i< firstNode.getAttributes().size(); i++) {
-
-				for(int y=0; y< secondNode.getAttributes().size(); y++) {
-
-//					if(!firstNode.getAttributes().get(i).getValue().equals(secondNode.getAttributes().get(y).getValue())) {
-
-						System.out.println("First Node Name: " + firstNode.getAttributes().get(i).getName());
-						System.out.println("First Node Value: " +firstNode.getAttributes().get(i).getValue());
-						System.out.println("Second Node Name: " + secondNode.getAttributes().get(y).getName());
-						System.out.println("Second Node Value: " + secondNode.getAttributes().get(y).getValue());
-						System.out.println("Difference Found so store it to transformation list");
-
-						String difference = whichDifference(firstNode.getAttributes().get(i).getName(), firstNode.getAttributes().get(i).getValue(), secondNode.getAttributes().get(y).getName(), secondNode.getAttributes().get(y).getValue());
-
-						//Only add transformation if there is a difference
-						if(!difference.equals("")) {
-							addTransformation(difference);
-							addTransformationAttributeName(firstNode.getAttributes().get(i).getName());
-						}
-
-				}
-
-			}
-
-		}
-
-	}
-
-	public String whichDifference(String firstNodeName, String firstNodeValue, String secondNodeName, String secondNodeValue) {
-
-		//Check Fill
-		if(firstNodeName.equals("fill") && secondNodeName.equals("fill")) {
-
-			if(firstNodeValue.equals("no") && secondNodeValue.equals("yes")) {
-				return "yes fill";
-			} else if(firstNodeValue.equals("yes") && secondNodeValue.equals("no")) {
-				return "no fill";
-			} else if(firstNodeValue.equals("no") && secondNodeValue.equals("left-half")) {
-				return "left-half fill";
-			} else if(firstNodeValue.equals("no") && secondNodeValue.equals("right-half")) {
-				return "right-half fill";
-			} else if(firstNodeValue.equals("no") && secondNodeValue.equals("top-left,bottom-left")) {
-				return "top-bottom-left fill";
-			} else if(firstNodeValue.equals("no") && secondNodeValue.equals("top-right,bottom-right")) {
-				return "top-bottom-right fill";
-			} else if(firstNodeValue.equals("no") && secondNodeValue.equals("top-left,top-right")) {
-				return "top-top-both fill";
-			} else if(firstNodeValue.equals("no") && secondNodeValue.equals("bottom-left,bottom-right")) {
-				return "bottom-bottom-both fill";
-			} else {
-				return "nothing";
-			}
+    RavensObject firstObject = null;
+    RavensObject secondObject = null;
 
-		} else if(firstNodeName.equals("shape") && secondNodeName.equals("shape")) {
+    ArrayList<String> transformations = null;
 
-				if(firstNodeValue.equals("circle") && secondNodeValue.equals("triangle")) {
-					return "circle->triangle";
-				} else if(firstNodeValue.equals("square") && secondNodeValue.equals("triangle")) {
-					return "square->triangle";
-				} else if(firstNodeValue.equals("circle") && secondNodeValue.equals("square")) {
-					return "circle->square";
-				} else if(firstNodeValue.equals("triangle") && secondNodeValue.equals("square")) {
-					return "triangle->square";
-				} else if(firstNodeValue.equals("triangle") && secondNodeValue.equals("circle")) {
-					return "triangle->circle";
-				} else if(firstNodeValue.equals("square") && secondNodeValue.equals("circle")) {
-					return "square->circle";
-				} else {
-					return "nothing";
-				}
+    ArrayList<RavensObject> insideObjects = null;
+    ArrayList<RavensObject> aboveObjects = null;
 
-		} else if(firstNodeName.equals("size") && secondNodeName.equals("size")) {
+    FrameA frameA = null;
+    FrameB frameB = null;
+    FrameC frameC = null;
 
-			if(firstNodeValue.equals("small") && secondNodeValue.equals("large")) {
-				return "yes large";
-			} else if(firstNodeValue.equals("large") && secondNodeValue.equals("small")) {
-				return "no large";
-			} else {
-				return "nothing";
-			}
+    public Transformation(RavensObject firstObject, RavensObject secondObject, FrameA frameA, FrameB frameB, FrameC frameC) {
 
-		} else if(firstNodeName.equals("angle") && secondNodeName.equals("angle")) {
+        this.firstObject = firstObject;
+        this.secondObject = secondObject;
 
-			if(firstNodeValue.equals("0") && secondNodeValue.equals("45")) {
-				return "rotate 45";
-			} else if(firstNodeValue.equals("0") && secondNodeValue.equals("90")) {
-				return "rotate 90";
-			} else if(firstNodeValue.equals("0") && secondNodeValue.equals("180")) {
-				return "rotate 180";
-			} else {
-				return "nothing";
-			}
+        transformations = new ArrayList<String>();
+        insideObjects = new ArrayList<RavensObject>();
+        aboveObjects = new ArrayList<RavensObject>();
 
-		} else if(firstNodeName.equals("inside") && secondNodeName.equals("above")) {
+        this.frameA = frameA;
+        this.frameB = frameB;
+        this.frameC = frameC;
 
-			String toMove = "move out";
-			String position = positionCurrentNodesObject();
-
-			toMove = toMove + position;
-
-			System.out.println("Movement with position: " +  toMove);
-
-			if(firstNodeValue.equals("Z") && secondNodeValue.equals("Z")) {
-				return toMove;
-			} else if(firstNodeValue.equals("Z,Y") && secondNodeValue.equals("Z")) {
-				return toMove;
-			} else if(firstNodeValue.equals("Y") && secondNodeValue.equals("Y")) {
-				return toMove;
-			} else {
-				return "nothing";
-			}
-
-		} else {
-
-			System.out.print("Could not find which difference");
-		}
-
-		return "";
-	}
-
-	public String positionCurrentNodesObject() {
-
-		String position = "";
-
-		//Need to check if moving above left or above right
-		for(int i=0; i< secondNode.getAttributes().size(); i++) {
-
-			if(secondNode.getAttributes().get(i).getName().equals("left-of") && secondNode.getAttributes().get(i).getValue().equals("X")){
-
-				//Checking to see which type of object we are moving left to
-				for(int y=0; y< frameB.getObjects().size(); y++){
-
-					if(frameB.getObjects().get(y).getName().equals("X")){
-
-						//Finding size attribute
-						for(int m=0; m< frameB.getObjects().get(y).getAttributes().size(); m++){
-
-							if(frameB.getObjects().get(y).getAttributes().get(m).getName().equals("size")) {
-
-								if(frameB.getObjects().get(y).getAttributes().get(m).getValue().equals("small")) {
-
-									position = " left small";
-
-								} else if(frameB.getObjects().get(y).getAttributes().get(m).getValue().equals("medium")) {
-
-									position = " left medium";
-
-								} else if(frameB.getObjects().get(y).getAttributes().get(m).getValue().equals("large")) {
-
-									position = " left large";
-
-								} else {
-
-								}
-							}
-
-						}
-
-					}
-
-				}
-
-			} else if(secondNode.getAttributes().get(i).getName().equals("left-of") && secondNode.getAttributes().get(i).getValue().equals("Y")) {
-
-				//Checking to see which type of object we are moving left to
-				for(int y=0; y< frameB.getObjects().size(); y++){
-
-					if(frameB.getObjects().get(y).getName().equals("Y")){
-
-						//Finding size attribute
-						for(int m=0; m< frameB.getObjects().get(y).getAttributes().size(); m++){
-
-							if(frameB.getObjects().get(y).getAttributes().get(m).getName().equals("size")) {
-
-								if(frameB.getObjects().get(y).getAttributes().get(m).getValue().equals("small")) {
-
-									position = " left small";
-
-								} else if(frameB.getObjects().get(y).getAttributes().get(m).getValue().equals("medium")) {
-
-									position = " left medium";
-
-								} else if(frameB.getObjects().get(y).getAttributes().get(m).getValue().equals("large")) {
-
-									position = " left large";
-
-								} else {
-
-								}
-							}
-
-						}
-
-					}
-
-				}
-
-			} else if(secondNode.getAttributes().get(i).getName().equals("left-of") && secondNode.getAttributes().get(i).getValue().equals("Z")){
-
-				//Checking to see which type of object we are moving left to
-				for(int y=0; y< frameB.getObjects().size(); y++){
-
-					if(frameB.getObjects().get(y).getName().equals("Z")){
-
-						//Finding size attribute
-						for(int m=0; m< frameB.getObjects().get(y).getAttributes().size(); m++){
-
-							if(frameB.getObjects().get(y).getAttributes().get(m).getName().equals("size")) {
-
-								if(frameB.getObjects().get(y).getAttributes().get(m).getValue().equals("small")) {
-
-									position = " left small";
-
-								} else if(frameB.getObjects().get(y).getAttributes().get(m).getValue().equals("medium")) {
-
-									position = " left medium";
-
-								} else if(frameB.getObjects().get(y).getAttributes().get(m).getValue().equals("large")) {
-
-									position = " left large";
-
-								} else {
-
-								}
-							}
-
-						}
-
-					}
-
-				}
-			} else {
-
-			}
-		}
-
-		return position;
-	}
-
-
-	public void addTransformation(String transformation) {
-		transformationList.add(transformation);
-	}
-
-	public void addTransformationAttributeName(String attributeName) {
-		transformationListAttributeName.add(attributeName);
-	}
-
-	public RavensObject getFirstNode() {
-		return firstNode;
-	}
-
-	public void setFirstNode(RavensObject firstNode) {
-		this.firstNode = firstNode;
-	}
-
-	public RavensObject getSecondNode() {
-		return secondNode;
-	}
-
-	public void setSecondNode(RavensObject secondNode) {
-		this.secondNode = secondNode;
-	}
-
-	public ArrayList<String> getTransformationList() {
-		return transformationList;
-	}
-
-	public void setTransformationList(ArrayList<String> transformationList) {
-		this.transformationList = transformationList;
-	}	
-	
-	public ArrayList<String> getTransformationListAttributeName() {
-		return transformationListAttributeName;
-	}
-
-	public void setTransformationListAttributeName(
-			ArrayList<String> transformationListAttributeName) {
-		this.transformationListAttributeName = transformationListAttributeName;
-	}
-	
+    }
+
+    /* Set of transformations will include flip, fill, partial fill,
+    *  move down, move up, expand, shrink, delete, and
+    * rotate 180/135/90/45 degrees.*/
+    public boolean checkDifferencesBetweenNodes() {
+
+        boolean differencesExist = false;
+
+        String firstObjectShapeType = Utility.getShapeOfObject(firstObject);
+        String secondObjectShapeType = Utility.getShapeOfObject(firstObject);
+
+        for(int i=0; i< firstObject.getAttributes().size(); i++) {
+
+            for(int j=0; j< secondObject.getAttributes().size(); j++) {
+
+                //TODO - NEED TO ONLY ADD THE DIFFERENCES; ELSE EVERYTHING IS THE SAME
+
+                String difference = getDifference(firstObject.getAttributes().get(i).getName(), firstObject.getAttributes().get(i).getValue(), secondObject.getAttributes().get(j).getName(), secondObject.getAttributes().get(j).getValue(), firstObjectShapeType, secondObjectShapeType);
+
+                //Only add transformation if there is a difference
+                if(!difference.equals("no match")) {
+
+                    getTransformations().add(difference);
+                    differencesExist = true;
+                }
+
+            }
+
+        }
+
+        return differencesExist;
+
+    }
+
+    public String getDifference(String firstNodeName, String firstNodeValue, String secondNodeName, String secondNodeValue, String firstObjectShapeType, String secondObjectShapeType) {
+
+        String difference = "no match";
+
+        //Check Fill
+        if(firstNodeName.equals("fill") && secondNodeName.equals("fill")) {
+
+            if(firstNodeValue.equals("no") && secondNodeValue.equals("yes")) {
+                difference =  "yes fill";
+            } else if(firstNodeValue.equals("yes") && secondNodeValue.equals("no")) {
+                difference =  "no fill";
+            } else if(firstNodeValue.equals("no") && secondNodeValue.equals("left-half")) {
+                difference =  "left-half fill";
+            } else if(firstNodeValue.equals("no") && secondNodeValue.equals("right-half")) {
+                difference =  "right-half fill";
+            } else if(firstNodeValue.equals("no") && secondNodeValue.equals("top-left,bottom-left")) {
+                difference =  "top-bottom-left fill";
+            } else if(firstNodeValue.equals("no") && secondNodeValue.equals("top-right,bottom-right")) {
+                difference =  "top-bottom-right fill";
+            } else if(firstNodeValue.equals("no") && secondNodeValue.equals("top-left,top-right")) {
+                difference =  "top-top-both fill";
+            } else if(firstNodeValue.equals("no") && secondNodeValue.equals("bottom-left,bottom-right")) {
+                difference =  "bottom-bottom-both fill";
+            } else {
+            }
+
+        } else if(firstNodeName.equals("shape") && secondNodeName.equals("shape")) {
+
+            if(firstNodeValue.equals("circle") && secondNodeValue.equals("triangle")) {
+                difference =  "change to triangle";
+            } else if(firstNodeValue.equals("circle") && secondNodeValue.equals("square")) {
+                difference =  "change to square";
+            }  else if(firstNodeValue.equals("square") && secondNodeValue.equals("circle")) {
+                difference =  "change to circle";
+            } else if(firstNodeValue.equals("square") && secondNodeValue.equals("triangle")) {
+                difference =  "change to triangle";
+            }  else if(firstNodeValue.equals("triangle") && secondNodeValue.equals("square")) {
+                difference =  "change to square";
+            } else if(firstNodeValue.equals("triangle") && secondNodeValue.equals("circle")) {
+                difference =  "change to circle";
+            } else {
+            }
+
+        } else if(firstNodeName.equals("size") && secondNodeName.equals("size")) {
+
+            if(firstNodeValue.equals("small") && secondNodeValue.equals("large")) {
+                difference =  "yes large";
+            } else if(firstNodeValue.equals("large") && secondNodeValue.equals("small")) {
+                difference =  "no large";
+            } else {
+            }
+
+        } else if(firstNodeName.equals("angle") && secondNodeName.equals("angle")) {
+
+            if(firstObjectShapeType.equals("right-triangle") && secondObjectShapeType.equals("right-triangle")) {
+                if(firstNodeValue.equals("0") && secondNodeValue.equals("90")) {
+                    difference =  "reflect up";
+                } else if(firstNodeValue.equals("0") && secondNodeValue.equals("45")) {
+                    difference =  "rotate 45";
+                } else if(firstNodeValue.equals("0") && secondNodeValue.equals("315")) {
+                    difference =  "rotate -45";
+                } else if(firstNodeValue.equals("0") && secondNodeValue.equals("270")) {
+                    difference =  "reflect right";
+                } else if(firstNodeValue.equals("45") && secondNodeValue.equals("90")) {
+                    difference =  "rotate 45";
+                } else if(firstNodeValue.equals("45") && secondNodeValue.equals("0")) {
+                    difference =  "rotate -45";
+                } else if(firstNodeValue.equals("90") && secondNodeValue.equals("0")) {
+                    difference =  "reflect down";
+                } else if(firstNodeValue.equals("90") && secondNodeValue.equals("135")) {
+                    difference =  "rotate 45";
+                } else if(firstNodeValue.equals("90") && secondNodeValue.equals("45")) {
+                    difference =  "rotate -45";
+                } else if(firstNodeValue.equals("135") && secondNodeValue.equals("180")) {
+                    difference =  "rotate 45";
+                } else if(firstNodeValue.equals("135") && secondNodeValue.equals("90")) {
+                    difference =  "rotate -45";
+                } else if(firstNodeValue.equals("180") && secondNodeValue.equals("90")) {
+                    difference =  "reflect left";
+                } else if(firstNodeValue.equals("180") && secondNodeValue.equals("270")) {
+                    difference =  "reflect down";
+                } else if(firstNodeValue.equals("270") && secondNodeValue.equals("180")) {
+                    difference =  "reflect up";
+                } else if(firstNodeValue.equals("270") && secondNodeValue.equals("0")) {
+                    difference =  "reflect left";
+                }  else {
+                }
+            } else if(firstObjectShapeType.equals("Pac-Man") && secondObjectShapeType.equals("Pac-Man")) {
+                if(firstNodeValue.equals("45") && secondNodeValue.equals("135")) {
+                    difference =  "reflect left";
+                } else if(firstNodeValue.equals("135") && secondNodeValue.equals("45")) {
+                    difference =  "reflect right";
+                } else if(firstNodeValue.equals("45") && secondNodeValue.equals("315")) {
+                    difference =  "reflect up";
+                } else if(firstNodeValue.equals("315") && secondNodeValue.equals("45")) {
+                    difference =  "reflect down";
+                }  else {
+                }
+            } else {
+                if(firstNodeValue.equals("0") && secondNodeValue.equals("45")) {
+                    difference =  "rotate 45";
+                } else if(firstNodeValue.equals("0") && secondNodeValue.equals("90")) {
+                    difference =  "rotate 90";
+                } else if(firstNodeValue.equals("0") && secondNodeValue.equals("180")) {
+                    difference =  "rotate 180";
+                } else if(firstNodeValue.equals("45") && secondNodeValue.equals("0")) {
+                    difference =  "rotate -45";
+                } else if(firstNodeValue.equals("45") && secondNodeValue.equals("135")) {
+                    difference =  "rotate 90";
+                } else if(firstNodeValue.equals("45") && secondNodeValue.equals("315")) {
+                    difference =  "rotate -90";
+                } else if(firstNodeValue.equals("180") && secondNodeValue.equals("90")) {
+                    difference =  "rotate -90";
+                }  else {
+                }
+            }
+
+        } else if(firstNodeName.equals("inside") && secondNodeName.equals("inside")) {
+
+            RavensObject object = Utility.returnObject(secondNodeValue, frameA, frameB, frameC);
+
+            getInsideObjects().add(object);
+
+        } else if(firstNodeName.equals("inside") && secondNodeName.equals("above")) {
+
+            RavensObject object = Utility.returnObject(secondNodeValue, frameA, frameB, frameC);
+
+            getAboveObjects().add(object);
+
+        } else {
+
+            System.out.print("NO MATCH!");
+        }
+
+        return difference;
+    }
+
+    public RavensObject getFirstObject() {
+        return firstObject;
+    }
+
+    public void setFirstObject(RavensObject firstObject) {
+        this.firstObject = firstObject;
+    }
+
+    public RavensObject getSecondObject() {
+        return secondObject;
+    }
+
+    public void setSecondObject(RavensObject secondObject) {
+        this.secondObject = secondObject;
+    }
+
+    public ArrayList<String> getTransformations() {
+        return transformations;
+    }
+
+    public void setTransformations(ArrayList<String> transformations) {
+        this.transformations = transformations;
+    }
+
+    public ArrayList<RavensObject> getInsideObjects() {
+        return insideObjects;
+    }
+
+    public void setInsideObjects(ArrayList<RavensObject> insideObjects) {
+        this.insideObjects = insideObjects;
+    }
+
+    public ArrayList<RavensObject> getAboveObjects() {
+        return aboveObjects;
+    }
+
+    public void setAboveObjects(ArrayList<RavensObject> aboveObjects) {
+        this.aboveObjects = aboveObjects;
+    }
+
+    public FrameA getFrameA() {
+        return frameA;
+    }
+
+    public void setFrameA(FrameA frameA) {
+        this.frameA = frameA;
+    }
+
+    public FrameB getFrameB() {
+        return frameB;
+    }
+
+    public void setFrameB(FrameB frameB) {
+        this.frameB = frameB;
+    }
+
+    public FrameC getFrameC() {
+        return frameC;
+    }
+
+    public void setFrameC(FrameC frameC) {
+        this.frameC = frameC;
+    }
 }

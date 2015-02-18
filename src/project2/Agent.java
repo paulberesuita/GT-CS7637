@@ -73,38 +73,30 @@ public class Agent {
 
         String solution = "1";
 
+        SemanticNetwork semanticNetwork = new SemanticNetwork(frameA, frameB, frameC);
+
         //Check which algorithm to use
         if(problem.getProblemType().toString().equals("2x1")) {
 
-            //Build semantic network for frames A and B
-            SemanticNetworkAB snAB = new SemanticNetworkAB(frameA, frameB);
-
-            snAB.generateTransformations();
-
-            //Generate frame solution
-            FrameGenerated generatedSolution = new FrameGenerated(snAB, frameC);
+//           if(problem.getName().equals("2x1 Basic Problem 11")) {
+            semanticNetwork.generateTransformations2x1();
+            GeneratedFrame generatedSolution = new GeneratedFrame(semanticNetwork, figures.get("B"), figures.get("C"));
             generatedSolution.createFrame();
-
-            //Check against all possible solutions and return
-            String finalSolution = Utility.solution(figures, generatedSolution.generatedFrame);
-//            String finalSolution = generatedSolution.retrieveSolution(figures);
-
+            String finalSolution = Utility.solution(figures, generatedSolution.generatedFrameDFromC);
             solution = finalSolution;
 
-            System.out.println("Finished Problem");
+//            }
 
         } else if(problem.getProblemType().toString().equals("2x2")) {
 
-            SemanticNetworkABC snABC = new SemanticNetworkABC(frameA, frameB, frameC);
-
-            if(problem.getName().equals("2x2 Basic Problem 06")) {
-                snABC.generateTransformations();
-                ImprovedFrameGenerated generatedSolution = new ImprovedFrameGenerated(snABC, figures.get("B"), figures.get("C"));
-                generatedSolution.createFrame2x2();
+//            if(problem.getName().equals("2x2 Basic Problem 06")) {
+                semanticNetwork.generateTransformations2x2();
+                GeneratedFrame generatedSolution = new GeneratedFrame(semanticNetwork, figures.get("B"), figures.get("C"));
+                generatedSolution.createFrame();
                 String finalSolution = Utility.solution(figures, generatedSolution.generatedFrameDFromC);
                 solution = finalSolution;
 
-            }
+//            }
 
             System.out.println("Finished Problem");
 
