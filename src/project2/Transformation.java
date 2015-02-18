@@ -11,6 +11,8 @@ public class Transformation {
 
     ArrayList<RavensObject> insideObjects = null;
     ArrayList<RavensObject> aboveObjects = null;
+    ArrayList<RavensObject> leftOfObjects = null;
+    ArrayList<RavensObject> rightOfObjects = null;
 
     FrameA frameA = null;
     FrameB frameB = null;
@@ -23,6 +25,8 @@ public class Transformation {
 
         transformations = new ArrayList<String>();
         insideObjects = new ArrayList<RavensObject>();
+        aboveObjects = new ArrayList<RavensObject>();
+        leftOfObjects = new ArrayList<RavensObject>();
         aboveObjects = new ArrayList<RavensObject>();
 
         this.frameA = frameA;
@@ -45,8 +49,6 @@ public class Transformation {
 
             for(int j=0; j< secondObject.getAttributes().size(); j++) {
 
-                //TODO - NEED TO ONLY ADD THE DIFFERENCES; ELSE EVERYTHING IS THE SAME
-
                 String difference = getDifference(firstObject.getAttributes().get(i).getName(), firstObject.getAttributes().get(i).getValue(), secondObject.getAttributes().get(j).getName(), secondObject.getAttributes().get(j).getValue(), firstObjectShapeType, secondObjectShapeType);
 
                 //Only add transformation if there is a difference
@@ -58,6 +60,55 @@ public class Transformation {
 
             }
 
+        }
+
+        //TODO - need to add another transformation for attributes that are new; example 8 A(Y) B(Y) the left-of:X is added
+
+        for(int i=0; i< secondObject.getAttributes().size(); i++) {
+
+            boolean isThere = false;
+            for (int j = 0; j < firstObject.getAttributes().size(); j++) {
+
+                if(secondObject.getAttributes().get(i).getName().equals(firstObject.getAttributes().get(j).getName())){
+                    isThere = true;
+                }
+            }
+
+            if(!isThere){
+
+                if(secondObject.getAttributes().get(i).getName().equals("above")){
+
+                    RavensObject object = Utility.returnObject(secondObject.getAttributes().get(i).getValue(), frameA, frameB, frameC);
+                    getAboveObjects().add(object);
+                    differencesExist = true;
+
+
+                } else if(secondObject.getAttributes().get(i).getName().equals("inside")) {
+
+                    RavensObject object = Utility.returnObject(secondObject.getAttributes().get(i).getValue(), frameA, frameB, frameC);
+                    getInsideObjects().add(object);
+                    differencesExist = true;
+
+
+                } else if(secondObject.getAttributes().get(i).getName().equals("left-of")) {
+
+                    RavensObject object = Utility.returnObject(secondObject.getAttributes().get(i).getValue(), frameA, frameB, frameC);
+                    getLeftOfObjects().add(object);
+                    differencesExist = true;
+
+
+                } else if(secondObject.getAttributes().get(i).getName().equals("right-of")) {
+
+                    RavensObject object = Utility.returnObject(secondObject.getAttributes().get(i).getValue(), frameA, frameB, frameC);
+                    getRightOfObjects().add(object);
+                    differencesExist = true;
+
+
+                } else {
+
+                }
+
+            }
         }
 
         return differencesExist;
@@ -181,19 +232,29 @@ public class Transformation {
                 }
             }
 
-        } else if(firstNodeName.equals("inside") && secondNodeName.equals("inside")) {
+        }
 
-            RavensObject object = Utility.returnObject(secondNodeValue, frameA, frameB, frameC);
+//        else if(firstNodeName.equals("inside") && secondNodeName.equals("inside")) {
+//
+//            RavensObject object = Utility.returnObject(secondNodeValue, frameA, frameB, frameC);
+//
+//            getInsideObjects().add(object);
+//
+//            difference =  "inside objects change";
+//
+//
+//        } else if(firstNodeName.equals("inside") && secondNodeName.equals("above")) {
+//
+//            RavensObject object = Utility.returnObject(secondNodeValue, frameA, frameB, frameC);
+//
+//            getAboveObjects().add(object);
+//
+//            difference =  "move out";
+//
+//
+//        }
 
-            getInsideObjects().add(object);
-
-        } else if(firstNodeName.equals("inside") && secondNodeName.equals("above")) {
-
-            RavensObject object = Utility.returnObject(secondNodeValue, frameA, frameB, frameC);
-
-            getAboveObjects().add(object);
-
-        } else {
+        else {
 
             System.out.print("NO MATCH!");
         }
@@ -263,5 +324,21 @@ public class Transformation {
 
     public void setFrameC(FrameC frameC) {
         this.frameC = frameC;
+    }
+
+    public ArrayList<RavensObject> getLeftOfObjects() {
+        return leftOfObjects;
+    }
+
+    public void setLeftOfObjects(ArrayList<RavensObject> leftOfObjects) {
+        this.leftOfObjects = leftOfObjects;
+    }
+
+    public ArrayList<RavensObject> getRightOfObjects() {
+        return rightOfObjects;
+    }
+
+    public void setRightOfObjects(ArrayList<RavensObject> rightOfObjects) {
+        this.rightOfObjects = rightOfObjects;
     }
 }

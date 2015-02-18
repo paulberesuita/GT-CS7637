@@ -27,7 +27,6 @@ public class GeneratedFrame {
         generatedFrameDFromB = new RavensFigure("D1");
         generatedFrameDFromC = new RavensFigure("D2");
 
-        boolean toAdd = true;
         //TRANSFORMATION FROM C TO D FIRST
         for(int i=0; i<semanticNetwork.getFrameC().getObjects().size(); i++) {
 
@@ -40,31 +39,21 @@ public class GeneratedFrame {
                 object.getAttributes().add(attribute);
             }
 
-            //Checking if the object to be added is in the removal list; if it is then it won't be added
-            if(semanticNetwork.getABRemovals().size() > 0) {
-                for(int r=0; r<semanticNetwork.getABRemovals().size(); r++) {
-
-                    for(int t=0; t<semanticNetwork.getABRemovals().get(r).getAttributes().size(); t++) {
-
-                        for(int m=0; m<object.getAttributes().size(); m++) {
-
-                            //Criteria is shape size
-                            if (object.getAttributes().get(m).getName().equals(semanticNetwork.getABRemovals().get(r).getAttributes().get(t).getName())
-                                    && object.getAttributes().get(m).getValue().equals(semanticNetwork.getABRemovals().get(r).getAttributes().get(t).getValue())) {
-                                toAdd = false;
-                            }
-                        }
-                    }
-
-                }
-            }
-
-            if(toAdd) {
-                generatedFrameDFromC.getObjects().add(object);
-            }
+            generatedFrameDFromC.getObjects().add(object);
 
         }
 
+
+        //Checking if the object to be added is in the removal list; if it is then it will removed
+        if(semanticNetwork.getABRemovals().size() > 0) {
+
+            for(int i=0; i<semanticNetwork.getABRemovals().size(); i++) {
+
+                int index = Utility.objectIndexToRemove(semanticNetwork.getABRemovals().get(i), generatedFrameDFromC);
+                generatedFrameDFromC.getObjects().remove(index);
+            }
+
+        }
 
         //Apply transformation to correct object in FrameD (copy of C)
         for(int i=0; i<semanticNetwork.getABTransformations().size(); i++) {
@@ -220,8 +209,54 @@ public class GeneratedFrame {
                         RavensAttribute attribute = new RavensAttribute("size", "large");
                         generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
 
+                    } else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getName().equals("size") &&
+                            semanticNetwork.getABTransformations().get(i).getTransformations().get(y).equals("added left-of")) {
+
+                        //TODO - HARCODING - NEEDS REVISION
+                        RavensAttribute attribute = new RavensAttribute("left-of", "X");
+                        generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().add(j, attribute);
+
                     } else {
 
+                    }
+
+                }
+
+
+                //WE ARE ASSUMING WE ARE SWITCHING TO "ABOVE" TO THE CORRECT "INSIDE" HOWEVER THIS MAY NOT BE THE CASE
+                for(int k=0; k<semanticNetwork.getABTransformations().get(i).getAboveObjects().size(); k++) {
+
+                    if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getName().equals("inside")){
+
+                        generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().remove(j);
+
+                        RavensAttribute attribute = new RavensAttribute("above", semanticNetwork.getABTransformations().get(i).getAboveObjects().get(k).getName());
+                        generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().add(j, attribute);
+
+
+                    }
+//                    else {
+//                        //If we can't find inside it means it must be new so added
+//                        RavensAttribute attribute = new RavensAttribute("above", semanticNetwork.getABTransformations().get(i).getAboveObjects().get(k).getName());
+//                        generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().add(j, attribute);
+//                    }
+                }
+
+                //WE ARE ASSUMING WE ARE SWITCHING TO "ABOVE" TO THE CORRECT "INSIDE" HOWEVER THIS MAY NOT BE THE CASE
+                for(int k=0; k<semanticNetwork.getABTransformations().get(i).getLeftOfObjects().size(); k++) {
+
+                    boolean isThere = false;
+                    //We will only add if not present
+                    for(int u=0; u<generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().size(); u++) {
+
+                        if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(u).getName().equals("left-of")){
+                            isThere = true;
+                        }
+                    }
+
+                    if(!isThere){
+                        RavensAttribute attribute = new RavensAttribute("left-of", semanticNetwork.getABTransformations().get(i).getLeftOfObjects().get(k).getName());
+                        generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().add(j, attribute);
                     }
 
                 }

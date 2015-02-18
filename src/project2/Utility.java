@@ -182,6 +182,8 @@ public class Utility {
                                 }
 
                             } else {
+
+                                //TODO - MAJOR REMOVE ELSE STATEMENT BECAUSE ITS AWARDING POINTS TO STUFF THAT IS NEVER CORRECT; FIX THE ABOVE: X, LEFT-OF: Y (BETTER SOLUTION WILL GIVE BETTER ANSWERS)
                                 if(generatedFrame.getObjects().get(y).getAttributes().get(m).getName().equals(frameSolution.get(y).getAttributes().get(n).getName()) &&
                                         generatedFrame.getObjects().get(y).getAttributes().get(m).getValue().equals(frameSolution.get(y).getAttributes().get(n).getValue())) {
                                     count ++;
@@ -283,5 +285,36 @@ public class Utility {
         return result;
     }
 
+    public static int objectIndexToRemove(RavensObject removal, RavensFigure figure) {
+
+        int indexToRemove = 0;
+        int previousCount = 0;
+
+        for(int r=0; r<figure.getObjects().size(); r++) {
+
+            int count = 0;
+
+            for(int t=0; t<figure.getObjects().get(r).getAttributes().size(); t++) {
+
+                    for(int m=0; m< removal.getAttributes().size(); m++) {
+
+                        if(removal.getAttributes().get(m).getName().equals(figure.getObjects().get(r).getAttributes().get(t).getName()) &&
+                           removal.getAttributes().get(m).getValue().equals(figure.getObjects().get(r).getAttributes().get(t).getValue())) {
+                            count ++;
+                            System.out.println("Increased Count!");
+                        }
+                    }
+
+            }
+
+            if(count > previousCount) {
+                indexToRemove = r;
+                previousCount = count;
+            }
+
+        }
+
+        return indexToRemove;
+    }
 
 }
