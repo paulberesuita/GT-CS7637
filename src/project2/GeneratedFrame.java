@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 public class GeneratedFrame {
 
-    ArrayList<RavensObject> objects = null;
     SemanticNetwork semanticNetwork = null;
     RavensFigure generatedFrameDFromB = null;
     RavensFigure generatedFrameDFromC = null;
@@ -55,215 +54,309 @@ public class GeneratedFrame {
 
         }
 
-        //Apply transformation to correct object in FrameD (copy of C)
+        //SPECIAL CASE - ONLY ROTATING - BASIC PROBLEM 15
+        boolean onlyRotation90 = false;
+        boolean onlyRotation180 = false;
+        boolean onlyRotation270 = false;
+
         for(int i=0; i<semanticNetwork.getABTransformations().size(); i++) {
 
-            int transformationIndex = findBestCorrespondenceForTransformationsFrameC(semanticNetwork.getFrameC(), semanticNetwork.getABTransformations().get(i));
-            String shapeOfFrameDObject = generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(0).getValue();
+            for (int y = 0; y < semanticNetwork.getABTransformations().get(i).getTransformations().size(); y++) {
 
-            for(int j=0; j<generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().size(); j++) {
+                if(semanticNetwork.getABTransformations().get(i).getTransformations().get(y).equals("rotate 90")){
+                    onlyRotation90 = true;
+                    onlyRotation180 = false;
+                    onlyRotation270 = false;
+                } else if(semanticNetwork.getABTransformations().get(i).getTransformations().get(y).equals("rotate 180")){
+                    onlyRotation90 = false;
+                    onlyRotation180 = true;
+                    onlyRotation270 = false;
+                } else if(semanticNetwork.getABTransformations().get(i).getTransformations().get(y).equals("rotate 270")){
+                    onlyRotation90 = false;
+                    onlyRotation180 = false;
+                    onlyRotation270 = true;
+                }else {
+                    onlyRotation90 = false;
+                    onlyRotation180 = false;
+                    onlyRotation270 = false;
+                }
+            }
+        }
 
-                for(int y=0; y<semanticNetwork.getABTransformations().get(i).getTransformations().size(); y++){
+        System.out.print("testing");
 
-                    if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getName().equals("angle") &&
-                       semanticNetwork.getABTransformations().get(i).getTransformations().get(y).equals("rotate -45")){
+        if(onlyRotation90 || onlyRotation180 || onlyRotation270) {
 
-                        if(shapeOfFrameDObject.equals("circle")) {
-                            RavensAttribute attribute = new RavensAttribute("angle", generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue());
-                            generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
+            for(int i=0; i<generatedFrameDFromC.getObjects().size(); i++) {
+
+                for(int j=0; j<generatedFrameDFromC.getObjects().get(i).getAttributes().size(); j++) {
+
+                    if(generatedFrameDFromC.getObjects().get(i).getAttributes().get(j).getName().equals("angle")){
+
+                        if(onlyRotation90) {
+                            RavensAttribute attribute = new RavensAttribute("angle","90");
+                            generatedFrameDFromC.getObjects().get(i).getAttributes().set(j, attribute);
+                        } else if(onlyRotation180) {
+                            RavensAttribute attribute = new RavensAttribute("angle","180");
+                            generatedFrameDFromC.getObjects().get(i).getAttributes().set(j, attribute);
+                        } else if(onlyRotation270) {
+                            RavensAttribute attribute = new RavensAttribute("angle","270");
+                            generatedFrameDFromC.getObjects().get(i).getAttributes().set(j, attribute);
                         } else {
-                            RavensAttribute attribute = new RavensAttribute("angle", Utility.performRotation(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue(), "-45"));
-                            generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
+
                         }
-
-                    } else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getName().equals("angle") &&
-                            semanticNetwork.getABTransformations().get(i).getTransformations().get(y).equals("rotate 45")){
-
-                        if(shapeOfFrameDObject.equals("circle")) {
-                            RavensAttribute attribute = new RavensAttribute("angle", generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue());
-                            generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
-                        } else {
-                            RavensAttribute attribute = new RavensAttribute("angle", Utility.performRotation(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue(), "45"));
-                            generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
-                        }
-
-                    } else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getName().equals("angle") &&
-                            semanticNetwork.getABTransformations().get(i).getTransformations().get(y).equals("rotate 180")){
-
-                        if(shapeOfFrameDObject.equals("circle")) {
-                            RavensAttribute attribute = new RavensAttribute("angle", generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue());
-                            generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
-                        } else {
-                            RavensAttribute attribute = new RavensAttribute("angle", Utility.performRotation(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue(), "180"));
-                            generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
-                        }
-
-                    } else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getName().equals("angle") &&
-                            semanticNetwork.getABTransformations().get(i).getTransformations().get(y).equals("reflect left")) {
-
-                        RavensAttribute attribute = new RavensAttribute("angle", Utility.performReflection(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue(), shapeOfFrameDObject));
-                        generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
-
-                    } else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getName().equals("angle") &&
-                            semanticNetwork.getABTransformations().get(i).getTransformations().get(y).equals("reflect right")) {
-
-                        RavensAttribute attribute = new RavensAttribute("angle", Utility.performReflection(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue(), shapeOfFrameDObject));
-                        generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
-
-                    } else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getName().equals("fill") &&
-                            semanticNetwork.getABTransformations().get(i).getTransformations().get(y).equals("yes fill")) {
-
-                        RavensAttribute attribute = new RavensAttribute("fill", "yes");
-                        generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
-
-                    } else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getName().equals("fill") &&
-                            semanticNetwork.getABTransformations().get(i).getTransformations().get(y).equals("no fill")) {
-
-                        RavensAttribute attribute = new RavensAttribute("fill", "no");
-                        generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
-
-                    } else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getName().equals("fill") &&
-                            semanticNetwork.getABTransformations().get(i).getTransformations().get(y).equals("left-half fill")) {
-
-                        RavensAttribute attribute = new RavensAttribute("fill", "left-half");
-                        generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
-
-                    } else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getName().equals("fill") &&
-                            semanticNetwork.getABTransformations().get(i).getTransformations().get(y).equals("right-half fill")) {
-
-                        RavensAttribute attribute = new RavensAttribute("fill", "right-half");
-                        generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
-
-                    }  else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getName().equals("fill") &&
-                            semanticNetwork.getABTransformations().get(i).getTransformations().get(y).equals("top-bottom-left fill")) {
-
-                        String toAddFirst = "top-left,bottom-left";
-                        String toAddSecond = "top-left";
-                        String toAddThird = "bottom-left";
-
-                        if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue().contains(toAddFirst)) {
-
-                            //Contains both so don't add anything
-
-                        } else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue().contains(toAddSecond)) {
-
-                            //Contains top left so add bottom left
-                            String bottomLeft = ",bottom-left";
-                            RavensAttribute attribute = new RavensAttribute("fill", generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue() + bottomLeft);
-                            generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
-
-                        } else {
-                            //Contains bottom left so add top left
-                            String topLeft = ",top-left";
-                            RavensAttribute attribute = new RavensAttribute("fill", generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue() + topLeft);
-                            generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
-                        }
-
-
-                    } else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getName().equals("fill") &&
-                            semanticNetwork.getABTransformations().get(i).getTransformations().get(y).equals("top-bottom-right fill")) {
-
-                        String checkOne = "top-right,bottom-right";
-                        String checkTwo = "top-right";
-                        String checkThree = "bottom-right";
-                        String checkFour = "bottom-left,bottom-right";
-
-
-                        if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue().equals(checkOne)) {
-
-                            //Contains both so don't add anything
-
-                        } else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue().equals(checkTwo)) {
-
-                            //Contains top right so add bottom right
-                            String bottomRight = ",bottom-right";
-                            RavensAttribute attribute = new RavensAttribute("fill", generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue() + bottomRight);
-                            generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
-
-                        } else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue().equals(checkThree)) {
-
-                            //Contains bottom right so add top right
-                            String topRight = "top-right,";
-                            RavensAttribute attribute = new RavensAttribute("fill", topRight + generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue());
-                            generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
-
-                        } else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue().equals(checkFour)) {
-
-                            //Contains bottom right and bottom left so add top right
-                            String topRight = "top-right,";
-                            RavensAttribute attribute = new RavensAttribute("fill", topRight + generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue());
-                            generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
-
-                        } else {
-                        }
-
-                    } else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getName().equals("size") &&
-                            semanticNetwork.getABTransformations().get(i).getTransformations().get(y).equals("no large")) {
-
-                        RavensAttribute attribute = new RavensAttribute("size", "small");
-                        generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
-
-                    } else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getName().equals("size") &&
-                            semanticNetwork.getABTransformations().get(i).getTransformations().get(y).equals("yes large")) {
-
-                        RavensAttribute attribute = new RavensAttribute("size", "large");
-                        generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
-
-                    } else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getName().equals("size") &&
-                            semanticNetwork.getABTransformations().get(i).getTransformations().get(y).equals("added left-of")) {
-
-                        //TODO - HARCODING - NEEDS REVISION
-                        RavensAttribute attribute = new RavensAttribute("left-of", "X");
-                        generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().add(j, attribute);
-
-                    } else {
 
                     }
 
                 }
 
+            }
 
-                //WE ARE ASSUMING WE ARE SWITCHING TO "ABOVE" TO THE CORRECT "INSIDE" HOWEVER THIS MAY NOT BE THE CASE
-                for(int k=0; k<semanticNetwork.getABTransformations().get(i).getAboveObjects().size(); k++) {
+            System.out.print("hello");
 
-                    if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getName().equals("inside")){
+        } else {
 
-                        generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().remove(j);
+            //Apply transformation to correct object in FrameD (copy of C)
+            for(int i=0; i<semanticNetwork.getABTransformations().size(); i++) {
 
-                        RavensAttribute attribute = new RavensAttribute("above", semanticNetwork.getABTransformations().get(i).getAboveObjects().get(k).getName());
-                        generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().add(j, attribute);
+                int transformationIndex = findBestCorrespondenceForTransformationsFrameC(semanticNetwork.getFrameC(), semanticNetwork.getABTransformations().get(i));
+                String shapeOfFrameDObject = generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(0).getValue();
 
+                for(int j=0; j<generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().size(); j++) {
+
+                    for(int y=0; y<semanticNetwork.getABTransformations().get(i).getTransformations().size(); y++){
+
+                        if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getName().equals("angle") &&
+                                semanticNetwork.getABTransformations().get(i).getTransformations().get(y).equals("rotate -45")){
+
+                            if(shapeOfFrameDObject.equals("circle")) {
+                                RavensAttribute attribute = new RavensAttribute("angle", generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue());
+                                generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
+                            } else {
+                                RavensAttribute attribute = new RavensAttribute("angle", Utility.performRotation(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue(), "-45"));
+                                generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
+                            }
+
+                        } else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getName().equals("angle") &&
+                                semanticNetwork.getABTransformations().get(i).getTransformations().get(y).equals("rotate 45")){
+
+                            if(shapeOfFrameDObject.equals("circle")) {
+                                RavensAttribute attribute = new RavensAttribute("angle", generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue());
+                                generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
+                            } else {
+                                RavensAttribute attribute = new RavensAttribute("angle", Utility.performRotation(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue(), "45"));
+                                generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
+                            }
+
+                        } else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getName().equals("angle") &&
+                                semanticNetwork.getABTransformations().get(i).getTransformations().get(y).equals("rotate 180")){
+
+                            if(shapeOfFrameDObject.equals("circle")) {
+                                RavensAttribute attribute = new RavensAttribute("angle", generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue());
+                                generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
+                            } else {
+                                RavensAttribute attribute = new RavensAttribute("angle", Utility.performRotation(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue(), "180"));
+                                generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
+                            }
+
+                        } else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getName().equals("angle") &&
+                                semanticNetwork.getABTransformations().get(i).getTransformations().get(y).equals("rotate 90")){
+
+                            if(shapeOfFrameDObject.equals("circle")) {
+                                RavensAttribute attribute = new RavensAttribute("angle", generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue());
+                                generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
+                            } else {
+                                RavensAttribute attribute = new RavensAttribute("angle", Utility.performRotation(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue(), "90"));
+                                generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
+                            }
+
+                        } else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getName().equals("angle") &&
+                                semanticNetwork.getABTransformations().get(i).getTransformations().get(y).equals("reflect left")) {
+
+                            RavensAttribute attribute = new RavensAttribute("angle", Utility.performReflection(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue(), shapeOfFrameDObject));
+                            generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
+
+                        } else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getName().equals("angle") &&
+                                semanticNetwork.getABTransformations().get(i).getTransformations().get(y).equals("reflect right")) {
+
+                            RavensAttribute attribute = new RavensAttribute("angle", Utility.performReflection(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue(), shapeOfFrameDObject));
+                            generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
+
+                        } else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getName().equals("fill") &&
+                                semanticNetwork.getABTransformations().get(i).getTransformations().get(y).equals("yes fill")) {
+
+                            RavensAttribute attribute = new RavensAttribute("fill", "yes");
+                            generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
+
+                        } else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getName().equals("fill") &&
+                                semanticNetwork.getABTransformations().get(i).getTransformations().get(y).equals("no fill")) {
+
+                            RavensAttribute attribute = new RavensAttribute("fill", "no");
+                            generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
+
+                        } else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getName().equals("fill") &&
+                                semanticNetwork.getABTransformations().get(i).getTransformations().get(y).equals("left-half fill")) {
+
+                            RavensAttribute attribute = new RavensAttribute("fill", "left-half");
+                            generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
+
+                        } else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getName().equals("fill") &&
+                                semanticNetwork.getABTransformations().get(i).getTransformations().get(y).equals("right-half fill")) {
+
+                            RavensAttribute attribute = new RavensAttribute("fill", "right-half");
+                            generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
+
+                        }  else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getName().equals("fill") &&
+                                semanticNetwork.getABTransformations().get(i).getTransformations().get(y).equals("top-bottom-left fill")) {
+
+                            String toAddFirst = "top-left,bottom-left";
+                            String toAddSecond = "top-left";
+                            String toAddThird = "bottom-left";
+
+                            if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue().contains(toAddFirst)) {
+
+                                //Contains both so don't add anything
+
+                            } else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue().contains(toAddSecond)) {
+
+                                //Contains top left so add bottom left
+                                String bottomLeft = ",bottom-left";
+                                RavensAttribute attribute = new RavensAttribute("fill", generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue() + bottomLeft);
+                                generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
+
+                            } else {
+                                //Contains bottom left so add top left
+                                String topLeft = ",top-left";
+                                RavensAttribute attribute = new RavensAttribute("fill", generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue() + topLeft);
+                                generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
+                            }
+
+
+                        } else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getName().equals("fill") &&
+                                semanticNetwork.getABTransformations().get(i).getTransformations().get(y).equals("top-bottom-right fill")) {
+
+                            String checkOne = "top-right,bottom-right";
+                            String checkTwo = "top-right";
+                            String checkThree = "bottom-right";
+                            String checkFour = "bottom-left,bottom-right";
+
+
+                            if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue().equals(checkOne)) {
+
+                                //Contains both so don't add anything
+
+                            } else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue().equals(checkTwo)) {
+
+                                //Contains top right so add bottom right
+                                String bottomRight = ",bottom-right";
+                                RavensAttribute attribute = new RavensAttribute("fill", generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue() + bottomRight);
+                                generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
+
+                            } else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue().equals(checkThree)) {
+
+                                //Contains bottom right so add top right
+                                String topRight = "top-right,";
+                                RavensAttribute attribute = new RavensAttribute("fill", topRight + generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue());
+                                generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
+
+                            } else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue().equals(checkFour)) {
+
+                                //Contains bottom right and bottom left so add top right
+                                String topRight = "top-right,";
+                                RavensAttribute attribute = new RavensAttribute("fill", topRight + generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue());
+                                generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
+
+                            } else {
+                            }
+
+                        } else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getName().equals("size") &&
+                                semanticNetwork.getABTransformations().get(i).getTransformations().get(y).equals("no large")) {
+
+                            RavensAttribute attribute = new RavensAttribute("size", "small");
+                            generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
+
+                        } else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getName().equals("size") &&
+                                semanticNetwork.getABTransformations().get(i).getTransformations().get(y).equals("yes large")) {
+
+                            RavensAttribute attribute = new RavensAttribute("size", "large");
+                            generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
+
+                        } else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getName().equals("shape") &&
+                                semanticNetwork.getABTransformations().get(i).getTransformations().get(y).equals("change to triangle")) {
+
+                            RavensAttribute attribute = new RavensAttribute("shape", "triangle");
+                            generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
+
+                        } else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getName().equals("shape") &&
+                                semanticNetwork.getABTransformations().get(i).getTransformations().get(y).equals("change to square")) {
+
+                            RavensAttribute attribute = new RavensAttribute("shape", "square");
+                            generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
+
+                        } else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getName().equals("shape") &&
+                                semanticNetwork.getABTransformations().get(i).getTransformations().get(y).equals("change to circle")) {
+
+                            RavensAttribute attribute = new RavensAttribute("shape", "circle");
+                            generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
+
+                        } else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getName().equals("size") &&
+                                semanticNetwork.getABTransformations().get(i).getTransformations().get(y).equals("added left-of")) {
+
+                            //TODO - HARCODING - NEEDS REVISION
+                            RavensAttribute attribute = new RavensAttribute("left-of", "X");
+                            generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().add(j, attribute);
+
+                        } else {
+
+                        }
 
                     }
+
+
+                    //WE ARE ASSUMING WE ARE SWITCHING TO "ABOVE" TO THE CORRECT "INSIDE" HOWEVER THIS MAY NOT BE THE CASE
+                    for(int k=0; k<semanticNetwork.getABTransformations().get(i).getAboveObjects().size(); k++) {
+
+                        if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getName().equals("inside")){
+
+                            generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().remove(j);
+
+                            RavensAttribute attribute = new RavensAttribute("above", semanticNetwork.getABTransformations().get(i).getAboveObjects().get(k).getName());
+                            generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().add(j, attribute);
+
+
+                        }
 //                    else {
 //                        //If we can't find inside it means it must be new so added
 //                        RavensAttribute attribute = new RavensAttribute("above", semanticNetwork.getABTransformations().get(i).getAboveObjects().get(k).getName());
 //                        generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().add(j, attribute);
 //                    }
-                }
+                    }
 
-                //WE ARE ASSUMING WE ARE SWITCHING TO "ABOVE" TO THE CORRECT "INSIDE" HOWEVER THIS MAY NOT BE THE CASE
-                for(int k=0; k<semanticNetwork.getABTransformations().get(i).getLeftOfObjects().size(); k++) {
+                    //WE ARE ASSUMING WE ARE SWITCHING TO "ABOVE" TO THE CORRECT "INSIDE" HOWEVER THIS MAY NOT BE THE CASE
+                    for(int k=0; k<semanticNetwork.getABTransformations().get(i).getLeftOfObjects().size(); k++) {
 
-                    boolean isThere = false;
-                    //We will only add if not present
-                    for(int u=0; u<generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().size(); u++) {
+                        boolean isThere = false;
+                        //We will only add if not present
+                        for(int u=0; u<generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().size(); u++) {
 
-                        if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(u).getName().equals("left-of")){
-                            isThere = true;
+                            if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(u).getName().equals("left-of")){
+                                isThere = true;
+                            }
                         }
-                    }
 
-                    if(!isThere){
-                        RavensAttribute attribute = new RavensAttribute("left-of", semanticNetwork.getABTransformations().get(i).getLeftOfObjects().get(k).getName());
-                        generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().add(j, attribute);
-                    }
+                        if(!isThere){
+                            RavensAttribute attribute = new RavensAttribute("left-of", semanticNetwork.getABTransformations().get(i).getLeftOfObjects().get(k).getName());
+                            generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().add(j, attribute);
 
+                        }
+
+                    }
                 }
+
+
             }
-
-
         }
+
 
         System.out.println("Done Creating Frame D");
 

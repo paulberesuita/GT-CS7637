@@ -78,21 +78,21 @@ public class Transformation {
 
                 if(secondObject.getAttributes().get(i).getName().equals("above")){
 
-                    RavensObject object = Utility.returnObject(secondObject.getAttributes().get(i).getValue(), frameA, frameB, frameC);
+                    RavensObject object = Utility.returnObjectInFrameB(secondObject.getAttributes().get(i).getValue(), frameB);
                     getAboveObjects().add(object);
                     differencesExist = true;
 
 
                 } else if(secondObject.getAttributes().get(i).getName().equals("inside")) {
 
-                    RavensObject object = Utility.returnObject(secondObject.getAttributes().get(i).getValue(), frameA, frameB, frameC);
+                    RavensObject object = Utility.returnObjectInFrameB(secondObject.getAttributes().get(i).getValue(), frameB);
                     getInsideObjects().add(object);
                     differencesExist = true;
 
 
                 } else if(secondObject.getAttributes().get(i).getName().equals("left-of")) {
 
-                    RavensObject object = Utility.returnObject(secondObject.getAttributes().get(i).getValue(), frameA, frameB, frameC);
+                    RavensObject object = Utility.returnObjectInFrameB(secondObject.getAttributes().get(i).getValue(), frameB);
                     getLeftOfObjects().add(object);
                     differencesExist = true;
 
@@ -220,6 +220,8 @@ public class Transformation {
                     difference =  "rotate 90";
                 } else if(firstNodeValue.equals("0") && secondNodeValue.equals("180")) {
                     difference =  "rotate 180";
+                } else if(firstNodeValue.equals("0") && secondNodeValue.equals("270")) {
+                    difference =  "rotate 270";
                 } else if(firstNodeValue.equals("45") && secondNodeValue.equals("0")) {
                     difference =  "rotate -45";
                 } else if(firstNodeValue.equals("45") && secondNodeValue.equals("135")) {

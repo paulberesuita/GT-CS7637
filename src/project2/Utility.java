@@ -43,6 +43,21 @@ public class Utility {
         return object;
     }
 
+    public static RavensObject returnObjectInFrameB(String objectName, FrameB frameB) {
+
+        RavensObject object = null;
+
+        for(int i=0; i<frameB.getObjects().size(); i++) {
+
+            if(frameB.getObjects().get(i).getName().equals(objectName)) {
+                object = frameB.getObjects().get(i);
+            }
+
+        }
+
+        return object;
+    }
+
     /**
      * Find the object that best corresponds to the object given
      * @param object
@@ -108,6 +123,11 @@ public class Utility {
                     }
 
                 }
+            }
+
+//            //Take out some points for each extra attribute
+            if(allObjects.get(i).getAttributes().size() != object.getAttributes().size()) {
+                count--;
             }
 
             if(count > highestCurrentCount) {
