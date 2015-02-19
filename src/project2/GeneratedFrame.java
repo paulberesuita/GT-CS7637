@@ -43,13 +43,23 @@ public class GeneratedFrame {
         }
 
 
-        //Checking if the object to be added is in the removal list; if it is then it will removed
+        //Removing objects in the removal list
         if(semanticNetwork.getABRemovals().size() > 0) {
 
             for(int i=0; i<semanticNetwork.getABRemovals().size(); i++) {
 
                 int index = Utility.objectIndexToRemove(semanticNetwork.getABRemovals().get(i), generatedFrameDFromC);
                 generatedFrameDFromC.getObjects().remove(index);
+            }
+
+        }
+
+        //Adding objects in the adding list
+        if(semanticNetwork.getABAdditions().size() > 0) {
+
+            for(int i=0; i<semanticNetwork.getABAdditions().size(); i++) {
+
+                generatedFrameDFromC.getObjects().add(semanticNetwork.getABAdditions().get(i));
             }
 
         }
@@ -173,14 +183,43 @@ public class GeneratedFrame {
                         } else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getName().equals("angle") &&
                                 semanticNetwork.getABTransformations().get(i).getTransformations().get(y).equals("reflect left")) {
 
-                            RavensAttribute attribute = new RavensAttribute("angle", Utility.performReflection(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue(), shapeOfFrameDObject));
-                            generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
+                            if(shapeOfFrameDObject.equals("half-arrow")) {
+
+                                RavensAttribute attribute = new RavensAttribute("angle", Utility.performReflection(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue(), shapeOfFrameDObject));
+                                generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
+
+                                //since it was a reflection we are gonna set the flip to true
+                                for(int e=0; e<generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().size(); e++) {
+
+                                    if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(e).getName().equals("vertical-flip")){
+                                        RavensAttribute attributeVerticalFlip = new RavensAttribute("vertical-flip", "yes");
+                                        generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(e, attributeVerticalFlip);
+                                    }
+                                }
+
+                            } else {
+
+                                RavensAttribute attribute = new RavensAttribute("angle", Utility.performReflection(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue(), shapeOfFrameDObject));
+                                generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
+
+                            }
+
 
                         } else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getName().equals("angle") &&
                                 semanticNetwork.getABTransformations().get(i).getTransformations().get(y).equals("reflect right")) {
 
-                            RavensAttribute attribute = new RavensAttribute("angle", Utility.performReflection(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue(), shapeOfFrameDObject));
-                            generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
+                            if(shapeOfFrameDObject.equals("half-arrow")) {
+
+                                RavensAttribute attribute = new RavensAttribute("angle", Utility.performReflection(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue(), shapeOfFrameDObject));
+                                generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
+
+                            } else {
+
+                                RavensAttribute attribute = new RavensAttribute("angle", Utility.performReflection(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getValue(), shapeOfFrameDObject));
+                                generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().set(j, attribute);
+
+                            }
+
 
                         } else if(generatedFrameDFromC.getObjects().get(transformationIndex).getAttributes().get(j).getName().equals("fill") &&
                                 semanticNetwork.getABTransformations().get(i).getTransformations().get(y).equals("yes fill")) {

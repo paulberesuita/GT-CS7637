@@ -203,7 +203,6 @@ public class Utility {
 
                             } else {
 
-                                //TODO - MAJOR REMOVE ELSE STATEMENT BECAUSE ITS AWARDING POINTS TO STUFF THAT IS NEVER CORRECT; FIX THE ABOVE: X, LEFT-OF: Y (BETTER SOLUTION WILL GIVE BETTER ANSWERS)
                                 if(generatedFrame.getObjects().get(y).getAttributes().get(m).getName().equals(frameSolution.get(y).getAttributes().get(n).getName()) &&
                                         generatedFrame.getObjects().get(y).getAttributes().get(m).getValue().equals(frameSolution.get(y).getAttributes().get(n).getValue())) {
                                     count ++;
@@ -272,6 +271,8 @@ public class Utility {
                 angleValue = angleValue - 90;
             } else if(objectShape.equals("right-triangle")) {
                 angleValue = angleValue + 90;
+            } else if(objectShape.equals("half-arrow")) {
+                angleValue = angleValue + 180;
             } else {
             }
         } else {
@@ -279,7 +280,9 @@ public class Utility {
                 angleValue = angleValue + 90;
             } else if(objectShape.equals("right-triangle")) {
                 angleValue = angleValue - 90;
-            } else {
+            } else if(objectShape.equals("half-arrow")) {
+                angleValue = angleValue + 180;
+            }else {
             }
         }
 

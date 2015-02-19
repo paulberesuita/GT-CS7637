@@ -10,9 +10,11 @@ public class SemanticNetwork {
 
     ArrayList<Transformation> ABTransformations = null;
     ArrayList<RavensObject> ABRemovals = null;
+    ArrayList<RavensObject> ABAdditions = null;
 
     ArrayList<Transformation> ACTransformations = null;
     ArrayList<RavensObject> ACRemovals = null;
+    ArrayList<RavensObject> ACAdditions = null;
 
     public SemanticNetwork(FrameA frameA, FrameB frameB, FrameC frameC) {
 
@@ -21,8 +23,10 @@ public class SemanticNetwork {
         this.frameC = frameC;
         ABTransformations = new ArrayList<Transformation>();
         ABRemovals = new ArrayList<RavensObject>();
+        ABAdditions = new ArrayList<RavensObject>();
         ACTransformations = new ArrayList<Transformation>();
         ACRemovals = new ArrayList<RavensObject>();
+        ACAdditions = new ArrayList<RavensObject>();
 
     }
     public void generateTransformations2x1() {
@@ -106,7 +110,8 @@ public class SemanticNetwork {
             indexAndScoreArrayAC.add(frameCObjectCorrespondence);
         }
 
-        if(frameA.getObjects().size() != frameB.getObjects().size()) {
+        //Possible items need to be removed
+        if(frameA.getObjects().size() > frameB.getObjects().size()) {
 
             ArrayList<CorrespondenceIndexAndScore> tempIndexAndScoreArrayAB = new ArrayList<CorrespondenceIndexAndScore>(indexAndScoreArrayAB);
 
@@ -134,6 +139,31 @@ public class SemanticNetwork {
                 }
 
             }
+        }
+
+        //Possible items need to be added
+        if(frameA.getObjects().size() < frameB.getObjects().size()) {
+
+            ArrayList<CorrespondenceIndexAndScore> tempIndexAndScoreArrayAB = new ArrayList<CorrespondenceIndexAndScore>(indexAndScoreArrayAB);
+
+            for(int i=0; i<frameB.getObjects().size(); i++) {
+
+                //Check if it exists as a corresponding object, else then it must be new
+                boolean isThere = false;
+                for(int p=0; p<tempIndexAndScoreArrayAB.size(); p++) {
+
+                    if(tempIndexAndScoreArrayAB.get(p).getCorrespondingObjectIndex() == i) {
+                        isThere = true;
+                    }
+                    System.out.print("tests");
+
+                }
+
+                if (!isThere) {
+                    ABAdditions.add(frameB.getObjects().get(i));
+                }
+            }
+
         }
 
         //Create Transformations (A to B)
@@ -246,5 +276,21 @@ public class SemanticNetwork {
 
     public void setFrameB(FrameB frameB) {
         this.frameB = frameB;
+    }
+
+    public ArrayList<RavensObject> getABAdditions() {
+        return ABAdditions;
+    }
+
+    public void setABAdditions(ArrayList<RavensObject> ABAdditions) {
+        this.ABAdditions = ABAdditions;
+    }
+
+    public ArrayList<RavensObject> getACAdditions() {
+        return ACAdditions;
+    }
+
+    public void setACAdditions(ArrayList<RavensObject> ACAdditions) {
+        this.ACAdditions = ACAdditions;
     }
 }

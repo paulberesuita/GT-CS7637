@@ -213,6 +213,13 @@ public class Transformation {
                     difference =  "reflect down";
                 }  else {
                 }
+            } else if(firstObjectShapeType.equals("arrow") && secondObjectShapeType.equals("arrow")) {
+                if(firstNodeValue.equals("0") && secondNodeValue.equals("180")) {
+                    difference =  "reflect left";
+                } else if(firstNodeValue.equals("180") && secondNodeValue.equals("0")) {
+                    difference =  "reflect right";
+                } else {
+                }
             } else {
                 if(firstNodeValue.equals("0") && secondNodeValue.equals("45")) {
                     difference =  "rotate 45";

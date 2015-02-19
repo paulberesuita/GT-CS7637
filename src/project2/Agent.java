@@ -78,7 +78,7 @@ public class Agent {
         //Check which algorithm to use
         if(problem.getProblemType().toString().equals("2x1")) {
 
-//           if(problem.getName().equals("2x1 Basic Problem 15")) {
+//           if(problem.getName().equals("2x1 Basic Problem 18")) {
             semanticNetwork.generateTransformations2x1();
             GeneratedFrame generatedSolution = new GeneratedFrame(semanticNetwork, figures.get("B"), figures.get("C"));
             generatedSolution.createFrame();
@@ -89,7 +89,7 @@ public class Agent {
 
         } else if(problem.getProblemType().toString().equals("2x2")) {
 
-//            if(problem.getName().equals("2x2 Basic Problem 06")) {
+//            if(problem.getName().equals("2x2 Basic Problem 07")) {
                 semanticNetwork.generateTransformations2x2();
                 GeneratedFrame generatedSolution = new GeneratedFrame(semanticNetwork, figures.get("B"), figures.get("C"));
                 generatedSolution.createFrame();
