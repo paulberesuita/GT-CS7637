@@ -11,10 +11,12 @@ public class SemanticNetwork {
     ArrayList<Transformation> ABTransformations = null;
     ArrayList<RavensObject> ABRemovals = null;
     ArrayList<RavensObject> ABAdditions = null;
+    int MultipleTransformationAB = 0;
 
     ArrayList<Transformation> ACTransformations = null;
     ArrayList<RavensObject> ACRemovals = null;
     ArrayList<RavensObject> ACAdditions = null;
+    int MultipleTransformationAC = 0;
 
     public SemanticNetwork(FrameA frameA, FrameB frameB, FrameC frameC) {
 
@@ -110,7 +112,8 @@ public class SemanticNetwork {
             indexAndScoreArrayAC.add(frameCObjectCorrespondence);
         }
 
-        //Possible items need to be removed
+
+        //A TO B - Possible items need to be removed
         if(frameA.getObjects().size() > frameB.getObjects().size()) {
 
             ArrayList<CorrespondenceIndexAndScore> tempIndexAndScoreArrayAB = new ArrayList<CorrespondenceIndexAndScore>(indexAndScoreArrayAB);
@@ -141,26 +144,48 @@ public class SemanticNetwork {
             }
         }
 
-        //Possible items need to be added
+        //A TO B - Possible items need to be added
         if(frameA.getObjects().size() < frameB.getObjects().size()) {
 
             ArrayList<CorrespondenceIndexAndScore> tempIndexAndScoreArrayAB = new ArrayList<CorrespondenceIndexAndScore>(indexAndScoreArrayAB);
 
+            boolean isMultiplicity = true;
+
+            //Check if its actually adding or multiplicity; Assuming 1 object to multiply
             for(int i=0; i<frameB.getObjects().size(); i++) {
 
-                //Check if it exists as a corresponding object, else then it must be new
-                boolean isThere = false;
-                for(int p=0; p<tempIndexAndScoreArrayAB.size(); p++) {
+                //Careful with initial empty objects
+                if(frameA.getObjects().size() > 0) {
 
-                    if(tempIndexAndScoreArrayAB.get(p).getCorrespondingObjectIndex() == i) {
-                        isThere = true;
+                    String shapeOfFrameObject = frameA.getObjects().get(0).getAttributes().get(0).getValue();
+
+
+                    if (frameB.getObjects().get(i).getAttributes().get(0).getValue().equals(shapeOfFrameObject)) {
+                        MultipleTransformationAB++;
+                    } else {
+                        isMultiplicity = false;
                     }
-                    System.out.print("tests");
-
+                } else {
+                    isMultiplicity = false;
                 }
+            }
 
-                if (!isThere) {
-                    ABAdditions.add(frameB.getObjects().get(i));
+            if(!isMultiplicity){
+                for(int i=0; i<frameB.getObjects().size(); i++) {
+
+                    //Check if it exists as a corresponding object, else then it must be new
+                    boolean isThere = false;
+                    for(int p=0; p<tempIndexAndScoreArrayAB.size(); p++) {
+
+                        if(tempIndexAndScoreArrayAB.get(p).getCorrespondingObjectIndex() == i) {
+                            isThere = true;
+                        }
+
+                    }
+
+                    if (!isThere) {
+                        ABAdditions.add(frameB.getObjects().get(i));
+                    }
                 }
             }
 
@@ -177,6 +202,7 @@ public class SemanticNetwork {
             }
         }
 
+        //A TO C - Possible items to be removed
         if(frameA.getObjects().size() != frameC.getObjects().size()) {
 
             ArrayList<CorrespondenceIndexAndScore> tempIndexAndScoreArrayAC = new ArrayList<CorrespondenceIndexAndScore>(indexAndScoreArrayAC);
@@ -207,6 +233,54 @@ public class SemanticNetwork {
             }
         }
 
+        //A TO C - Possible items need to be added
+        if(frameA.getObjects().size() < frameC.getObjects().size()) {
+
+            ArrayList<CorrespondenceIndexAndScore> tempIndexAndScoreArrayAC = new ArrayList<CorrespondenceIndexAndScore>(indexAndScoreArrayAB);
+
+            boolean isMultiplicity = true;
+
+            //Check if its actually adding or multiplicity; Assuming 1 object to multiply
+            for(int i=0; i<frameC.getObjects().size(); i++) {
+
+                //Careful with initial empty objects
+                if(frameA.getObjects().size() > 0) {
+
+                    String shapeOfFrameObject = frameA.getObjects().get(0).getAttributes().get(0).getValue();
+
+                    if(frameC.getObjects().get(i).getAttributes().get(0).getValue().equals(shapeOfFrameObject)){
+                        MultipleTransformationAC++;
+                    } else {
+                        isMultiplicity = false;
+                    }
+
+                } else {
+                    isMultiplicity = false;
+                }
+
+            }
+
+            if(!isMultiplicity) {
+                for(int i=0; i<frameC.getObjects().size(); i++) {
+
+                    //Check if it exists as a corresponding object, else then it must be new
+                    boolean isThere = false;
+                    for(int p=0; p<tempIndexAndScoreArrayAC.size(); p++) {
+
+                        if(tempIndexAndScoreArrayAC.get(p).getCorrespondingObjectIndex() == i) {
+                            isThere = true;
+                        }
+
+                    }
+
+                    if (!isThere) {
+                        ACAdditions.add(frameC.getObjects().get(i));
+                    }
+                }
+            }
+
+        }
+
         //Create Transformations (A to C)
         for(int i=0; i<indexAndScoreArrayAC.size(); i++) {
 
@@ -222,6 +296,13 @@ public class SemanticNetwork {
 
     }
 
+    public void performTransformationFromAtoB(){
+
+    }
+
+    public void performTransformationFromAtoC(){
+
+    }
     public ArrayList<Transformation> getABTransformations() {
         return ABTransformations;
     }
