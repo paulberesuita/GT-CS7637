@@ -409,7 +409,7 @@ public class Utility {
         return shapeValue;
     }
 
-    public static String performReflection(String value, String objectShape) {
+    public static String performReflection(String value, String objectShape, String direction) {
 
         String result = "";
 
@@ -430,10 +430,17 @@ public class Utility {
                 angleValue = angleValue + 90;
             } else if(objectShape.equals("right-triangle")) {
 
-                if(angleValue == 90 ){
+                if(angleValue == 90 && direction.equals("right")){
                     angleValue = angleValue + 90;
-                } else if(angleValue == 180) {
+                } else if(angleValue == 90 && direction.equals("down")){
                     angleValue = angleValue - 90;
+                }
+                else if(angleValue == 180 && direction.equals("left")) {
+                    angleValue = angleValue - 90;
+                } else if(angleValue == 180 && direction.equals("down")) {
+                    angleValue = angleValue + 90;
+                } else {
+
                 }
 
             } else if(objectShape.equals("half-arrow")) {
