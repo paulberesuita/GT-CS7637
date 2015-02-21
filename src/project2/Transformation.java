@@ -1,6 +1,8 @@
 package project2;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Transformation {
 
@@ -92,15 +94,45 @@ public class Transformation {
 
                 } else if(secondObject.getAttributes().get(i).getName().equals("left-of")) {
 
-                    RavensObject object = Utility.returnObjectInFrameB(secondObject.getAttributes().get(i).getValue(), frameB);
-                    getLeftOfObjects().add(object);
+                    if(secondObject.getAttributes().get(i).getValue().contains(",")){
+
+                        List<String> differentObjects = Arrays.asList(secondObject.getAttributes().get(i).getValue().split(","));
+
+                        for(int n=0; n<differentObjects.size(); n++) {
+
+                            RavensObject object = Utility.returnObjectInFrameB(differentObjects.get(n), frameB);
+                            getLeftOfObjects().add(object);
+                        }
+
+                    } else {
+
+                        RavensObject object = Utility.returnObjectInFrameB(secondObject.getAttributes().get(i).getValue(), frameB);
+                        getLeftOfObjects().add(object);
+                    }
+
                     differencesExist = true;
 
 
                 } else if(secondObject.getAttributes().get(i).getName().equals("right-of")) {
 
-                    RavensObject object = Utility.returnObject(secondObject.getAttributes().get(i).getValue(), frameA, frameB, frameC);
-                    getRightOfObjects().add(object);
+
+
+                    if(secondObject.getAttributes().get(i).getValue().contains(",")){
+
+                        List<String> differentObjects = Arrays.asList(secondObject.getAttributes().get(i).getValue().split(","));
+
+                        for(int n=0; n<differentObjects.size(); n++) {
+
+                            RavensObject object = Utility.returnObject(differentObjects.get(n), frameA, frameB, frameC);
+                            getLeftOfObjects().add(object);
+                        }
+
+                    } else {
+
+                        RavensObject object = Utility.returnObject(secondObject.getAttributes().get(i).getValue(), frameA, frameB, frameC);
+                        getRightOfObjects().add(object);
+                    }
+
                     differencesExist = true;
 
 

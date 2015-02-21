@@ -8,6 +8,7 @@ public class GeneratedFrame {
     RavensFigure generatedFrameDFromB = null;
     RavensFigure generatedFrameDFromC = null;
     RavensFigure generatedFrameDFromBC = null;
+    boolean uncertainRotation = false;
 
     RavensFigure figureB = null;
     RavensFigure figureC = null;
@@ -873,6 +874,12 @@ public class GeneratedFrame {
             }
         }
 
+        //Special Case - ONLY MULTIPLE - 2X2 BASIC PROBLEM 13 AND 16
+        boolean onlyCircle = false;
+        if(semanticNetwork.isCircleOnlyUnclearRotationAB()){
+            onlyCircle = true;
+        }
+
         if(onlyRotation90 || onlyRotation180 || onlyRotation270) {
 
             for(int i=0; i<generatedFrameDFromBC.getObjects().size(); i++) {
@@ -899,6 +906,44 @@ public class GeneratedFrame {
                 }
 
             }
+
+        } else if(onlyCircle) {
+
+//            RavensObject object = generatedFrameDFromBC.getObjects().get(0);
+//            RavensObject object2 = generatedFrameDFromBC.getObjects().get(0);
+//            RavensObject object3 = generatedFrameDFromBC.getObjects().get(0);
+//            RavensObject object4 = generatedFrameDFromBC.getObjects().get(0);
+//            RavensObject object5 = generatedFrameDFromBC.getObjects().get(0);
+//
+//            int angleIndex = 0;
+//
+//            for(int i=0; i<object.getAttributes().size(); i++) {
+//                if(object.getAttributes().get(i).getName().equals("angle")){
+//                    angleIndex = i;
+//                }
+//            }
+//
+//            RavensAttribute attributeAngle0 = new RavensAttribute("angle", "0");
+//            object.getAttributes().set(angleIndex, attributeAngle0);
+//            generatedFrameDFromBC.getObjects().add(object);
+//
+//            RavensAttribute attributeAngle45 = new RavensAttribute("angle", "45");
+//            object2.getAttributes().set(angleIndex, attributeAngle45);
+//            generatedFrameDFromBC.getObjects().add(object2);
+//
+//            RavensAttribute attributeAngle90 = new RavensAttribute("angle", "90");
+//            object3.getAttributes().set(angleIndex, attributeAngle90);
+//            generatedFrameDFromBC.getObjects().add(object3);
+//
+//            RavensAttribute attributeAngle135 = new RavensAttribute("angle", "135");
+//            object4.getAttributes().set(angleIndex, attributeAngle135);
+//            generatedFrameDFromBC.getObjects().add(object4);
+//
+//            RavensAttribute attributeAngle80 = new RavensAttribute("angle", "180");
+//            object5.getAttributes().set(angleIndex, attributeAngle80);
+//            generatedFrameDFromBC.getObjects().add(object5);
+
+            uncertainRotation = true;
 
         } else {
 
@@ -1260,11 +1305,18 @@ public class GeneratedFrame {
             }
         }
 
-        boolean onlyMultiple = false;
         //Special Case - ONLY MULTIPLE - 2X2 BASIC PROBLEM 13 AND 16
+        boolean onlyMultiple = false;
         if(semanticNetwork.MultipleTransformationAC > 0){
             onlyMultiple = true;
         }
+
+        //Special Case - ONLY MULTIPLE - 2X2 BASIC PROBLEM 12
+        boolean onlyCircle = false;
+        if(semanticNetwork.isCircleOnlyUnclearRotationAC()){
+            onlyCircle = true;
+        }
+
 
         if(onlyRotation90 || onlyRotation180 || onlyRotation270) {
 
@@ -1300,6 +1352,44 @@ public class GeneratedFrame {
             for(int i=1; i<semanticNetwork.MultipleTransformationAC; i++) {
                 generatedFrameDFromBC.getObjects().add(object);
             }
+
+        } else if(onlyCircle) {
+
+//            RavensObject object = generatedFrameDFromBC.getObjects().get(0);
+//            RavensObject object2 = generatedFrameDFromBC.getObjects().get(0);
+//            RavensObject object3 = generatedFrameDFromBC.getObjects().get(0);
+//            RavensObject object4 = generatedFrameDFromBC.getObjects().get(0);
+//            RavensObject object5 = generatedFrameDFromBC.getObjects().get(0);
+//
+//            int angleIndex = 0;
+//
+//            for(int i=0; i<object.getAttributes().size(); i++) {
+//                if(object.getAttributes().get(i).getName().equals("angle")){
+//                    angleIndex = i;
+//                }
+//            }
+
+//            RavensAttribute attributeAngle0 = new RavensAttribute("angle", "0");
+//            object.getAttributes().set(angleIndex, attributeAngle0);
+//            generatedFrameDFromBC.getObjects().add(object);
+//
+//            RavensAttribute attributeAngle45 = new RavensAttribute("angle", "45");
+//            object2.getAttributes().set(angleIndex, attributeAngle45);
+//            generatedFrameDFromBC.getObjects().add(object2);
+//
+//            RavensAttribute attributeAngle90 = new RavensAttribute("angle", "90");
+//            object3.getAttributes().set(angleIndex, attributeAngle90);
+//            generatedFrameDFromBC.getObjects().add(object3);
+//
+//            RavensAttribute attributeAngle135 = new RavensAttribute("angle", "135");
+//            object4.getAttributes().set(angleIndex, attributeAngle135);
+//            generatedFrameDFromBC.getObjects().add(object4);
+//
+//            RavensAttribute attributeAngle80 = new RavensAttribute("angle", "180");
+//            object5.getAttributes().set(angleIndex, attributeAngle80);
+//            generatedFrameDFromBC.getObjects().add(object5);
+
+            uncertainRotation = true;
 
         } else {
 
@@ -1754,5 +1844,61 @@ public class GeneratedFrame {
         }
 
         return transformationIndex;
+    }
+
+    public SemanticNetwork getSemanticNetwork() {
+        return semanticNetwork;
+    }
+
+    public void setSemanticNetwork(SemanticNetwork semanticNetwork) {
+        this.semanticNetwork = semanticNetwork;
+    }
+
+    public RavensFigure getGeneratedFrameDFromB() {
+        return generatedFrameDFromB;
+    }
+
+    public void setGeneratedFrameDFromB(RavensFigure generatedFrameDFromB) {
+        this.generatedFrameDFromB = generatedFrameDFromB;
+    }
+
+    public RavensFigure getGeneratedFrameDFromC() {
+        return generatedFrameDFromC;
+    }
+
+    public void setGeneratedFrameDFromC(RavensFigure generatedFrameDFromC) {
+        this.generatedFrameDFromC = generatedFrameDFromC;
+    }
+
+    public RavensFigure getGeneratedFrameDFromBC() {
+        return generatedFrameDFromBC;
+    }
+
+    public void setGeneratedFrameDFromBC(RavensFigure generatedFrameDFromBC) {
+        this.generatedFrameDFromBC = generatedFrameDFromBC;
+    }
+
+    public boolean isUncertainRotation() {
+        return uncertainRotation;
+    }
+
+    public void setUncertainRotation(boolean uncertainRotation) {
+        this.uncertainRotation = uncertainRotation;
+    }
+
+    public RavensFigure getFigureB() {
+        return figureB;
+    }
+
+    public void setFigureB(RavensFigure figureB) {
+        this.figureB = figureB;
+    }
+
+    public RavensFigure getFigureC() {
+        return figureC;
+    }
+
+    public void setFigureC(RavensFigure figureC) {
+        this.figureC = figureC;
     }
 }

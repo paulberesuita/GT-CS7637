@@ -12,11 +12,13 @@ public class SemanticNetwork {
     ArrayList<RavensObject> ABRemovals = null;
     ArrayList<RavensObject> ABAdditions = null;
     int MultipleTransformationAB = 0;
+    boolean circleOnlyUnclearRotationAB = false;
 
     ArrayList<Transformation> ACTransformations = null;
     ArrayList<RavensObject> ACRemovals = null;
     ArrayList<RavensObject> ACAdditions = null;
     int MultipleTransformationAC = 0;
+    boolean circleOnlyUnclearRotationAC = false;
 
     public SemanticNetwork(FrameA frameA, FrameB frameB, FrameC frameC) {
 
@@ -191,6 +193,15 @@ public class SemanticNetwork {
 
         }
 
+        //Special Case - Basic Problem 12 - Only Circle objects with no clear rotation
+        if(frameA.getObjects().size() == 1 && frameA.getObjects().size() == 1) {
+
+            if(frameA.getObjects().get(0).getAttributes().get(0).getValue().equals("circle") &&
+                frameB.getObjects().get(0).getAttributes().get(0).getValue().equals("circle")) {
+                circleOnlyUnclearRotationAB = true;
+            }
+        }
+
         //Create Transformations (A to B)
         for(int i=0; i<indexAndScoreArrayAB.size(); i++) {
 
@@ -279,6 +290,15 @@ public class SemanticNetwork {
                 }
             }
 
+        }
+
+        //Special Case - Basic Problem 12 - Only Circle objects with no clear rotation
+        if(frameA.getObjects().size() == 1 && frameC.getObjects().size() == 1) {
+
+            if(frameA.getObjects().get(0).getAttributes().get(0).getValue().equals("circle") &&
+                    frameC.getObjects().get(0).getAttributes().get(0).getValue().equals("circle")) {
+                circleOnlyUnclearRotationAC = true;
+            }
         }
 
         //Create Transformations (A to C)
@@ -373,5 +393,37 @@ public class SemanticNetwork {
 
     public void setACAdditions(ArrayList<RavensObject> ACAdditions) {
         this.ACAdditions = ACAdditions;
+    }
+
+    public int getMultipleTransformationAB() {
+        return MultipleTransformationAB;
+    }
+
+    public void setMultipleTransformationAB(int multipleTransformationAB) {
+        MultipleTransformationAB = multipleTransformationAB;
+    }
+
+    public boolean isCircleOnlyUnclearRotationAB() {
+        return circleOnlyUnclearRotationAB;
+    }
+
+    public void setCircleOnlyUnclearRotationAB(boolean circleOnlyUnclearRotationAB) {
+        this.circleOnlyUnclearRotationAB = circleOnlyUnclearRotationAB;
+    }
+
+    public int getMultipleTransformationAC() {
+        return MultipleTransformationAC;
+    }
+
+    public void setMultipleTransformationAC(int multipleTransformationAC) {
+        MultipleTransformationAC = multipleTransformationAC;
+    }
+
+    public boolean isCircleOnlyUnclearRotationAC() {
+        return circleOnlyUnclearRotationAC;
+    }
+
+    public void setCircleOnlyUnclearRotationAC(boolean circleOnlyUnclearRotationAC) {
+        this.circleOnlyUnclearRotationAC = circleOnlyUnclearRotationAC;
     }
 }

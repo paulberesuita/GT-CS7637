@@ -82,18 +82,18 @@ public class Agent {
             semanticNetwork.generateTransformations2x1();
             GeneratedFrame generatedSolution = new GeneratedFrame(semanticNetwork, figures.get("B"), figures.get("C"));
             generatedSolution.createFrame2x1();
-            String finalSolution = Utility.solution2x1(figures, generatedSolution.generatedFrameDFromC);
+            String finalSolution = Utility.solution2x1(figures, generatedSolution.generatedFrameDFromC, generatedSolution.isUncertainRotation());
             solution = finalSolution;
 
 //            }
 
         } else if(problem.getProblemType().toString().equals("2x2")) {
 
-//            if(problem.getName().equals("2x2 Basic Problem 12")) {
+//            if(problem.getName().equals("2x2 Basic Problem 15")) {
                 semanticNetwork.generateTransformations2x2();
                 GeneratedFrame generatedSolution = new GeneratedFrame(semanticNetwork, figures.get("B"), figures.get("C"));
                 generatedSolution.createFrame2x2();
-                String finalSolution = Utility.solution2x1(figures, generatedSolution.generatedFrameDFromBC);
+                String finalSolution = Utility.solution2x1(figures, generatedSolution.generatedFrameDFromBC, generatedSolution.isUncertainRotation());
 //                SolutionAndScore finalSolutionFromB = Utility.solution2x2(figures, generatedSolution.generatedFrameDFromB);
 //                SolutionAndScore finalSolutionFromC = Utility.solution2x2(figures, generatedSolution.generatedFrameDFromC);
 //                String finalSolution = Utility.finalSolution(finalSolutionFromB, finalSolutionFromC);

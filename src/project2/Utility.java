@@ -58,6 +58,21 @@ public class Utility {
         return object;
     }
 
+    public static RavensObject returnObjectInFrameA(String objectName, FrameA frameA) {
+
+        RavensObject object = null;
+
+        for(int i=0; i<frameA.getObjects().size(); i++) {
+
+            if(frameA.getObjects().get(i).getName().equals(objectName)) {
+                object = frameA.getObjects().get(i);
+            }
+
+        }
+
+        return object;
+    }
+
     /**
      * Find the object that best corresponds to the object given
      * @param object
@@ -292,7 +307,7 @@ public class Utility {
         }
     }
 
-    public static String solution2x1(HashMap<String, RavensFigure> possibleSolutions, RavensFigure generatedFrame) {
+    public static String solution2x1(HashMap<String, RavensFigure> possibleSolutions, RavensFigure generatedFrame, boolean uncertainRotation) {
 
         int solution = 0;
         int previousCount = 0;
@@ -302,6 +317,7 @@ public class Utility {
             ArrayList<RavensObject> frameSolution = possibleSolutions.get(String.valueOf(i)).getObjects();
 
             int count = 0;
+            int previousUncertainCount = 0;
 
             System.out.println("Generated Frame Number Objects: " + generatedFrame.getObjects().size());
             for(int y=0; y<generatedFrame.getObjects().size(); y++) {
@@ -317,6 +333,7 @@ public class Utility {
                     for(int m=0; m<generatedFrame.getObjects().get(y).getAttributes().size(); m++) {
 
                         System.out.println("Current Solution Number Of Attributes: " + frameSolution.get(y).getAttributes().size());
+
                         for(int n=0; n< frameSolution.get(y).getAttributes().size(); n++) {
 
                             //Special Case to check for specific fill order; sometimes bottom-left, bottom-right, etc are mix in the answers
@@ -357,6 +374,9 @@ public class Utility {
                                         generatedFrame.getObjects().get(y).getAttributes().get(m).getValue().equals(frameSolution.get(y).getAttributes().get(n).getValue())) {
                                     count ++;
                                     System.out.println("Increased Count!");
+                                } else if(generatedFrame.getObjects().get(y).getAttributes().get(m).getName().equals("shape") && frameSolution.get(y).getAttributes().get(n).getName().equals("shape") &&
+                                        !generatedFrame.getObjects().get(y).getAttributes().get(m).getValue().equals(frameSolution.get(y).getAttributes().get(n).getValue()) && uncertainRotation) {
+                                    count = count - 1;
                                 }
                             }
                         }
@@ -368,6 +388,10 @@ public class Utility {
                 solution = i;
                 previousCount = count;
             }
+            else if(count == previousCount && uncertainRotation == true) {
+                solution = i;
+                previousCount = count;
+            } else {}
 
         }
 
