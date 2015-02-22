@@ -76,7 +76,7 @@ public class Agent {
         SemanticNetwork semanticNetwork = new SemanticNetwork(frameA, frameB, frameC);
 
         //Check which algorithm to use
-        if(problem.getProblemType().toString().equals("2x1")) {
+        if(problem.getProblemType().equals("2x1")) {
 
 //           if(problem.getName().equals("2x1 Basic Problem 18")) {
             semanticNetwork.generateTransformations2x1();
@@ -87,9 +87,9 @@ public class Agent {
 
 //            }
 
-        } else if(problem.getProblemType().toString().equals("2x2")) {
+        } else if(problem.getProblemType().equals("2x2")) {
 
-//            if(problem.getName().equals("2x2 Basic Problem 15")) {
+//            if(problem.getName().equals("2x2 Basic Problem 10")) {
                 semanticNetwork.generateTransformations2x2();
                 GeneratedFrame generatedSolution = new GeneratedFrame(semanticNetwork, figures.get("B"), figures.get("C"));
                 generatedSolution.createFrame2x2();
@@ -98,7 +98,6 @@ public class Agent {
 //                SolutionAndScore finalSolutionFromC = Utility.solution2x2(figures, generatedSolution.generatedFrameDFromC);
 //                String finalSolution = Utility.finalSolution(finalSolutionFromB, finalSolutionFromC);
                 solution = finalSolution;
-
 //            }
 
             System.out.println("Finished Problem");

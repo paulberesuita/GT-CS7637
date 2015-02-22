@@ -316,13 +316,6 @@ public class SemanticNetwork {
 
     }
 
-    public void performTransformationFromAtoB(){
-
-    }
-
-    public void performTransformationFromAtoC(){
-
-    }
     public ArrayList<Transformation> getABTransformations() {
         return ABTransformations;
     }
