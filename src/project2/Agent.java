@@ -86,6 +86,8 @@ public class Agent {
             solution = finalSolution;
 
 //            }
+            System.out.println("Finished Running 2x1 Problems");
+
 
         } else if(problem.getProblemType().equals("2x2")) {
 
@@ -100,7 +102,7 @@ public class Agent {
                 solution = finalSolution;
 //            }
 
-            System.out.println("Finished Problem");
+            System.out.println("Finished Running 2x2 Problems");
 
         }
 
