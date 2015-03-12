@@ -1,27 +1,25 @@
 package project3;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.HashMap;
 import java.util.ArrayList;
+
 import org.opencv.core.*;
 import org.opencv.highgui.Highgui;
 import org.opencv.imgproc.Imgproc;
-import java.awt.image.BufferedImage;
-import java.awt.Panel;
-import java.io.InputStream;
-import java.io.ByteArrayInputStream;
-import java.awt.image.DataBufferByte;
-import javax.imageio.ImageIO;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.MatOfPoint2f;
 
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+
+import javax.imageio.ImageIO;
+
 import javax.swing.*;
-import java.awt.BorderLayout;
+
+import java.awt.image.BufferedImage;
 import java.awt.FlowLayout;
-import java.awt.Graphics;
-import java.util.Vector;
+import java.awt.image.DataBufferByte;
 
 import org.opencv.highgui.VideoCapture;
 
@@ -55,6 +53,7 @@ public class Agent extends JFrame {
     public Agent() {
         
     }
+
     public static BufferedImage convert(Mat m){
         Mat image_tmp = m;
 
@@ -76,19 +75,10 @@ public class Agent extends JFrame {
             return bufImage;
         }
     }
-    public static Mat convert(BufferedImage i){
-        BufferedImage image = i;
-        byte[] data = ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
-        Mat mat = new Mat(image.getHeight(),image.getWidth(), CvType.CV_8UC3);
-        mat.put(0, 0, data);
-        return mat;
-    }
-    public static void show(BufferedImage i){
-        JFrame frame = new JFrame();
-        frame.getContentPane().setLayout(new FlowLayout());
-        frame.getContentPane().add(new JLabel(new ImageIcon(i)));
-        frame.pack();
-        frame.setVisible(true);
+
+    public static ArrayList<RavensObject> imageObjects(List<MatOfPoint> contours){
+
+        return null;
     }
 
     /**
@@ -118,7 +108,9 @@ public class Agent extends JFrame {
      */
     public String Solve(VisualRavensProblem problem) {
 
-        if(problem.getName().equals("2x1 Basic Problem 01")) {
+            FrameA frameA = new FrameA();
+            FrameB frameB = new FrameB();
+            FrameC frameC = new FrameC();
 
             System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
@@ -142,10 +134,10 @@ public class Agent extends JFrame {
             List<MatOfPoint> contours = new ArrayList<>();
             Mat hierarchy = new Mat();
 
-            ArrayList<MatOfPoint2f> result = new ArrayList<MatOfPoint2f>();
-
             Imgproc.findContours(figureAImage, contours, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
             Imgproc.drawContours(figureAImage, contours, 0, new Scalar(255,255,0), 1);
+
+            double area = Imgproc.contourArea(contours.get(0));
 
             ImageVisible panel = new ImageVisible(convert(figureAImage));
             add(panel);
@@ -153,16 +145,38 @@ public class Agent extends JFrame {
             setSize(400,400);
             setDefaultCloseOperation(EXIT_ON_CLOSE);
 
+            ArrayList<RavensObject> listOfRavensObjects = new ArrayList<RavensObject>();
+
             for (MatOfPoint contour : contours) {
+
                 MatOfPoint2f  mop2f = new MatOfPoint2f(contour.toArray());
                 MatOfPoint2f approx = new MatOfPoint2f();
                 double epsilon = 0.01*Imgproc.arcLength(mop2f,true);
                 Imgproc.approxPolyDP(mop2f, approx, epsilon, true);
-                System.out.println("approx: " + approx.size());
-                result.add(approx);
+                double area2 = Imgproc.contourArea(approx);
+
+                RavensObject ravenObject = new RavensObject("Object 1");
+
+                //Determine Shape
+                if(approx.total() == 4) {
+                    //Square found
+                    RavensAttribute shapeSquare = new RavensAttribute("shape: " , "square");
+                    ravenObject.getAttributes().add(shapeSquare);
+
+                } else if(approx.total() == 3) {
+                    //Triangle found
+                    RavensAttribute shapeSquare = new RavensAttribute("shape: " , "triangle");
+
+                } else {
+                    //Cicle probably found
+                }
+
+                //Add all of the objects with its properties
+                listOfRavensObjects.add(ravenObject);
             }
 
-            System.out.print("Visible");
+
+            System.out.print("Breakpoint");
 
 
 //        //Populate frame A figures to array list
@@ -211,8 +225,6 @@ public class Agent extends JFrame {
 //            System.out.println("Finished Running 2x2 Problems");
 //
 //        }
-
-        }
 
         return "1";
     }

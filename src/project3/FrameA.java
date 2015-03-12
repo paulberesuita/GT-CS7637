@@ -6,6 +6,11 @@ public class FrameA {
 
 	ArrayList<RavensObject> objectsA = null;
 
+    public FrameA() {
+
+        this.objectsA = null;
+    }
+
 	public FrameA(ArrayList<RavensObject> objects) {
 
 		this.objectsA = objects;

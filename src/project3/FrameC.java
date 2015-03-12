@@ -6,6 +6,11 @@ public class FrameC {
 	
 	ArrayList<RavensObject> objects = null;
 
+    public FrameC() {
+
+        this.objects = null;
+    }
+
 	public FrameC(ArrayList<RavensObject> objects) {
 
 		this.objects = objects;
