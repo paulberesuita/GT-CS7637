@@ -18,15 +18,6 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import java.awt.image.BufferedImage;
-import java.awt.FlowLayout;
-import java.awt.image.DataBufferByte;
-
-import org.opencv.highgui.VideoCapture;
-
-import static org.opencv.highgui.Highgui.imread;
-import static org.opencv.imgproc.Imgproc.Canny;
-import static org.opencv.imgproc.Imgproc.blur;
-import static org.opencv.imgproc.Imgproc.cvtColor;
 
 /**
  * Your Agent for solving Raven's Progressive Matrices. You MUST modify this
@@ -78,9 +69,41 @@ public class Agent extends JFrame {
 
     public static ArrayList<RavensObject> retrieveImageObjects(List<MatOfPoint> contours, Mat hierarchy){
 
+        //Current contour hierarchy
+        List<List<String>> hierarchyList = new ArrayList<List<String>>((int)hierarchy.total());
+
+        for(int m=0; m<hierarchy.total(); m++) {
+
+            ArrayList<String> hierarchyArray = new ArrayList<>();
+
+            for (int n=0; n<hierarchy.get(0,m).length; n++){
+                hierarchyArray.add(n, Double.toString(hierarchy.get(0,m)[n]));
+            }
+
+            hierarchyList.add(m, hierarchyArray);
+
+        }
+
         ArrayList<RavensObject> ravensObjects = new ArrayList<RavensObject>();
 
+        boolean shapeContourOne = false;
+        boolean shapeContourTwo = false;
+
         for(int i=0; i<contours.size(); i++) {
+
+            shapeContourOne = true;
+
+            boolean inBounds = (i + 1 >= 0) && (i + 1 < hierarchyList.size());
+
+            if(inBounds) {
+
+                if((int)Double.parseDouble(hierarchyList.get(i + 1).get(3)) == i) {
+
+                    shapeContourTwo = true;
+                    i++;
+
+                }
+            }
 
             MatOfPoint2f  mop2f = new MatOfPoint2f(contours.get(i).toArray());
             MatOfPoint2f approx = new MatOfPoint2f();
@@ -89,42 +112,86 @@ public class Agent extends JFrame {
 
 //          double area2 = Imgproc.contourArea(approx);
 
-            //Current contour hierarchy
-            List<List<String>> listOfLists = new ArrayList<List<String>>((int)hierarchy.total());
-
-            for(int m=0; m<hierarchy.total(); m++) {
-
-                ArrayList<String> hierarchyArray = new ArrayList<>();
-
-                for (int n=0; n<hierarchy.get(0,m).length; n++){
-                    hierarchyArray.add(n, Double.toString(hierarchy.get(0,m)[n]));
-                }
-
-                listOfLists.add(m, hierarchyArray);
-
-            }
-
-            RavensObject ravenObject = new RavensObject("Object 1");
+            RavensObject ravenObject = new RavensObject("Object");
 
             //Determine Shape
             if(approx.total() == 4) {
+
                 //Square found
                 RavensAttribute shapeSquare = new RavensAttribute("shape" , "square");
                 ravenObject.getAttributes().add(shapeSquare);
 
+                //Check fill
+                if(shapeContourOne && shapeContourTwo) {
+                    RavensAttribute fillSquare = new RavensAttribute("fill" , "no");
+                    ravenObject.getAttributes().add(fillSquare);
+
+                } else{
+                    RavensAttribute fillSquare = new RavensAttribute("fill" , "yes");
+                    ravenObject.getAttributes().add(fillSquare);
+                }
+
+                //Check size
+                double circleSquare = Imgproc.contourArea(approx);
+
+                if(circleSquare < 4000){
+                    RavensAttribute sizeSquare = new RavensAttribute("size" , "small");
+                    ravenObject.getAttributes().add(sizeSquare);
+                } else {
+                    RavensAttribute sizeSquare = new RavensAttribute("size" , "large");
+                    ravenObject.getAttributes().add(sizeSquare);
+                }
+
             } else if(approx.total() == 3) {
+
                 //Triangle found
                 RavensAttribute shapeTriangle = new RavensAttribute("shape" , "triangle");
                 ravenObject.getAttributes().add(shapeTriangle);
 
+                //Check fill
+                if(shapeContourOne && shapeContourTwo) {
+                    RavensAttribute fillSquare = new RavensAttribute("fill" , "no");
+                    ravenObject.getAttributes().add(fillSquare);
+
+                } else{
+                    RavensAttribute fillSquare = new RavensAttribute("fill" , "yes");
+                    ravenObject.getAttributes().add(fillSquare);
+                }
+
             } else {
+
                 //Cicle probably found
                 RavensAttribute shapeCircle = new RavensAttribute("shape"  , "circle");
                 ravenObject.getAttributes().add(shapeCircle);
+
+                //Check fill
+                if(shapeContourOne && shapeContourTwo) {
+                    RavensAttribute fillCircle = new RavensAttribute("fill" , "no");
+                    ravenObject.getAttributes().add(fillCircle);
+
+                } else{
+                    RavensAttribute fillCircle = new RavensAttribute("fill" , "yes");
+                    ravenObject.getAttributes().add(fillCircle);
+                }
+
+                //Check size
+                double circleArea = Imgproc.contourArea(approx);
+
+                if(circleArea < 3000){
+                    RavensAttribute sizeCircle = new RavensAttribute("size" , "small");
+                    ravenObject.getAttributes().add(sizeCircle);
+                } else {
+                    RavensAttribute sizeCircle = new RavensAttribute("size" , "large");
+                    ravenObject.getAttributes().add(sizeCircle);
+                }
+
             }
 
             //Add all of the objects with its properties
             ravensObjects.add(ravenObject);
+
+            shapeContourOne = false;
+            shapeContourTwo = false;
         }
 
         return ravensObjects;
@@ -145,15 +212,15 @@ public class Agent extends JFrame {
 
         ravensObjects = retrieveImageObjects(contours, hierarchy);
 
-        Imgproc.drawContours(image, contours, 0, new Scalar(255,255,0), 1);
-
-        double area = Imgproc.contourArea(contours.get(0));
-
-        ImageVisible panel = new ImageVisible(convert(image));
-        add(panel);
-        setVisible(true);
-        setSize(400,400);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+//        Imgproc.drawContours(image, contours, 0, new Scalar(255,255,0), 1);
+//
+//        double area = Imgproc.contourArea(contours.get(0));
+//
+//        ImageVisible panel = new ImageVisible(convert(image));
+//        add(panel);
+//        setVisible(true);
+//        setSize(1400,1400);
+//        setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         return ravensObjects;
     }
@@ -185,7 +252,9 @@ public class Agent extends JFrame {
      */
     public String Solve(VisualRavensProblem problem) {
 
-        if(problem.getName().equals("2x1 Basic Problem 05")) {
+        String solution = "1";
+
+//        if(problem.getName().equals("2x1 Basic Problem 02")) {
 
             System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
@@ -204,66 +273,112 @@ public class Agent extends JFrame {
 
             FrameA frameA = new FrameA(processImage(figureAPath));
 
-            FrameA frameB = new FrameA(processImage(figureBPath));
+            FrameB frameB = new FrameB(processImage(figureBPath));
 
-            FrameA frameC = new FrameA(processImage(figureCPath));
+            FrameC frameC = new FrameC(processImage(figureCPath));
 
-//            List<MatOfPoint> figureBContours = retrieveContoursFromImage(figureBPath);
-//            FrameB frameB = new FrameB(retrieveImageObjects(figureBContours));
+            RavensFigure allFiguresA = new RavensFigure("Figure A");
+            RavensFigure allFiguresB = new RavensFigure("Figure B");
+            RavensFigure allFiguresC = new RavensFigure("Figure C");
 
-//            List<MatOfPoint> figureCContours = retrieveContoursFromImage(figureCPath);
-//            FrameC frameC = new FrameC(retrieveImageObjects(figureCContours));
+            RavensFigure allFigures1 = new RavensFigure("Figure 1");
+            RavensFigure allFigures2 = new RavensFigure("Figure 2");
+            RavensFigure allFigures3 = new RavensFigure("Figure 3");
+            RavensFigure allFigures4 = new RavensFigure("Figure 4");
+            RavensFigure allFigures5 = new RavensFigure("Figure 5");
+            RavensFigure allFigures6 = new RavensFigure("Figure 6");
+
+            ArrayList<RavensObject> figureAObjects = processImage(figureAPath);
+            ArrayList<RavensObject> figureBObjects = processImage(figureBPath);
+            ArrayList<RavensObject> figureCObjects = processImage(figureCPath);
+
+            ArrayList<RavensObject> figure1Objects = processImage(figure1Path);
+            ArrayList<RavensObject> figure2Objects = processImage(figure2Path);
+            ArrayList<RavensObject> figure3Objects = processImage(figure3Path);
+            ArrayList<RavensObject> figure4Objects = processImage(figure4Path);
+            ArrayList<RavensObject> figure5Objects = processImage(figure5Path);
+            ArrayList<RavensObject> figure6Objects = processImage(figure6Path);
+
+            for(int f=0; f<figureAObjects.size(); f++) {
+                allFiguresA.getObjects().add(figureAObjects.get(f));
+            }
+
+            for(int f=0; f<figureBObjects.size(); f++) {
+                allFiguresB.getObjects().add(figureBObjects.get(f));
+            }
+
+            for(int f=0; f<figureCObjects.size(); f++) {
+                allFiguresC.getObjects().add(figureCObjects.get(f));
+            }
+
+            for(int f=0; f<figure1Objects.size(); f++) {
+                allFigures1.getObjects().add(figure1Objects.get(f));
+            }
+
+            for(int f=0; f<figure2Objects.size(); f++) {
+                allFigures2.getObjects().add(figure2Objects.get(f));
+            }
+
+            for(int f=0; f<figure3Objects.size(); f++) {
+                allFigures3.getObjects().add(figure3Objects.get(f));
+            }
+
+            for(int f=0; f<figure4Objects.size(); f++) {
+                allFigures4.getObjects().add(figure4Objects.get(f));
+            }
+
+            for(int f=0; f<figure5Objects.size(); f++) {
+                allFigures5.getObjects().add(figure5Objects.get(f));
+            }
+
+            for(int f=0; f<figure6Objects.size(); f++) {
+                allFigures6.getObjects().add(figure6Objects.get(f));
+            }
+
+            SemanticNetwork semanticNetwork = new SemanticNetwork(frameA, frameB, frameC);
 
             System.out.print("Breakpoint");
 
+            HashMap<String, RavensFigure> figuresNoVisual = new HashMap<String, RavensFigure>();
+            figuresNoVisual.put("1", allFigures1);
+            figuresNoVisual.put("2", allFigures2);
+            figuresNoVisual.put("3", allFigures3);
+            figuresNoVisual.put("4", allFigures4);
+            figuresNoVisual.put("5", allFigures5);
+            figuresNoVisual.put("6", allFigures6);
 
-//        //Populate frame A figures to array list
-//        ArrayList<RavensObject> frameAObjects = figures.get("A").getObjects();
-//        FrameA frameA = new FrameA(frameAObjects);
-//
-//        //Populate frame A figures to array list
-//        ArrayList<RavensObject> frameBObjects = figures.get("B").getObjects();
-//        FrameB frameB = new FrameB(frameBObjects);
-//
-//        //Populate frame A figures to array list
-//        ArrayList<RavensObject> frameCObjects = figures.get("C").getObjects();
-//        FrameC frameC = new FrameC(frameCObjects);
-//
-//        String solution = "1";
-//
-//        SemanticNetwork semanticNetwork = new SemanticNetwork(frameA, frameB, frameC);
-//
-//        //Check which algorithm to use
-//        if(problem.getProblemType().equals("2x1")) {
-//
-////           if(problem.getName().equals("2x1 Basic Problem 18")) {
-//            semanticNetwork.generateTransformations2x1();
-//            GeneratedFrame generatedSolution = new GeneratedFrame(semanticNetwork, figures.get("B"), figures.get("C"));
-//            generatedSolution.createFrame2x1();
-//            String finalSolution = Utility.solution2x1(figures, generatedSolution.generatedFrameDFromC, generatedSolution.isUncertainRotation());
-//            solution = finalSolution;
-//
-////            }
-//            System.out.println("Finished Running 2x1 Problems");
-//
-//
-//        } else if(problem.getProblemType().equals("2x2")) {
-//
-////            if(problem.getName().equals("2x2 Basic Problem 10")) {
+
+            //Check which algorithm to use
+        if(problem.getProblemType().equals("2x1 (Image)")) {
+
+//           if(problem.getName().equals("2x1 Basic Problem 18")) {
+              semanticNetwork.generateTransformations2x1();
+            GeneratedFrame generatedSolution = new GeneratedFrame(semanticNetwork, allFiguresB, allFiguresC);
+            generatedSolution.createFrame2x1();
+
+            System.out.print("Breakpoint");
+
+            String finalSolution = Utility.solution2x1(figuresNoVisual, generatedSolution.generatedFrameDFromC, generatedSolution.isUncertainRotation());
+            solution = finalSolution;
+
+//            }
+            System.out.println("Finished Running 2x1 Problems");
+
+
+        } else if(problem.getProblemType().equals("2x2 (Image)")) {
+
+//            if(problem.getName().equals("2x2 Basic Problem 10")) {
 //            semanticNetwork.generateTransformations2x2();
 //            GeneratedFrame generatedSolution = new GeneratedFrame(semanticNetwork, figures.get("B"), figures.get("C"));
 //            generatedSolution.createFrame2x2();
 //            String finalSolution = Utility.solution2x1(figures, generatedSolution.generatedFrameDFromBC, generatedSolution.isUncertainRotation());
-////                SolutionAndScore finalSolutionFromB = Utility.solution2x2(figures, generatedSolution.generatedFrameDFromB);
-////                SolutionAndScore finalSolutionFromC = Utility.solution2x2(figures, generatedSolution.generatedFrameDFromC);
-////                String finalSolution = Utility.finalSolution(finalSolutionFromB, finalSolutionFromC);
 //            solution = finalSolution;
-////            }
-//
-//            System.out.println("Finished Running 2x2 Problems");
-//
-//        }
+//            }
+
+            System.out.println("Finished Running 2x2 Problems");
+
         }
-        return "1";
+//        } //Specific Problem
+        return solution;
     }
 }
