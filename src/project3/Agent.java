@@ -100,6 +100,7 @@ public class Agent extends JFrame {
                 if((int)Double.parseDouble(hierarchyList.get(i + 1).get(3)) == i) {
 
                     shapeContourTwo = true;
+
                     i++;
 
                 }
@@ -111,15 +112,83 @@ public class Agent extends JFrame {
             Imgproc.approxPolyDP(mop2f, approx, epsilon, true);
 
 //          double area2 = Imgproc.contourArea(approx);
+            RotatedRect originalRect = Imgproc.minAreaRect(mop2f);
+            boolean isConvex = Imgproc.isContourConvex(contours.get(i));
 
-            RavensObject ravenObject = new RavensObject("Object");
+
+            RavensObject ravenObject = new RavensObject("Z");
 
             //Determine Shape
-            if(approx.total() == 4) {
+            if(!isConvex && approx.total() == 12) {
+                //Plus found
+                RavensAttribute shapePlus = new RavensAttribute("shape" , "plus");
+                ravenObject.getAttributes().add(shapePlus);
 
-                //Square found
-                RavensAttribute shapeSquare = new RavensAttribute("shape" , "square");
-                ravenObject.getAttributes().add(shapeSquare);
+                //Check fill
+                if(shapeContourOne && shapeContourTwo) {
+                    RavensAttribute fillPlus = new RavensAttribute("fill" , "no");
+                    ravenObject.getAttributes().add(fillPlus);
+
+                } else{
+                    RavensAttribute fillPlus = new RavensAttribute("fill" , "yes");
+                    ravenObject.getAttributes().add(fillPlus);
+                }
+
+                //Check size
+                double plusAres = Imgproc.contourArea(approx);
+
+                if(plusAres < 4000){
+                    RavensAttribute sizePlus = new RavensAttribute("size" , "small");
+                    ravenObject.getAttributes().add(sizePlus);
+                } else {
+                    RavensAttribute sizePlus = new RavensAttribute("size" , "large");
+                    ravenObject.getAttributes().add(sizePlus);
+                }
+
+                //check if child
+                if(shapeContourOne && shapeContourTwo) {
+                    if ((int) Double.parseDouble(hierarchyList.get(i - 1).get(3)) != -1) {
+                        RavensAttribute insidePlus = new RavensAttribute("inside", "Z");
+                        ravenObject.getAttributes().add(insidePlus);
+                    }
+                }
+
+                //check angle
+
+                if(originalRect.angle == -0.0) {
+                    RavensAttribute anglePlus = new RavensAttribute("angle" , "45");
+                    ravenObject.getAttributes().add(anglePlus);
+                } else {
+                    RavensAttribute anglePlus = new RavensAttribute("angle" , "0");
+                    ravenObject.getAttributes().add(anglePlus);
+                }
+
+                //check height
+                //There is more than 1 object to check if an object is above or not
+                if(contours.size() > 2 && i > 1) {
+
+                    MatOfPoint2f  nextObject = new MatOfPoint2f(contours.get(i-2).toArray());
+                    RotatedRect originalRect2 = Imgproc.minAreaRect(nextObject);
+
+                    if(originalRect.center.y < originalRect2.center.y) {
+                        RavensAttribute anglePlus = new RavensAttribute("above" , "Z");
+                        ravenObject.getAttributes().add(anglePlus);
+                    }
+
+                }
+
+
+            }
+            else if(approx.total() == 4) {
+
+                //Square or Diamond found
+//                if(originalRect.angle == -45.0) {
+//                    RavensAttribute shapeSquare = new RavensAttribute("shape" , "diamond");
+//                    ravenObject.getAttributes().add(shapeSquare);
+//                } else {
+                    RavensAttribute shapeSquare = new RavensAttribute("shape" , "square");
+                    ravenObject.getAttributes().add(shapeSquare);
+//                }
 
                 //Check fill
                 if(shapeContourOne && shapeContourTwo) {
@@ -132,14 +201,45 @@ public class Agent extends JFrame {
                 }
 
                 //Check size
-                double circleSquare = Imgproc.contourArea(approx);
+                double squareArea = Imgproc.contourArea(approx);
 
-                if(circleSquare < 4000){
+                if(squareArea < 4000){
                     RavensAttribute sizeSquare = new RavensAttribute("size" , "small");
                     ravenObject.getAttributes().add(sizeSquare);
                 } else {
                     RavensAttribute sizeSquare = new RavensAttribute("size" , "large");
                     ravenObject.getAttributes().add(sizeSquare);
+                }
+
+                //check if child
+                if(shapeContourOne && shapeContourTwo) {
+                    if ((int) Double.parseDouble(hierarchyList.get(i - 1).get(3)) != -1) {
+                        RavensAttribute insideSquare = new RavensAttribute("inside", "Z");
+                        ravenObject.getAttributes().add(insideSquare);
+                    }
+                }
+
+                //check angle
+                if(originalRect.angle == -45.0) {
+                    RavensAttribute angleSquare = new RavensAttribute("angle" , "45");
+                    ravenObject.getAttributes().add(angleSquare);
+                } else {
+                    RavensAttribute angleSquare = new RavensAttribute("angle" , "0");
+                    ravenObject.getAttributes().add(angleSquare);
+                }
+
+                //check height
+                //There is more than 1 object to check if an object is above or not
+                if(contours.size() > 2 && i > 1) {
+
+                    MatOfPoint2f  nextObject = new MatOfPoint2f(contours.get(i-2).toArray());
+                    RotatedRect originalRect2 = Imgproc.minAreaRect(nextObject);
+
+                    if(originalRect.center.y < originalRect2.center.y) {
+                        RavensAttribute anglePlus = new RavensAttribute("above" , "Z");
+                        ravenObject.getAttributes().add(anglePlus);
+                    }
+
                 }
 
             } else if(approx.total() == 3) {
@@ -156,6 +256,48 @@ public class Agent extends JFrame {
                 } else{
                     RavensAttribute fillSquare = new RavensAttribute("fill" , "yes");
                     ravenObject.getAttributes().add(fillSquare);
+                }
+
+                //Check size
+                double triangleArea = Imgproc.contourArea(approx);
+
+                if(triangleArea < 4000){
+                    RavensAttribute sizeSquare = new RavensAttribute("size" , "small");
+                    ravenObject.getAttributes().add(sizeSquare);
+                } else {
+                    RavensAttribute sizeSquare = new RavensAttribute("size" , "large");
+                    ravenObject.getAttributes().add(sizeSquare);
+                }
+
+                //check if child
+                if(shapeContourOne && shapeContourTwo) {
+                    if ((int) Double.parseDouble(hierarchyList.get(i - 1).get(3)) != -1) {
+                        RavensAttribute insideTriangle = new RavensAttribute("inside", "Z");
+                        ravenObject.getAttributes().add(insideTriangle);
+                    }
+                }
+
+                //check angle
+                if(originalRect.angle == -45.0) {
+                    RavensAttribute angleTriangle = new RavensAttribute("angle" , "0");
+                    ravenObject.getAttributes().add(angleTriangle);
+                } else {
+                    RavensAttribute angleTriangle = new RavensAttribute("angle" , "45");
+                    ravenObject.getAttributes().add(angleTriangle);
+                }
+
+                //check height
+                //There is more than 1 object to check if an object is above or not
+                if(contours.size() > 2 && i > 1) {
+
+                    MatOfPoint2f  nextObject = new MatOfPoint2f(contours.get(i-2).toArray());
+                    RotatedRect originalRect2 = Imgproc.minAreaRect(nextObject);
+
+                    if(originalRect.center.y < originalRect2.center.y) {
+                        RavensAttribute anglePlus = new RavensAttribute("above" , "Z");
+                        ravenObject.getAttributes().add(anglePlus);
+                    }
+
                 }
 
             } else {
@@ -177,12 +319,45 @@ public class Agent extends JFrame {
                 //Check size
                 double circleArea = Imgproc.contourArea(approx);
 
-                if(circleArea < 3000){
+                if(circleArea < 6000){
                     RavensAttribute sizeCircle = new RavensAttribute("size" , "small");
                     ravenObject.getAttributes().add(sizeCircle);
                 } else {
                     RavensAttribute sizeCircle = new RavensAttribute("size" , "large");
                     ravenObject.getAttributes().add(sizeCircle);
+                }
+
+                //check if child
+                if(shapeContourOne && shapeContourTwo) {
+                    if ((int) Double.parseDouble(hierarchyList.get(i - 1).get(3)) >= 0) {
+                        RavensAttribute insideCircle = new RavensAttribute("inside", "Z");
+                        ravenObject.getAttributes().add(insideCircle);
+                    }
+                }
+
+                //check angle
+                if(originalRect.angle == -45.0) {
+                    RavensAttribute angleCircle = new RavensAttribute("angle" , "0");
+                    ravenObject.getAttributes().add(angleCircle);
+                } else if(originalRect.angle == -0.0) {
+                    RavensAttribute angleCircle = new RavensAttribute("angle" , "0");
+                    ravenObject.getAttributes().add(angleCircle);
+                } else {
+
+                }
+
+                //check height
+                //There is more than 1 object to check if an object is above or not
+                if(contours.size() > 2 && i > 1) {
+
+                    MatOfPoint2f  nextObject = new MatOfPoint2f(contours.get(i-2).toArray());
+                    RotatedRect originalRect2 = Imgproc.minAreaRect(nextObject);
+
+                    if(originalRect.center.y < originalRect2.center.y) {
+                        RavensAttribute anglePlus = new RavensAttribute("above" , "Z");
+                        ravenObject.getAttributes().add(anglePlus);
+                    }
+
                 }
 
             }
@@ -203,6 +378,7 @@ public class Agent extends JFrame {
 
         Mat image = Highgui.imread(imagePath, 0);
 
+
         Imgproc.threshold(image, image, 127, Imgproc.THRESH_BINARY_INV,1);
 
         List<MatOfPoint> contours = new ArrayList<>();
@@ -212,14 +388,23 @@ public class Agent extends JFrame {
 
         ravensObjects = retrieveImageObjects(contours, hierarchy);
 
-//        Imgproc.drawContours(image, contours, 0, new Scalar(255,255,0), 1);
+//        RotatedRect originalRect = Imgproc.minAreaRect(mop2f);
+
+//        for(int i=0; i<contours.size(); i++){
+//            MatOfPoint2f rect_points[4] = minRect[i].points( rect_points );
+//        }
+//        // rotated rectangle
+//        for( int j = 0; j < 4; j++ )
 //
-//        double area = Imgproc.contourArea(contours.get(0));
+//            line( drawing, rect_points[j], rect_points[(j+1)%4], color, 1,
+
+//        Imgproc.drawContours(image, contours, -1, new Scalar(255,255,0), 1);
+////        double area = Imgproc.contourArea(contours.get(0));
 //
 //        ImageVisible panel = new ImageVisible(convert(image));
 //        add(panel);
 //        setVisible(true);
-//        setSize(1400,1400);
+//        setSize(400,400);
 //        setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         return ravensObjects;
@@ -254,7 +439,7 @@ public class Agent extends JFrame {
 
         String solution = "1";
 
-//        if(problem.getName().equals("2x1 Basic Problem 02")) {
+//        if(problem.getName().equals("2x1 Basic Problem 06")) {
 
             System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
@@ -272,9 +457,7 @@ public class Agent extends JFrame {
             String figure6Path = figures.get("6").getPath();
 
             FrameA frameA = new FrameA(processImage(figureAPath));
-
             FrameB frameB = new FrameB(processImage(figureBPath));
-
             FrameC frameC = new FrameC(processImage(figureCPath));
 
             RavensFigure allFiguresA = new RavensFigure("Figure A");
@@ -352,7 +535,7 @@ public class Agent extends JFrame {
         if(problem.getProblemType().equals("2x1 (Image)")) {
 
 //           if(problem.getName().equals("2x1 Basic Problem 18")) {
-              semanticNetwork.generateTransformations2x1();
+            semanticNetwork.generateTransformations2x1();
             GeneratedFrame generatedSolution = new GeneratedFrame(semanticNetwork, allFiguresB, allFiguresC);
             generatedSolution.createFrame2x1();
 
@@ -368,11 +551,11 @@ public class Agent extends JFrame {
         } else if(problem.getProblemType().equals("2x2 (Image)")) {
 
 //            if(problem.getName().equals("2x2 Basic Problem 10")) {
-//            semanticNetwork.generateTransformations2x2();
-//            GeneratedFrame generatedSolution = new GeneratedFrame(semanticNetwork, figures.get("B"), figures.get("C"));
-//            generatedSolution.createFrame2x2();
-//            String finalSolution = Utility.solution2x1(figures, generatedSolution.generatedFrameDFromBC, generatedSolution.isUncertainRotation());
-//            solution = finalSolution;
+            semanticNetwork.generateTransformations2x2();
+            GeneratedFrame generatedSolution = new GeneratedFrame(semanticNetwork, allFiguresB, allFiguresC);
+            generatedSolution.createFrame2x2();
+            String finalSolution = Utility.solution2x1(figuresNoVisual, generatedSolution.generatedFrameDFromBC, generatedSolution.isUncertainRotation());
+            solution = finalSolution;
 //            }
 
             System.out.println("Finished Running 2x2 Problems");
