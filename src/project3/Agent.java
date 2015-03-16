@@ -1,23 +1,11 @@
 package project3;
 
-import java.util.List;
 import java.util.HashMap;
 import java.util.ArrayList;
 
 import org.opencv.core.*;
-import org.opencv.highgui.Highgui;
-import org.opencv.imgproc.Imgproc;
-import org.opencv.core.MatOfPoint;
-import org.opencv.core.MatOfPoint2f;
-
-import java.io.InputStream;
-import java.io.ByteArrayInputStream;
-
-import javax.imageio.ImageIO;
 
 import javax.swing.*;
-
-import java.awt.image.BufferedImage;
 
 /**
  * Your Agent for solving Raven's Progressive Matrices. You MUST modify this
@@ -74,7 +62,7 @@ public class Agent extends JFrame {
 
         String solution = "1";
 
-//        if(problem.getName().equals("2x1 Basic Problem 10")) {
+//        if(problem.getName().equals("2x1 Basic Problem 14")) {
 
             CVUtils cvutils = new CVUtils();
 

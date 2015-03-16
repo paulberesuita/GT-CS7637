@@ -65,6 +65,15 @@ public class CVUtils extends JFrame {
 
         for(int i=0; i<contours.size(); i++) {
 
+            MatOfPoint2f mop2f = new MatOfPoint2f(contours.get(i).toArray());
+            MatOfPoint2f approx = new MatOfPoint2f();
+            double epsilon = 0.02*Imgproc.arcLength(mop2f,true);
+            Imgproc.approxPolyDP(mop2f, approx, epsilon, true);
+
+//          double area2 = Imgproc.contourArea(approx);
+            RotatedRect originalRect = Imgproc.minAreaRect(mop2f);
+            boolean isConvex = Imgproc.isContourConvex(contours.get(i));
+
             shapeContourOne = true;
 
             boolean inBounds = (i + 1 >= 0) && (i + 1 < hierarchyList.size());
@@ -80,20 +89,11 @@ public class CVUtils extends JFrame {
                 }
             }
 
-            MatOfPoint2f mop2f = new MatOfPoint2f(contours.get(i).toArray());
-            MatOfPoint2f approx = new MatOfPoint2f();
-            double epsilon = 0.02*Imgproc.arcLength(mop2f,true);
-            Imgproc.approxPolyDP(mop2f, approx, epsilon, true);
-
-//          double area2 = Imgproc.contourArea(approx);
-            RotatedRect originalRect = Imgproc.minAreaRect(mop2f);
-            boolean isConvex = Imgproc.isContourConvex(contours.get(i));
-
-
             RavensObject ravenObject = new RavensObject("Z");
 
             //Determine Shape
             if(!isConvex && approx.total() == 12) {
+
                 //Plus found
                 RavensAttribute shapePlus = new RavensAttribute("shape" , "plus");
                 ravenObject.getAttributes().add(shapePlus);
@@ -165,9 +165,41 @@ public class CVUtils extends JFrame {
 //                }
 
                 //Check fill
-                if(shapeContourOne && shapeContourTwo) {
+                boolean isPartial = false;
+
+                //we should use i + 1; but it already has been increased previously
+                MatOfPoint2f mop2fCheckFill = new MatOfPoint2f(contours.get(i).toArray());
+                MatOfPoint2f approxCheckFill = new MatOfPoint2f();
+                double epsilonCheckFill = 0.02*Imgproc.arcLength(mop2fCheckFill,true);
+                Imgproc.approxPolyDP(mop2fCheckFill, approxCheckFill, epsilonCheckFill, true);
+
+                double area1 = Imgproc.contourArea(approx);
+                double area2 = Imgproc.contourArea(approxCheckFill);
+                double difference = area1 - area2;
+
+                //The found contour is a square
+                if(approxCheckFill.total() == 4 && difference > 5000) {
+                    isPartial = true;
+                }
+
+                if(shapeContourOne && shapeContourTwo && !isPartial) {
                     RavensAttribute fillSquare = new RavensAttribute("fill" , "no");
                     ravenObject.getAttributes().add(fillSquare);
+
+                } else if(isPartial) {
+
+                    RotatedRect originalRectCheckFill = Imgproc.minAreaRect(mop2fCheckFill);
+
+                    if(originalRectCheckFill.center.x > 100) {
+                        RavensAttribute fillSquare = new RavensAttribute("fill" , "left-half");
+                        ravenObject.getAttributes().add(fillSquare);
+                    } else if(originalRectCheckFill.center.y > 100) {
+                        RavensAttribute fillSquare = new RavensAttribute("fill" , "top-half");
+                        ravenObject.getAttributes().add(fillSquare);
+                    } else {
+                        RavensAttribute fillSquare = new RavensAttribute("fill" , "right-half");
+                        ravenObject.getAttributes().add(fillSquare);
+                    }
 
                 } else{
                     RavensAttribute fillSquare = new RavensAttribute("fill" , "yes");
@@ -177,7 +209,7 @@ public class CVUtils extends JFrame {
                 //Check size
                 double squareArea = Imgproc.contourArea(approx);
 
-                if(squareArea < 4000){
+                if(squareArea < 4400){
                     RavensAttribute sizeSquare = new RavensAttribute("size" , "small");
                     ravenObject.getAttributes().add(sizeSquare);
                 } else {
@@ -222,14 +254,46 @@ public class CVUtils extends JFrame {
                 RavensAttribute shapeTriangle = new RavensAttribute("shape" , "triangle");
                 ravenObject.getAttributes().add(shapeTriangle);
 
+                boolean isPartial = false;
+
+                //we should use i + 1; but it already has been increased previously
+                MatOfPoint2f mop2fCheckFill = new MatOfPoint2f(contours.get(i).toArray());
+                MatOfPoint2f approxCheckFill = new MatOfPoint2f();
+                double epsilonCheckFill = 0.02*Imgproc.arcLength(mop2fCheckFill,true);
+                Imgproc.approxPolyDP(mop2fCheckFill, approxCheckFill, epsilonCheckFill, true);
+
+                double area1 = Imgproc.contourArea(approx);
+                double area2 = Imgproc.contourArea(approxCheckFill);
+                double difference = area1 - area2;
+
+                //The found contour is a square
+                if(approxCheckFill.total() == 3 && difference > 5000) {
+                    isPartial = true;
+                }
+
                 //Check fill
-                if(shapeContourOne && shapeContourTwo) {
-                    RavensAttribute fillSquare = new RavensAttribute("fill" , "no");
-                    ravenObject.getAttributes().add(fillSquare);
+                if(shapeContourOne && shapeContourTwo && !isPartial) {
+                    RavensAttribute fillTriangle = new RavensAttribute("fill" , "no");
+                    ravenObject.getAttributes().add(fillTriangle);
+
+                } else if(isPartial) {
+
+                    RotatedRect originalRectCheckFill = Imgproc.minAreaRect(mop2fCheckFill);
+
+                    if(originalRectCheckFill.center.x > 100) {
+                        RavensAttribute fillTriangle = new RavensAttribute("fill" , "left-half");
+                        ravenObject.getAttributes().add(fillTriangle);
+                    } else if(originalRectCheckFill.center.y > 100) {
+                        RavensAttribute fillTriangle = new RavensAttribute("fill" , "top-half");
+                        ravenObject.getAttributes().add(fillTriangle);
+                    } else {
+                        RavensAttribute fillTriangle = new RavensAttribute("fill" , "right-half");
+                        ravenObject.getAttributes().add(fillTriangle);
+                    }
 
                 } else{
-                    RavensAttribute fillSquare = new RavensAttribute("fill" , "yes");
-                    ravenObject.getAttributes().add(fillSquare);
+                    RavensAttribute fillTriangle = new RavensAttribute("fill" , "yes");
+                    ravenObject.getAttributes().add(fillTriangle);
                 }
 
                 //Check size
@@ -372,15 +436,15 @@ public class CVUtils extends JFrame {
 //
 //            line( drawing, rect_points[j], rect_points[(j+1)%4], color, 1,
 
-//        Imgproc.drawContours(image, contours, -1, new Scalar(255,255,0), 1);
-////        double area = Imgproc.contourArea(contours.get(0));
-//
+        Imgproc.drawContours(image, contours, -1, new Scalar(255,255,0), 1);
+//        double area = Imgproc.contourArea(contours.get(0));
+
 //        ImageVisible panel = new ImageVisible(convert(image));
 //        add(panel);
 //        setVisible(true);
 //        setSize(400,400);
 //        setDefaultCloseOperation(EXIT_ON_CLOSE);
-
+//
         return ravensObjects;
     }
 
