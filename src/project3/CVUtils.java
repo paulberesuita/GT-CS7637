@@ -380,9 +380,9 @@ public class CVUtils extends JFrame {
                 double tempX = 0;
                 double tempY = 0;
 
-                for(int m=0; m<contours.size(); m++) {
+//                for(int m=0; m<contours.size(); m++) {
 
-                    Point[] pointsArray = contours.get(m).toArray();
+                    Point[] pointsArray = contours.get(i).toArray();
 
                     boolean continueX = false;
                     boolean continueY = false;
@@ -393,6 +393,7 @@ public class CVUtils extends JFrame {
 
                             if(continueX) {
                                 xCount ++;
+                                alotOfXCordinate = pointsArray[n].x;
                             }
                             continueX = true;
                         } else {
@@ -404,6 +405,7 @@ public class CVUtils extends JFrame {
 
                             if(continueY) {
                                 yCount ++;
+                                alotOfYCordinate = pointsArray[n].y;
                             }
                             continueY = true;
                         } else {
@@ -411,16 +413,15 @@ public class CVUtils extends JFrame {
                         }
 
                         tempX = pointsArray[n].x;
-
                         tempY = pointsArray[n].y;
 
-                        if(xCount > 15) {
-                            alotOfXCordinate = pointsArray[n].x;
-                        }
-
-                        if(yCount > 15) {
-                            alotOfYCordinate = pointsArray[n].y;
-                        }
+//                        if(xCount > 15) {
+//                            alotOfXCordinate = pointsArray[n].x;
+//                        }
+//
+//                        if(yCount > 15) {
+//                            alotOfYCordinate = pointsArray[n].y;
+//                        }
 
                         if(pointsArray[n].x > greatestX) {
                             greatestX = pointsArray[n].x;
@@ -429,18 +430,27 @@ public class CVUtils extends JFrame {
                             greatestY = pointsArray[n].y;
                         }
                     }
-                }
+//                }
 
-                if(yCount > 100 && alotOfYCordinate < 100) {
+//                if(yCount > 100 && alotOfYCordinate < 100) {
+//                    pointing = "up";
+//                } else if(yCount > 100 && alotOfYCordinate > 100) {
+//                    pointing = "down";
+//                } else if(xCount > 100 && alotOfXCordinate > 100) {
+//                    pointing = "left";
+//                } else if(xCount > 100 && alotOfXCordinate < 100) {
+//                    pointing = "right";
+//                }
+
+                if(yCount > 50 && alotOfYCordinate > originalRect.center.y) {
                     pointing = "up";
-                } else if(yCount > 100 && alotOfYCordinate > 100) {
+                } else if(yCount > 50 && alotOfYCordinate < originalRect.center.y) {
                     pointing = "down";
-                } else if(xCount > 100 && alotOfXCordinate > 100) {
+                } else if(xCount > 50 && alotOfXCordinate > originalRect.center.x) {
                     pointing = "left";
-                } else if(xCount > 100 && alotOfXCordinate < 100) {
+                } else if(xCount > 50 && alotOfXCordinate < originalRect.center.x) {
                     pointing = "right";
                 }
-
 
                 //check angle
 //                String zeroString = String.valueOf(originalRect.angle);
@@ -478,7 +488,7 @@ public class CVUtils extends JFrame {
                     MatOfPoint2f  nextObject = new MatOfPoint2f(contours.get(i-2).toArray());
                     RotatedRect originalRect2 = Imgproc.minAreaRect(nextObject);
 
-                    if(originalRect.center.y < originalRect2.center.y) {
+                    if(originalRect.center.y < originalRect2.center.y && originalRect.center.x == originalRect2.center.x && contours.size() < 8) {
                         RavensAttribute anglePlus = new RavensAttribute("above" , "Z");
                         ravenObject.getAttributes().add(anglePlus);
                     }
