@@ -72,6 +72,11 @@ public class CVUtils extends JFrame {
 
 //          double area2 = Imgproc.contourArea(approx);
             RotatedRect originalRect = Imgproc.minAreaRect(mop2f);
+            double x = originalRect.center.x;
+            double y = originalRect.center.y;
+            boolean xInCenter = (x >= 89) && ( x < 93);
+            boolean yInCenter = (y >= 89) && ( y < 93);
+
             boolean isConvex = Imgproc.isContourConvex(contours.get(i));
 
             shapeContourOne = true;
@@ -90,6 +95,20 @@ public class CVUtils extends JFrame {
             }
 
             RavensObject ravenObject = new RavensObject("Z");
+
+            double currentObjectArea = Imgproc.contourArea(approx);
+
+            double circleAreaCal = 3.1415 * originalRect.size.width/2 * originalRect.size.width/2;
+//            double triangleAreaCal = (originalRect.size.width * originalRect.size.height) / 2;
+//            double squareAreaCal = originalRect.size.width * originalRect.size.height;
+
+            double circleDifference = Math.abs(currentObjectArea - circleAreaCal);
+
+            boolean circleLikely = false;
+
+            if(circleDifference < 700) {
+                circleLikely = true;
+            }
 
             //Determine Shape
             if(!isConvex && approx.total() == 12) {
@@ -151,6 +170,39 @@ public class CVUtils extends JFrame {
 
                 }
 
+
+            }
+            else if(!isConvex && approx.total() == 8 && !xInCenter && !yInCenter && !circleLikely) {
+
+                RavensAttribute shapePacman = new RavensAttribute("shape" , "Pac-Man");
+                ravenObject.getAttributes().add(shapePacman);
+
+                //Will use x, y to determine angle
+
+                if(originalRect.center.x < 95 && originalRect.center.y < 95) {
+
+                    RavensAttribute anglePlus = new RavensAttribute("angle" , "45");
+                    ravenObject.getAttributes().add(anglePlus);
+
+                } else if(originalRect.center.x > 95 && originalRect.center.y < 95) {
+
+                    RavensAttribute anglePlus = new RavensAttribute("angle" , "135");
+                    ravenObject.getAttributes().add(anglePlus);
+
+                } else if(originalRect.center.x < 95 && originalRect.center.y > 95) {
+
+                    RavensAttribute anglePlus = new RavensAttribute("angle" , "315");
+                    ravenObject.getAttributes().add(anglePlus);
+
+                } else if(originalRect.center.x > 95 && originalRect.center.y > 95) {
+
+                    RavensAttribute anglePlus = new RavensAttribute("angle" , "225");
+                    ravenObject.getAttributes().add(anglePlus);
+
+                } else {
+                    RavensAttribute anglePlus = new RavensAttribute("angle" , "0");
+                    ravenObject.getAttributes().add(anglePlus);
+                }
 
             }
             else if(approx.total() == 4) {
@@ -315,12 +367,107 @@ public class CVUtils extends JFrame {
                     }
                 }
 
+
+                //Finding greatets flat for triangle
+                String pointing = "";
+                double greatestX = 0;
+                double greatestY = 0;
+                int xCount = 0;
+                int yCount = 0;
+                double alotOfXCordinate = 0;
+                double alotOfYCordinate = 0;
+
+                double tempX = 0;
+                double tempY = 0;
+
+                for(int m=0; m<contours.size(); m++) {
+
+                    Point[] pointsArray = contours.get(m).toArray();
+
+                    boolean continueX = false;
+                    boolean continueY = false;
+
+                    for(int n=0; n<pointsArray.length; n++) {
+
+                        if(pointsArray[n].x == tempX) {
+
+                            if(continueX) {
+                                xCount ++;
+                            }
+                            continueX = true;
+                        } else {
+                            continueX = false;
+
+                        }
+
+                        if(pointsArray[n].y == tempY) {
+
+                            if(continueY) {
+                                yCount ++;
+                            }
+                            continueY = true;
+                        } else {
+                            continueY = false;
+                        }
+
+                        tempX = pointsArray[n].x;
+
+                        tempY = pointsArray[n].y;
+
+                        if(xCount > 15) {
+                            alotOfXCordinate = pointsArray[n].x;
+                        }
+
+                        if(yCount > 15) {
+                            alotOfYCordinate = pointsArray[n].y;
+                        }
+
+                        if(pointsArray[n].x > greatestX) {
+                            greatestX = pointsArray[n].x;
+                        }
+                        if(pointsArray[n].y > greatestY) {
+                            greatestY = pointsArray[n].y;
+                        }
+                    }
+                }
+
+                if(yCount > 100 && alotOfYCordinate < 100) {
+                    pointing = "up";
+                } else if(yCount > 100 && alotOfYCordinate > 100) {
+                    pointing = "down";
+                } else if(xCount > 100 && alotOfXCordinate > 100) {
+                    pointing = "left";
+                } else if(xCount > 100 && alotOfXCordinate < 100) {
+                    pointing = "right";
+                }
+
+
                 //check angle
-                if(originalRect.angle == -45.0) {
+//                String zeroString = String.valueOf(originalRect.angle);
+//                boolean zeroStartsWithNegative = zeroString.startsWith("-");
+//
+//                if(originalRect.angle == 0.0 && !zeroStartsWithNegative) {
+//                    RavensAttribute angleTriangle = new RavensAttribute("angle" , "0");
+//                    ravenObject.getAttributes().add(angleTriangle);
+//                } else if(originalRect.angle == -0.0 && zeroStartsWithNegative) {
+//                    RavensAttribute angleTriangle = new RavensAttribute("angle" , "180");
+//                    ravenObject.getAttributes().add(angleTriangle);
+//                } else {
+//                    RavensAttribute angleTriangle = new RavensAttribute("angle" , "45");
+//                    ravenObject.getAttributes().add(angleTriangle);
+//                }
+
+                if(pointing.equals("up")) {
                     RavensAttribute angleTriangle = new RavensAttribute("angle" , "0");
                     ravenObject.getAttributes().add(angleTriangle);
-                } else {
-                    RavensAttribute angleTriangle = new RavensAttribute("angle" , "45");
+                } else if(pointing.equals("down")) {
+                    RavensAttribute angleTriangle = new RavensAttribute("angle" , "180");
+                    ravenObject.getAttributes().add(angleTriangle);
+                } else if(pointing.equals("left")) {
+                    RavensAttribute angleTriangle = new RavensAttribute("angle" , "270");
+                    ravenObject.getAttributes().add(angleTriangle);
+                } else if(pointing.equals("right")) {
+                    RavensAttribute angleTriangle = new RavensAttribute("angle" , "90");
                     ravenObject.getAttributes().add(angleTriangle);
                 }
 
@@ -422,7 +569,7 @@ public class CVUtils extends JFrame {
         List<MatOfPoint> contours = new ArrayList<>();
         Mat hierarchy = new Mat();
 
-        Imgproc.findContours(image, contours, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
+        Imgproc.findContours(image, contours, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_NONE);
 
         ravensObjects = retrieveImageObjects(contours, hierarchy);
 
@@ -444,7 +591,7 @@ public class CVUtils extends JFrame {
 //        setVisible(true);
 //        setSize(400,400);
 //        setDefaultCloseOperation(EXIT_ON_CLOSE);
-//
+
         return ravensObjects;
     }
 

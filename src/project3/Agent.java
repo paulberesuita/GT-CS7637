@@ -62,7 +62,7 @@ public class Agent extends JFrame {
 
         String solution = "1";
 
-//        if(problem.getName().equals("2x1 Basic Problem 14")) {
+//        if(problem.getName().equals("2x1 Basic Problem 13")) {
 
             CVUtils cvutils = new CVUtils();
 
