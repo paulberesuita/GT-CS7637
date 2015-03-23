@@ -62,8 +62,6 @@ public class Agent extends JFrame {
 
         String solution = "1";
 
-//        if(problem.getName().equals("2x1 Basic Problem 15")) {
-
             CVUtils cvutils = new CVUtils();
 
             System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
@@ -175,7 +173,6 @@ public class Agent extends JFrame {
             System.out.println("Finished Running 2x2 Problems");
 
         }
-//        } //Specific Problem
         return solution;
     }
 }

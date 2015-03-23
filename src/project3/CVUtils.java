@@ -302,72 +302,6 @@ public class CVUtils extends JFrame {
 
             } else if(approx.total() == 3) {
 
-                //Triangle found
-                RavensAttribute shapeTriangle = new RavensAttribute("shape" , "triangle");
-                ravenObject.getAttributes().add(shapeTriangle);
-
-                boolean isPartial = false;
-
-                //we should use i + 1; but it already has been increased previously
-                MatOfPoint2f mop2fCheckFill = new MatOfPoint2f(contours.get(i).toArray());
-                MatOfPoint2f approxCheckFill = new MatOfPoint2f();
-                double epsilonCheckFill = 0.02*Imgproc.arcLength(mop2fCheckFill,true);
-                Imgproc.approxPolyDP(mop2fCheckFill, approxCheckFill, epsilonCheckFill, true);
-
-                double area1 = Imgproc.contourArea(approx);
-                double area2 = Imgproc.contourArea(approxCheckFill);
-                double difference = area1 - area2;
-
-                //The found contour is a square
-                if(approxCheckFill.total() == 3 && difference > 5000) {
-                    isPartial = true;
-                }
-
-                //Check fill
-                if(shapeContourOne && shapeContourTwo && !isPartial) {
-                    RavensAttribute fillTriangle = new RavensAttribute("fill" , "no");
-                    ravenObject.getAttributes().add(fillTriangle);
-
-                } else if(isPartial) {
-
-                    RotatedRect originalRectCheckFill = Imgproc.minAreaRect(mop2fCheckFill);
-
-                    if(originalRectCheckFill.center.x > 100) {
-                        RavensAttribute fillTriangle = new RavensAttribute("fill" , "left-half");
-                        ravenObject.getAttributes().add(fillTriangle);
-                    } else if(originalRectCheckFill.center.y > 100) {
-                        RavensAttribute fillTriangle = new RavensAttribute("fill" , "top-half");
-                        ravenObject.getAttributes().add(fillTriangle);
-                    } else {
-                        RavensAttribute fillTriangle = new RavensAttribute("fill" , "right-half");
-                        ravenObject.getAttributes().add(fillTriangle);
-                    }
-
-                } else{
-                    RavensAttribute fillTriangle = new RavensAttribute("fill" , "yes");
-                    ravenObject.getAttributes().add(fillTriangle);
-                }
-
-                //Check size
-                double triangleArea = Imgproc.contourArea(approx);
-
-                if(triangleArea < 4000){
-                    RavensAttribute sizeSquare = new RavensAttribute("size" , "small");
-                    ravenObject.getAttributes().add(sizeSquare);
-                } else {
-                    RavensAttribute sizeSquare = new RavensAttribute("size" , "large");
-                    ravenObject.getAttributes().add(sizeSquare);
-                }
-
-                //check if child
-                if(shapeContourOne && shapeContourTwo) {
-                    if ((int) Double.parseDouble(hierarchyList.get(i - 1).get(3)) != -1) {
-                        RavensAttribute insideTriangle = new RavensAttribute("inside", "Z");
-                        ravenObject.getAttributes().add(insideTriangle);
-                    }
-                }
-
-
                 //Finding greatets flat for triangle
                 String pointing = "";
                 double greatestX = 0;
@@ -380,120 +314,170 @@ public class CVUtils extends JFrame {
                 double tempX = 0;
                 double tempY = 0;
 
-//                for(int m=0; m<contours.size(); m++) {
+                Point[] pointsArray = contours.get(i).toArray();
 
-                    Point[] pointsArray = contours.get(i).toArray();
+                boolean continueX = false;
+                boolean continueY = false;
 
-                    boolean continueX = false;
-                    boolean continueY = false;
+                for(int n=0; n<pointsArray.length; n++) {
 
-                    for(int n=0; n<pointsArray.length; n++) {
+                    if(pointsArray[n].x == tempX) {
 
-                        if(pointsArray[n].x == tempX) {
-
-                            if(continueX) {
-                                xCount ++;
-                                alotOfXCordinate = pointsArray[n].x;
-                            }
-                            continueX = true;
-                        } else {
-                            continueX = false;
-
+                        if(continueX) {
+                            xCount ++;
+                            alotOfXCordinate = pointsArray[n].x;
                         }
+                        continueX = true;
+                    } else {
+                        continueX = false;
 
-                        if(pointsArray[n].y == tempY) {
-
-                            if(continueY) {
-                                yCount ++;
-                                alotOfYCordinate = pointsArray[n].y;
-                            }
-                            continueY = true;
-                        } else {
-                            continueY = false;
-                        }
-
-                        tempX = pointsArray[n].x;
-                        tempY = pointsArray[n].y;
-
-//                        if(xCount > 15) {
-//                            alotOfXCordinate = pointsArray[n].x;
-//                        }
-//
-//                        if(yCount > 15) {
-//                            alotOfYCordinate = pointsArray[n].y;
-//                        }
-
-                        if(pointsArray[n].x > greatestX) {
-                            greatestX = pointsArray[n].x;
-                        }
-                        if(pointsArray[n].y > greatestY) {
-                            greatestY = pointsArray[n].y;
-                        }
-                    }
-//                }
-
-//                if(yCount > 100 && alotOfYCordinate < 100) {
-//                    pointing = "up";
-//                } else if(yCount > 100 && alotOfYCordinate > 100) {
-//                    pointing = "down";
-//                } else if(xCount > 100 && alotOfXCordinate > 100) {
-//                    pointing = "left";
-//                } else if(xCount > 100 && alotOfXCordinate < 100) {
-//                    pointing = "right";
-//                }
-
-                if(yCount > 50 && alotOfYCordinate > originalRect.center.y) {
-                    pointing = "up";
-                } else if(yCount > 50 && alotOfYCordinate < originalRect.center.y) {
-                    pointing = "down";
-                } else if(xCount > 50 && alotOfXCordinate > originalRect.center.x) {
-                    pointing = "left";
-                } else if(xCount > 50 && alotOfXCordinate < originalRect.center.x) {
-                    pointing = "right";
-                }
-
-                //check angle
-//                String zeroString = String.valueOf(originalRect.angle);
-//                boolean zeroStartsWithNegative = zeroString.startsWith("-");
-//
-//                if(originalRect.angle == 0.0 && !zeroStartsWithNegative) {
-//                    RavensAttribute angleTriangle = new RavensAttribute("angle" , "0");
-//                    ravenObject.getAttributes().add(angleTriangle);
-//                } else if(originalRect.angle == -0.0 && zeroStartsWithNegative) {
-//                    RavensAttribute angleTriangle = new RavensAttribute("angle" , "180");
-//                    ravenObject.getAttributes().add(angleTriangle);
-//                } else {
-//                    RavensAttribute angleTriangle = new RavensAttribute("angle" , "45");
-//                    ravenObject.getAttributes().add(angleTriangle);
-//                }
-
-                if(pointing.equals("up")) {
-                    RavensAttribute angleTriangle = new RavensAttribute("angle" , "0");
-                    ravenObject.getAttributes().add(angleTriangle);
-                } else if(pointing.equals("down")) {
-                    RavensAttribute angleTriangle = new RavensAttribute("angle" , "180");
-                    ravenObject.getAttributes().add(angleTriangle);
-                } else if(pointing.equals("left")) {
-                    RavensAttribute angleTriangle = new RavensAttribute("angle" , "270");
-                    ravenObject.getAttributes().add(angleTriangle);
-                } else if(pointing.equals("right")) {
-                    RavensAttribute angleTriangle = new RavensAttribute("angle" , "90");
-                    ravenObject.getAttributes().add(angleTriangle);
-                }
-
-                //check height
-                //There is more than 1 object to check if an object is above or not
-                if(contours.size() > 2 && i > 1) {
-
-                    MatOfPoint2f  nextObject = new MatOfPoint2f(contours.get(i-2).toArray());
-                    RotatedRect originalRect2 = Imgproc.minAreaRect(nextObject);
-
-                    if(originalRect.center.y < originalRect2.center.y && originalRect.center.x == originalRect2.center.x && contours.size() < 8) {
-                        RavensAttribute anglePlus = new RavensAttribute("above" , "Z");
-                        ravenObject.getAttributes().add(anglePlus);
                     }
 
+                    if(pointsArray[n].y == tempY) {
+
+                        if(continueY) {
+                            yCount ++;
+                            alotOfYCordinate = pointsArray[n].y;
+                        }
+                        continueY = true;
+                    } else {
+                        continueY = false;
+                    }
+
+                    tempX = pointsArray[n].x;
+                    tempY = pointsArray[n].y;
+
+                    if(pointsArray[n].x > greatestX) {
+                        greatestX = pointsArray[n].x;
+                    }
+                    if(pointsArray[n].y > greatestY) {
+                        greatestY = pointsArray[n].y;
+                    }
                 }
+                double checkTriangleOnEdge = Math.abs(xCount - yCount);
+
+                //For problems such as 2x2 Problme 4
+                if(checkTriangleOnEdge < 5 && (( alotOfXCordinate < 10 || alotOfYCordinate < 10) || (alotOfXCordinate > 170 || alotOfYCordinate > 170)) ) {
+
+                    //Triangle found
+                    RavensAttribute shapeTriangle = new RavensAttribute("shape" , "right-triangle");
+                    ravenObject.getAttributes().add(shapeTriangle);
+
+                    if(alotOfXCordinate > 100 && alotOfYCordinate < 10) {
+                        RavensAttribute angleTriangle = new RavensAttribute("angle" , "180");
+                        ravenObject.getAttributes().add(angleTriangle);
+                    } else if(alotOfXCordinate < 100 && alotOfYCordinate < 10) {
+                        RavensAttribute angleTriangle = new RavensAttribute("angle" , "90");
+                        ravenObject.getAttributes().add(angleTriangle);
+                    } else if(alotOfXCordinate > 100 && alotOfYCordinate > 100) {
+                        RavensAttribute angleTriangle = new RavensAttribute("angle" , "270");
+                        ravenObject.getAttributes().add(angleTriangle);
+                    } else {
+                        RavensAttribute angleTriangle = new RavensAttribute("angle" , "0");
+                        ravenObject.getAttributes().add(angleTriangle);
+                    }
+
+                } else {
+
+                    //Triangle found
+                    RavensAttribute shapeTriangle = new RavensAttribute("shape" , "triangle");
+                    ravenObject.getAttributes().add(shapeTriangle);
+
+                    boolean isPartial = false;
+
+                    //we should use i + 1; but it already has been increased previously
+                    MatOfPoint2f mop2fCheckFill = new MatOfPoint2f(contours.get(i).toArray());
+                    MatOfPoint2f approxCheckFill = new MatOfPoint2f();
+                    double epsilonCheckFill = 0.02*Imgproc.arcLength(mop2fCheckFill,true);
+                    Imgproc.approxPolyDP(mop2fCheckFill, approxCheckFill, epsilonCheckFill, true);
+
+                    double area1 = Imgproc.contourArea(approx);
+                    double area2 = Imgproc.contourArea(approxCheckFill);
+                    double difference = area1 - area2;
+
+                    //The found contour is a square
+                    if(approxCheckFill.total() == 3 && difference > 5000) {
+                        isPartial = true;
+                    }
+
+                    //Check fill
+                    if(shapeContourOne && shapeContourTwo && !isPartial) {
+                        RavensAttribute fillTriangle = new RavensAttribute("fill" , "no");
+                        ravenObject.getAttributes().add(fillTriangle);
+
+                    } else if(isPartial) {
+
+                        RotatedRect originalRectCheckFill = Imgproc.minAreaRect(mop2fCheckFill);
+
+                        if(originalRectCheckFill.center.x > 100) {
+                            RavensAttribute fillTriangle = new RavensAttribute("fill" , "left-half");
+                            ravenObject.getAttributes().add(fillTriangle);
+                        } else if(originalRectCheckFill.center.y > 100) {
+                            RavensAttribute fillTriangle = new RavensAttribute("fill" , "top-half");
+                            ravenObject.getAttributes().add(fillTriangle);
+                        } else {
+                            RavensAttribute fillTriangle = new RavensAttribute("fill" , "right-half");
+                            ravenObject.getAttributes().add(fillTriangle);
+                        }
+
+                    } else{
+                        RavensAttribute fillTriangle = new RavensAttribute("fill" , "yes");
+                        ravenObject.getAttributes().add(fillTriangle);
+                    }
+
+                    //Check size
+                    double triangleArea = Imgproc.contourArea(approx);
+
+                    if(triangleArea < 4000){
+                        RavensAttribute sizeSquare = new RavensAttribute("size" , "small");
+                        ravenObject.getAttributes().add(sizeSquare);
+                    } else {
+                        RavensAttribute sizeSquare = new RavensAttribute("size" , "large");
+                        ravenObject.getAttributes().add(sizeSquare);
+                    }
+
+                    //check if child
+                    if(shapeContourOne && shapeContourTwo) {
+                        if ((int) Double.parseDouble(hierarchyList.get(i - 1).get(3)) != -1) {
+                            RavensAttribute insideTriangle = new RavensAttribute("inside", "Z");
+                            ravenObject.getAttributes().add(insideTriangle);
+                        }
+                    }
+
+
+                        if(yCount > 50 && alotOfYCordinate > originalRect.center.y) {
+                            pointing = "up";
+                            RavensAttribute angleTriangle = new RavensAttribute("angle" , "0");
+                            ravenObject.getAttributes().add(angleTriangle);
+                        } else if(yCount > 50 && alotOfYCordinate < originalRect.center.y) {
+                            pointing = "down";
+                            RavensAttribute angleTriangle = new RavensAttribute("angle" , "180");
+                            ravenObject.getAttributes().add(angleTriangle);
+                        } else if(xCount > 50 && alotOfXCordinate > originalRect.center.x) {
+                            pointing = "left";
+                            RavensAttribute angleTriangle = new RavensAttribute("angle" , "270");
+                            ravenObject.getAttributes().add(angleTriangle);
+                        } else if(xCount > 50 && alotOfXCordinate < originalRect.center.x) {
+                            pointing = "right";
+                            RavensAttribute angleTriangle = new RavensAttribute("angle" , "90");
+                            ravenObject.getAttributes().add(angleTriangle);
+                        }
+
+                    //check height
+                    //There is more than 1 object to check if an object is above or not
+                    if(contours.size() > 2 && i > 1) {
+
+                        MatOfPoint2f  nextObject = new MatOfPoint2f(contours.get(i-2).toArray());
+                        RotatedRect originalRect2 = Imgproc.minAreaRect(nextObject);
+
+                        if(originalRect.center.y < originalRect2.center.y && originalRect.center.x == originalRect2.center.x && contours.size() < 8) {
+                            RavensAttribute anglePlus = new RavensAttribute("above" , "Z");
+                            ravenObject.getAttributes().add(anglePlus);
+                        }
+
+                    }
+                }
+
 
             } else {
 
