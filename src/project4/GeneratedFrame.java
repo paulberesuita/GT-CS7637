@@ -1,6 +1,4 @@
-package project3;
-
-import java.util.ArrayList;
+package project4;
 
 public class GeneratedFrame {
 

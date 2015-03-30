@@ -5,7 +5,7 @@
  * If you have any questions, please email the TAs.
  * 
  */
-package project3;
+package project4;
 
 import java.awt.Image;
 import java.io.File;
@@ -94,6 +94,15 @@ public class VisualProblemSet {
         newProblem.getFigures().put("4",new VisualRavensFigure("4",problem.getAbsolutePath() + File.separatorChar + "4.png"));
         newProblem.getFigures().put("5",new VisualRavensFigure("5",problem.getAbsolutePath() + File.separatorChar + "5.png"));
         newProblem.getFigures().put("6",new VisualRavensFigure("6",problem.getAbsolutePath() + File.separatorChar + "6.png"));
+        File f1 = new File(problem.getAbsolutePath() + File.separatorChar + "7.png");
+        if(f1.exists() && !f1.isDirectory()) {  
+        newProblem.getFigures().put("7",new VisualRavensFigure("7",problem.getAbsolutePath() + File.separatorChar + "7.png"));
+        }
+
+        File f2 = new File(problem.getAbsolutePath() + File.separatorChar + "8.png");
+        if(f2.exists() && !f2.isDirectory()) {  
+        newProblem.getFigures().put("8",new VisualRavensFigure("8",problem.getAbsolutePath() + File.separatorChar + "8.png"));
+        }
         if(newProblem.getProblemType().equals("3x3 (Image)")) {
             newProblem.getFigures().put("D",new VisualRavensFigure("D",problem.getAbsolutePath() + File.separatorChar + "D.png"));
             newProblem.getFigures().put("E",new VisualRavensFigure("E",problem.getAbsolutePath() + File.separatorChar + "E.png"));
