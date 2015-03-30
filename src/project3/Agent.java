@@ -60,6 +60,7 @@ public class Agent extends JFrame {
      */
     public String Solve(VisualRavensProblem problem) {
 
+        //Master
         String solution = "1";
 
             CVUtils cvutils = new CVUtils();
