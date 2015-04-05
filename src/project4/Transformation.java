@@ -18,9 +18,8 @@ public class Transformation {
 
     Frame frameA = null;
     Frame frameB = null;
-    Frame frameC = null;
 
-    public Transformation(RavensObject firstObject, RavensObject secondObject, Frame frameA, Frame frameB, Frame frameC) {
+    public Transformation(RavensObject firstObject, RavensObject secondObject, Frame frameA, Frame frameB) {
 
         this.firstObject = firstObject;
         this.secondObject = secondObject;
@@ -33,7 +32,6 @@ public class Transformation {
 
         this.frameA = frameA;
         this.frameB = frameB;
-        this.frameC = frameC;
 
     }
 
@@ -123,13 +121,13 @@ public class Transformation {
 
                         for(int n=0; n<differentObjects.size(); n++) {
 
-                            RavensObject object = Utility.returnObject(differentObjects.get(n), frameA, frameB, frameC);
+                            RavensObject object = Utility.returnObject(differentObjects.get(n), frameA, frameB);
                             getLeftOfObjects().add(object);
                         }
 
                     } else {
 
-                        RavensObject object = Utility.returnObject(secondObject.getAttributes().get(i).getValue(), frameA, frameB, frameC);
+                        RavensObject object = Utility.returnObject(secondObject.getAttributes().get(i).getValue(), frameA, frameB);
                         getRightOfObjects().add(object);
                     }
 
@@ -357,14 +355,6 @@ public class Transformation {
 
     public void setFrameB(Frame frameB) {
         this.frameB = frameB;
-    }
-
-    public Frame getFrameC() {
-        return frameC;
-    }
-
-    public void setFrameC(Frame frameC) {
-        this.frameC = frameC;
     }
 
     public ArrayList<RavensObject> getLeftOfObjects() {

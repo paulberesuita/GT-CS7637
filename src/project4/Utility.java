@@ -12,7 +12,7 @@ public class Utility {
      * @param frameC
      * @return
      */
-    public static RavensObject returnObject(String objectName, Frame frameA, Frame frameB, Frame frameC) {
+    public static RavensObject returnObject(String objectName, Frame frameA, Frame frameB) {
 
         RavensObject object = null;
 
@@ -32,13 +32,6 @@ public class Utility {
 
         }
 
-        for(int i=0; i<frameC.getObjects().size(); i++) {
-
-            if(frameC.getObjects().get(i).getName().equals(objectName)) {
-                object = frameC.getObjects().get(i);
-            }
-
-        }
 
         return object;
     }

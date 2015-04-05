@@ -208,7 +208,7 @@ public class Agent {
             figuresNoVisual.put("5", allFigures5);
             figuresNoVisual.put("6", allFigures6);
 
-            semanticNetwork = new SemanticNetwork(frameA, frameB, frameC);
+            semanticNetwork = new SemanticNetwork(frameA, frameB, frameC, frameD, frameE, frameF, frameG, frameH);
 
         } else {
 
@@ -305,7 +305,7 @@ public class Agent {
         if (problem.getProblemType().equals("2x1 (Image)")) {
 
             semanticNetwork.generateTransformations2x1();
-            GeneratedFrame generatedSolution = new GeneratedFrame(semanticNetwork, allFiguresB, allFiguresC);
+            GeneratedFrame generatedSolution = new GeneratedFrame(semanticNetwork);
             generatedSolution.createFrame2x1();
 
             String finalSolution = Utility.solution2x1(figuresNoVisual, generatedSolution.generatedFrameDFromC, generatedSolution.isUncertainRotation());
@@ -317,7 +317,7 @@ public class Agent {
         } else if (problem.getProblemType().equals("2x2 (Image)")) {
 
             semanticNetwork.generateTransformations2x2();
-            GeneratedFrame generatedSolution = new GeneratedFrame(semanticNetwork, allFiguresB, allFiguresC);
+            GeneratedFrame generatedSolution = new GeneratedFrame(semanticNetwork);
             generatedSolution.createFrame2x2();
             String finalSolution = Utility.solution2x1(figuresNoVisual, generatedSolution.generatedFrameDFromBC, generatedSolution.isUncertainRotation());
             solution = finalSolution;
@@ -325,6 +325,9 @@ public class Agent {
             System.out.println("Finished Running 2x2 Problems");
 
         } else {
+            semanticNetwork.generateTransformations3x3();
+            GeneratedFrame generatedSolution = new GeneratedFrame(semanticNetwork);
+
             System.out.println("Finished Running 3x3 Problems");
             System.out.println("Finished Running 3x3 Problems");
             System.out.println("Finished Running 3x3 Problems");

@@ -8,13 +8,8 @@ public class GeneratedFrame {
     RavensFigure generatedFrameDFromBC = null;
     boolean uncertainRotation = false;
 
-    RavensFigure figureB = null;
-    RavensFigure figureC = null;
-
-    public GeneratedFrame(SemanticNetwork semanticNetwork, RavensFigure figureB, RavensFigure figureC) {
+    public GeneratedFrame(SemanticNetwork semanticNetwork) {
         this.semanticNetwork = semanticNetwork;
-        this.figureB = figureB;
-        this.figureC = figureC;
     }
 
     /**
@@ -49,6 +44,11 @@ public class GeneratedFrame {
 
     public void createFrame3x3() {
 
+        System.out.println("CREATING FRAME");
+        generatedFrameDFromC = new RavensFigure("D2");
+
+        performTransformationFromC();
+        System.out.println("Done Creating Frame D from C");
     }
 
     public void performTransformationFromB() {
@@ -1888,19 +1888,4 @@ public class GeneratedFrame {
         this.uncertainRotation = uncertainRotation;
     }
 
-    public RavensFigure getFigureB() {
-        return figureB;
-    }
-
-    public void setFigureB(RavensFigure figureB) {
-        this.figureB = figureB;
-    }
-
-    public RavensFigure getFigureC() {
-        return figureC;
-    }
-
-    public void setFigureC(RavensFigure figureC) {
-        this.figureC = figureC;
-    }
 }

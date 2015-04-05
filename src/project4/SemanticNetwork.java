@@ -56,7 +56,7 @@ public class SemanticNetwork {
 
     }
 
-    public SemanticNetwork(Frame frameA, Frame frameB, Frame frameC, Frame frameD, Frame frameE, Frame frameF, Frame frameG, Frame frameH, Frame frameI) {
+    public SemanticNetwork(Frame frameA, Frame frameB, Frame frameC, Frame frameD, Frame frameE, Frame frameF, Frame frameG, Frame frameH) {
 
         this.frameA = frameA;
         this.frameB = frameB;
@@ -66,7 +66,6 @@ public class SemanticNetwork {
         this.frameF = frameF;
         this.frameG = frameG;
         this.frameH = frameH;
-        this.frameI = frameI;
 
         ABTransformations = new ArrayList<Transformation>();
         ACTransformations = new ArrayList<Transformation>();
@@ -138,7 +137,7 @@ public class SemanticNetwork {
         for(int i=0; i<indexAndScoreArrayAB.size(); i++) {
 
             //Create Transformation between nodes; assuming correspondence
-            Transformation transformation = new Transformation(frameA.getObjects().get(indexAndScoreArrayAB.get(i).getFrameAObjectIndex()), frameB.getObjects().get(indexAndScoreArrayAB.get(i).getCorrespondingObjectIndex()), frameA, frameB, frameC);
+            Transformation transformation = new Transformation(frameA.getObjects().get(indexAndScoreArrayAB.get(i).getFrameAObjectIndex()), frameB.getObjects().get(indexAndScoreArrayAB.get(i).getCorrespondingObjectIndex()), frameA, frameB);
             boolean differenceExist = transformation.checkDifferencesBetweenNodes();
             if(differenceExist) {
                 ABTransformations.add(transformation);
@@ -259,7 +258,7 @@ public class SemanticNetwork {
         for(int i=0; i<indexAndScoreArrayAB.size(); i++) {
 
             //Create Transformation between nodes; assuming correspondence
-            Transformation transformation = new Transformation(frameA.getObjects().get(indexAndScoreArrayAB.get(i).getFrameAObjectIndex()), frameB.getObjects().get(indexAndScoreArrayAB.get(i).getCorrespondingObjectIndex()), frameA, frameB, frameC);
+            Transformation transformation = new Transformation(frameA.getObjects().get(indexAndScoreArrayAB.get(i).getFrameAObjectIndex()), frameB.getObjects().get(indexAndScoreArrayAB.get(i).getCorrespondingObjectIndex()), frameA, frameB);
             boolean differenceExist = transformation.checkDifferencesBetweenNodes();
             if(differenceExist) {
                 ABTransformations.add(transformation);
@@ -358,7 +357,7 @@ public class SemanticNetwork {
         for(int i=0; i<indexAndScoreArrayAC.size(); i++) {
 
             //Create Transformation between nodes; assuming correspondence
-            Transformation transformation = new Transformation(frameA.getObjects().get(indexAndScoreArrayAC.get(i).getFrameAObjectIndex()), frameC.getObjects().get(indexAndScoreArrayAC.get(i).getCorrespondingObjectIndex()), frameA, frameB, frameC);
+            Transformation transformation = new Transformation(frameA.getObjects().get(indexAndScoreArrayAC.get(i).getFrameAObjectIndex()), frameC.getObjects().get(indexAndScoreArrayAC.get(i).getCorrespondingObjectIndex()), frameA, frameB);
             boolean differenceExist = transformation.checkDifferencesBetweenNodes();
             if(differenceExist) {
                 ACTransformations.add(transformation);
@@ -427,7 +426,7 @@ public class SemanticNetwork {
         for(int i=0; i<indexAndScoreArrayAB.size(); i++) {
 
             //Create Transformation between nodes; assuming correspondence
-            Transformation transformation = new Transformation(frameA.getObjects().get(indexAndScoreArrayAB.get(i).getFrameAObjectIndex()), frameB.getObjects().get(indexAndScoreArrayAB.get(i).getCorrespondingObjectIndex()), frameA, frameB, frameC);
+            Transformation transformation = new Transformation(frameA.getObjects().get(indexAndScoreArrayAB.get(i).getFrameAObjectIndex()), frameB.getObjects().get(indexAndScoreArrayAB.get(i).getCorrespondingObjectIndex()), frameA, frameB);
             boolean differenceExist = transformation.checkDifferencesBetweenNodes();
             if(differenceExist) {
                 ABTransformations.add(transformation);
@@ -435,21 +434,48 @@ public class SemanticNetwork {
         }
 
         //Create Transformations (B to C)
-//        for(int i=0; i<indexAndScoreArrayBC.size(); i++) {
-//
-//            //Create Transformation between nodes; assuming correspondence
-//            Transformation transformation = new Transformation(frameA.getObjects().get(indexAndScoreArrayAB.get(i).getFrameAObjectIndex()), frameB.getObjects().get(indexAndScoreArrayAB.get(i).getCorrespondingObjectIndex()), frameA, frameB, frameC);
-//            boolean differenceExist = transformation.checkDifferencesBetweenNodes();
-//            if(differenceExist) {
-//                ABTransformations.add(transformation);
-//            }
-//        }
+        for(int i=0; i<indexAndScoreArrayBC.size(); i++) {
+
+            //Create Transformation between nodes; assuming correspondence
+            Transformation transformation = new Transformation(frameB.getObjects().get(indexAndScoreArrayBC.get(i).getFrameAObjectIndex()), frameC.getObjects().get(indexAndScoreArrayBC.get(i).getCorrespondingObjectIndex()), frameB, frameC);
+            boolean differenceExist = transformation.checkDifferencesBetweenNodes();
+            if(differenceExist) {
+                BCTransformations.add(transformation);
+            }
+        }
 
         //Create Transformations (D to E)
+        for(int i=0; i<indexAndScoreArrayDE.size(); i++) {
+
+            //Create Transformation between nodes; assuming correspondence
+            Transformation transformation = new Transformation(frameD.getObjects().get(indexAndScoreArrayDE.get(i).getFrameAObjectIndex()), frameE.getObjects().get(indexAndScoreArrayDE.get(i).getCorrespondingObjectIndex()), frameD, frameE);
+            boolean differenceExist = transformation.checkDifferencesBetweenNodes();
+            if(differenceExist) {
+                DETransformations.add(transformation);
+            }
+        }
 
         //Create Transformations (E to F)
+        for(int i=0; i<indexAndScoreArrayEF.size(); i++) {
+
+            //Create Transformation between nodes; assuming correspondence
+            Transformation transformation = new Transformation(frameE.getObjects().get(indexAndScoreArrayEF.get(i).getFrameAObjectIndex()), frameF.getObjects().get(indexAndScoreArrayEF.get(i).getCorrespondingObjectIndex()), frameE, frameF);
+            boolean differenceExist = transformation.checkDifferencesBetweenNodes();
+            if(differenceExist) {
+                EFTransformations.add(transformation);
+            }
+        }
 
         //Create Transformations (G to H)
+        for(int i=0; i<indexAndScoreArrayGH.size(); i++) {
+
+            //Create Transformation between nodes; assuming correspondence
+            Transformation transformation = new Transformation(frameG.getObjects().get(indexAndScoreArrayGH.get(i).getFrameAObjectIndex()), frameH.getObjects().get(indexAndScoreArrayGH.get(i).getCorrespondingObjectIndex()), frameG, frameH);
+            boolean differenceExist = transformation.checkDifferencesBetweenNodes();
+            if(differenceExist) {
+                GHTransformations.add(transformation);
+            }
+        }
 
 
         System.out.println("removals have been checked");
