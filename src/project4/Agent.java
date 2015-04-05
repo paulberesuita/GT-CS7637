@@ -6,31 +6,31 @@ import java.util.ArrayList;
 import org.opencv.core.*;
 
 import javax.swing.*;
+
 /**
  * Your Agent for solving Raven's Progressive Matrices. You MUST modify this
  * file.
- *
+ * <p/>
  * You may also create and submit new files in addition to modifying this file.
- *
+ * <p/>
  * Make sure your file retains methods with the signatures:
  * public Agent()
  * public char Solve(VisualRavensProblem problem)
- *
+ * <p/>
  * These methods will be necessary for the project's main method to run.
- *
  */
 public class Agent {
     /**
      * The default constructor for your Agent. Make sure to execute any
      * processing necessary before your Agent starts solving problems here.
-     *
+     * <p/>
      * Do not add any variables to this signature; they will not be used by
      * main().
-     *
      */
     public Agent() {
 
     }
+
     /**
      * The primary method for solving incoming Raven's Progressive Matrices.
      * For each problem, your Agent's Solve() method will be called. At the
@@ -38,7 +38,7 @@ public class Agent {
      * answer to the question: "1", "2", "3", "4", "5", or "6". These Strings
      * are also the Names of the individual RavensFigures, obtained through
      * RavensFigure.getName().
-     *
+     * <p/>
      * In addition to returning your answer at the end of the method, your Agent
      * may also call problem.checkAnswer(String givenAnswer). The parameter
      * passed to checkAnswer should be your Agent's current guess for the
@@ -48,7 +48,7 @@ public class Agent {
      * checkAnswer is used to allow your Agent to learn from its incorrect
      * answers; however, your Agent cannot change the answer to a question it
      * has already answered.
-     *
+     * <p/>
      * If your Agent calls checkAnswer during execution of Solve, the answer it
      * returns will be ignored; otherwise, the answer returned at the end of
      * Solve will be taken as your Agent's answer to this problem.
@@ -67,88 +67,242 @@ public class Agent {
         //Get All figures
         HashMap<String, VisualRavensFigure> figures = problem.getFigures();
 
-        String figureAPath = figures.get("A").getPath();
-        String figureBPath = figures.get("B").getPath();
-        String figureCPath = figures.get("C").getPath();
-        String figure1Path = figures.get("1").getPath();
-        String figure2Path = figures.get("2").getPath();
-        String figure3Path = figures.get("3").getPath();
-        String figure4Path = figures.get("4").getPath();
-        String figure5Path = figures.get("5").getPath();
-        String figure6Path = figures.get("6").getPath();
+        SemanticNetwork semanticNetwork = null;
+        SemanticNetwork semanticNetwork3x3 = null;
+        RavensFigure allFiguresA = null;
+        RavensFigure allFiguresB = null;
+        RavensFigure allFiguresC = null;
+        RavensFigure allFiguresD = null;
+        RavensFigure allFiguresE = null;
+        RavensFigure allFiguresF = null;
+        RavensFigure allFiguresG = null;
+        RavensFigure allFiguresH = null;
+        RavensFigure allFiguresI = null;
+        RavensFigure allFigures1 = null;
+        RavensFigure allFigures2 = null;
+        RavensFigure allFigures3 = null;
+        RavensFigure allFigures4 = null;
+        RavensFigure allFigures5 = null;
+        RavensFigure allFigures6 = null;
+        HashMap<String, RavensFigure> figuresNoVisual = null;
 
-        FrameA frameA = new FrameA(cvutils.processImage(figureAPath));
-        FrameB frameB = new FrameB(cvutils.processImage(figureBPath));
-        FrameC frameC = new FrameC(cvutils.processImage(figureCPath));
+        if (problem.getProblemType().equals("3x3 (Image)")) {
 
-        RavensFigure allFiguresA = new RavensFigure("Figure A");
-        RavensFigure allFiguresB = new RavensFigure("Figure B");
-        RavensFigure allFiguresC = new RavensFigure("Figure C");
-        RavensFigure allFigures1 = new RavensFigure("Figure 1");
-        RavensFigure allFigures2 = new RavensFigure("Figure 2");
-        RavensFigure allFigures3 = new RavensFigure("Figure 3");
-        RavensFigure allFigures4 = new RavensFigure("Figure 4");
-        RavensFigure allFigures5 = new RavensFigure("Figure 5");
-        RavensFigure allFigures6 = new RavensFigure("Figure 6");
+            String figureAPath = figures.get("A").getPath();
+            String figureBPath = figures.get("B").getPath();
+            String figureCPath = figures.get("C").getPath();
+            String figureDPath = figures.get("D").getPath();
+            String figureEPath = figures.get("E").getPath();
+            String figureFPath = figures.get("F").getPath();
+            String figureGPath = figures.get("G").getPath();
+            String figureHPath = figures.get("H").getPath();
+            String figure1Path = figures.get("1").getPath();
+            String figure2Path = figures.get("2").getPath();
+            String figure3Path = figures.get("3").getPath();
+            String figure4Path = figures.get("4").getPath();
+            String figure5Path = figures.get("5").getPath();
+            String figure6Path = figures.get("6").getPath();
 
-        ArrayList<RavensObject> figureAObjects = cvutils.processImage(figureAPath);
-        ArrayList<RavensObject> figureBObjects = cvutils.processImage(figureBPath);
-        ArrayList<RavensObject> figureCObjects = cvutils.processImage(figureCPath);
-        ArrayList<RavensObject> figure1Objects = cvutils.processImage(figure1Path);
-        ArrayList<RavensObject> figure2Objects = cvutils.processImage(figure2Path);
-        ArrayList<RavensObject> figure3Objects = cvutils.processImage(figure3Path);
-        ArrayList<RavensObject> figure4Objects = cvutils.processImage(figure4Path);
-        ArrayList<RavensObject> figure5Objects = cvutils.processImage(figure5Path);
-        ArrayList<RavensObject> figure6Objects = cvutils.processImage(figure6Path);
+            FrameA frameA = new FrameA(cvutils.processImage(figureAPath));
+            FrameB frameB = new FrameB(cvutils.processImage(figureBPath));
+            FrameC frameC = new FrameC(cvutils.processImage(figureCPath));
+            FrameD frameD = new FrameD(cvutils.processImage(figureDPath));
+            FrameE frameE = new FrameE(cvutils.processImage(figureEPath));
+            FrameF frameF = new FrameF(cvutils.processImage(figureFPath));
+            FrameG frameG = new FrameG(cvutils.processImage(figureGPath));
+            FrameH frameH = new FrameH(cvutils.processImage(figureHPath));
 
-        for(int f=0; f<figureAObjects.size(); f++) {
-            allFiguresA.getObjects().add(figureAObjects.get(f));
+            allFiguresA = new RavensFigure("Figure A");
+            allFiguresB = new RavensFigure("Figure B");
+            allFiguresC = new RavensFigure("Figure C");
+            allFiguresD = new RavensFigure("Figure D");
+            allFiguresE = new RavensFigure("Figure E");
+            allFiguresF = new RavensFigure("Figure F");
+            allFiguresG = new RavensFigure("Figure G");
+            allFiguresH = new RavensFigure("Figure H");
+            allFiguresI = new RavensFigure("Figure I");
+            allFigures1 = new RavensFigure("Figure 1");
+            allFigures2 = new RavensFigure("Figure 2");
+            allFigures3 = new RavensFigure("Figure 3");
+            allFigures4 = new RavensFigure("Figure 4");
+            allFigures5 = new RavensFigure("Figure 5");
+            allFigures6 = new RavensFigure("Figure 6");
+
+            ArrayList<RavensObject> figureAObjects = cvutils.processImage(figureAPath);
+            ArrayList<RavensObject> figureBObjects = cvutils.processImage(figureBPath);
+            ArrayList<RavensObject> figureCObjects = cvutils.processImage(figureCPath);
+            ArrayList<RavensObject> figureDObjects = cvutils.processImage(figureDPath);
+            ArrayList<RavensObject> figureEObjects = cvutils.processImage(figureEPath);
+            ArrayList<RavensObject> figureFObjects = cvutils.processImage(figureFPath);
+            ArrayList<RavensObject> figureGObjects = cvutils.processImage(figureGPath);
+            ArrayList<RavensObject> figureHObjects = cvutils.processImage(figureHPath);
+            ArrayList<RavensObject> figure1Objects = cvutils.processImage(figure1Path);
+            ArrayList<RavensObject> figure2Objects = cvutils.processImage(figure2Path);
+            ArrayList<RavensObject> figure3Objects = cvutils.processImage(figure3Path);
+            ArrayList<RavensObject> figure4Objects = cvutils.processImage(figure4Path);
+            ArrayList<RavensObject> figure5Objects = cvutils.processImage(figure5Path);
+            ArrayList<RavensObject> figure6Objects = cvutils.processImage(figure6Path);
+
+            for (int f = 0; f < figureAObjects.size(); f++) {
+                allFiguresA.getObjects().add(figureAObjects.get(f));
+            }
+
+            for (int f = 0; f < figureBObjects.size(); f++) {
+                allFiguresB.getObjects().add(figureBObjects.get(f));
+            }
+
+            for (int f = 0; f < figureCObjects.size(); f++) {
+                allFiguresC.getObjects().add(figureCObjects.get(f));
+            }
+
+            for (int f = 0; f < figureDObjects.size(); f++) {
+                allFiguresD.getObjects().add(figureDObjects.get(f));
+            }
+
+            for (int f = 0; f < figureEObjects.size(); f++) {
+                allFiguresE.getObjects().add(figureEObjects.get(f));
+            }
+
+            for (int f = 0; f < figureFObjects.size(); f++) {
+                allFiguresF.getObjects().add(figureFObjects.get(f));
+            }
+
+            for (int f = 0; f < figureGObjects.size(); f++) {
+                allFiguresG.getObjects().add(figureGObjects.get(f));
+            }
+
+            for (int f = 0; f < figureHObjects.size(); f++) {
+                allFiguresH.getObjects().add(figureHObjects.get(f));
+            }
+
+
+            for (int f = 0; f < figure1Objects.size(); f++) {
+                allFigures1.getObjects().add(figure1Objects.get(f));
+            }
+
+            for (int f = 0; f < figure2Objects.size(); f++) {
+                allFigures2.getObjects().add(figure2Objects.get(f));
+            }
+
+            for (int f = 0; f < figure3Objects.size(); f++) {
+                allFigures3.getObjects().add(figure3Objects.get(f));
+            }
+
+            for (int f = 0; f < figure4Objects.size(); f++) {
+                allFigures4.getObjects().add(figure4Objects.get(f));
+            }
+
+            for (int f = 0; f < figure5Objects.size(); f++) {
+                allFigures5.getObjects().add(figure5Objects.get(f));
+            }
+
+            for (int f = 0; f < figure6Objects.size(); f++) {
+                allFigures6.getObjects().add(figure6Objects.get(f));
+            }
+
+            figuresNoVisual = new HashMap<String, RavensFigure>();
+            figuresNoVisual.put("1", allFigures1);
+            figuresNoVisual.put("2", allFigures2);
+            figuresNoVisual.put("3", allFigures3);
+            figuresNoVisual.put("4", allFigures4);
+            figuresNoVisual.put("5", allFigures5);
+            figuresNoVisual.put("6", allFigures6);
+
+            semanticNetwork = new SemanticNetwork(frameA, frameB, frameC);
+
+        } else {
+
+            String figureAPath = figures.get("A").getPath();
+            String figureBPath = figures.get("B").getPath();
+            String figureCPath = figures.get("C").getPath();
+            String figure1Path = figures.get("1").getPath();
+            String figure2Path = figures.get("2").getPath();
+            String figure3Path = figures.get("3").getPath();
+            String figure4Path = figures.get("4").getPath();
+            String figure5Path = figures.get("5").getPath();
+            String figure6Path = figures.get("6").getPath();
+
+            FrameA frameA = new FrameA(cvutils.processImage(figureAPath));
+            FrameB frameB = new FrameB(cvutils.processImage(figureBPath));
+            FrameC frameC = new FrameC(cvutils.processImage(figureCPath));
+
+            allFiguresA = new RavensFigure("Figure A");
+            allFiguresB = new RavensFigure("Figure B");
+            allFiguresC = new RavensFigure("Figure C");
+            allFiguresD = new RavensFigure("Figure D");
+            allFiguresE = new RavensFigure("Figure E");
+            allFiguresF = new RavensFigure("Figure F");
+            allFiguresG = new RavensFigure("Figure G");
+            allFiguresH = new RavensFigure("Figure H");
+            allFiguresI = new RavensFigure("Figure I");
+            allFigures1 = new RavensFigure("Figure 1");
+            allFigures2 = new RavensFigure("Figure 2");
+            allFigures3 = new RavensFigure("Figure 3");
+            allFigures4 = new RavensFigure("Figure 4");
+            allFigures5 = new RavensFigure("Figure 5");
+            allFigures6 = new RavensFigure("Figure 6");
+
+            ArrayList<RavensObject> figureAObjects = cvutils.processImage(figureAPath);
+            ArrayList<RavensObject> figureBObjects = cvutils.processImage(figureBPath);
+            ArrayList<RavensObject> figureCObjects = cvutils.processImage(figureCPath);
+            ArrayList<RavensObject> figure1Objects = cvutils.processImage(figure1Path);
+            ArrayList<RavensObject> figure2Objects = cvutils.processImage(figure2Path);
+            ArrayList<RavensObject> figure3Objects = cvutils.processImage(figure3Path);
+            ArrayList<RavensObject> figure4Objects = cvutils.processImage(figure4Path);
+            ArrayList<RavensObject> figure5Objects = cvutils.processImage(figure5Path);
+            ArrayList<RavensObject> figure6Objects = cvutils.processImage(figure6Path);
+
+            for (int f = 0; f < figureAObjects.size(); f++) {
+                allFiguresA.getObjects().add(figureAObjects.get(f));
+            }
+
+            for (int f = 0; f < figureBObjects.size(); f++) {
+                allFiguresB.getObjects().add(figureBObjects.get(f));
+            }
+
+            for (int f = 0; f < figureCObjects.size(); f++) {
+                allFiguresC.getObjects().add(figureCObjects.get(f));
+            }
+
+            for (int f = 0; f < figure1Objects.size(); f++) {
+                allFigures1.getObjects().add(figure1Objects.get(f));
+            }
+
+            for (int f = 0; f < figure2Objects.size(); f++) {
+                allFigures2.getObjects().add(figure2Objects.get(f));
+            }
+
+            for (int f = 0; f < figure3Objects.size(); f++) {
+                allFigures3.getObjects().add(figure3Objects.get(f));
+            }
+
+            for (int f = 0; f < figure4Objects.size(); f++) {
+                allFigures4.getObjects().add(figure4Objects.get(f));
+            }
+
+            for (int f = 0; f < figure5Objects.size(); f++) {
+                allFigures5.getObjects().add(figure5Objects.get(f));
+            }
+
+            for (int f = 0; f < figure6Objects.size(); f++) {
+                allFigures6.getObjects().add(figure6Objects.get(f));
+            }
+
+            figuresNoVisual = new HashMap<String, RavensFigure>();
+            figuresNoVisual.put("1", allFigures1);
+            figuresNoVisual.put("2", allFigures2);
+            figuresNoVisual.put("3", allFigures3);
+            figuresNoVisual.put("4", allFigures4);
+            figuresNoVisual.put("5", allFigures5);
+            figuresNoVisual.put("6", allFigures6);
+
+            semanticNetwork = new SemanticNetwork(frameA, frameB, frameC);
+
         }
 
-        for(int f=0; f<figureBObjects.size(); f++) {
-            allFiguresB.getObjects().add(figureBObjects.get(f));
-        }
-
-        for(int f=0; f<figureCObjects.size(); f++) {
-            allFiguresC.getObjects().add(figureCObjects.get(f));
-        }
-
-        for(int f=0; f<figure1Objects.size(); f++) {
-            allFigures1.getObjects().add(figure1Objects.get(f));
-        }
-
-        for(int f=0; f<figure2Objects.size(); f++) {
-            allFigures2.getObjects().add(figure2Objects.get(f));
-        }
-
-        for(int f=0; f<figure3Objects.size(); f++) {
-            allFigures3.getObjects().add(figure3Objects.get(f));
-        }
-
-        for(int f=0; f<figure4Objects.size(); f++) {
-            allFigures4.getObjects().add(figure4Objects.get(f));
-        }
-
-        for(int f=0; f<figure5Objects.size(); f++) {
-            allFigures5.getObjects().add(figure5Objects.get(f));
-        }
-
-        for(int f=0; f<figure6Objects.size(); f++) {
-            allFigures6.getObjects().add(figure6Objects.get(f));
-        }
-
-        HashMap<String, RavensFigure> figuresNoVisual = new HashMap<String, RavensFigure>();
-        figuresNoVisual.put("1", allFigures1);
-        figuresNoVisual.put("2", allFigures2);
-        figuresNoVisual.put("3", allFigures3);
-        figuresNoVisual.put("4", allFigures4);
-        figuresNoVisual.put("5", allFigures5);
-        figuresNoVisual.put("6", allFigures6);
-
-        SemanticNetwork semanticNetwork = new SemanticNetwork(frameA, frameB, frameC);
 
         //Check which algorithm to use
-        if(problem.getProblemType().equals("2x1 (Image)")) {
+        if (problem.getProblemType().equals("2x1 (Image)")) {
 
             semanticNetwork.generateTransformations2x1();
             GeneratedFrame generatedSolution = new GeneratedFrame(semanticNetwork, allFiguresB, allFiguresC);
@@ -160,7 +314,7 @@ public class Agent {
             System.out.println("Finished Running 2x1 Problems");
 
 
-        } else if(problem.getProblemType().equals("2x2 (Image)")) {
+        } else if (problem.getProblemType().equals("2x2 (Image)")) {
 
             semanticNetwork.generateTransformations2x2();
             GeneratedFrame generatedSolution = new GeneratedFrame(semanticNetwork, allFiguresB, allFiguresC);
@@ -170,7 +324,17 @@ public class Agent {
 
             System.out.println("Finished Running 2x2 Problems");
 
+        } else {
+            System.out.println("Finished Running 3x3 Problems");
+            System.out.println("Finished Running 3x3 Problems");
+            System.out.println("Finished Running 3x3 Problems");
+            System.out.println("Finished Running 3x3 Problems");
+            System.out.println("Finished Running 3x3 Problems");
+            System.out.println("Finished Running 3x3 Problems");
+            System.out.println("Finished Running 3x3 Problems");
+
         }
+
         return solution;
     }
 }
