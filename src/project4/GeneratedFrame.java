@@ -47,6 +47,10 @@ public class GeneratedFrame {
         performTransformationFromBThenCSecond();
     }
 
+    public void createFrame3x3() {
+
+    }
+
     public void performTransformationFromB() {
 
         //TRANSFORMATION FROM B TO D FIRST
@@ -1696,7 +1700,7 @@ public class GeneratedFrame {
         }
     }
 
-    public int findBestCorrespondenceForTransformationsFrameC(FrameC frameC, Transformation transformationTransformation) {
+    public int findBestCorrespondenceForTransformationsFrameC(Frame frameC, Transformation transformationTransformation) {
 
         int count = 0;
         int previousCount = 0;
@@ -1770,7 +1774,7 @@ public class GeneratedFrame {
         return transformationIndex;
     }
 
-    public int findBestCorrespondenceForTransformationsFrameB(FrameB frameB, Transformation transformationTransformation) {
+    public int findBestCorrespondenceForTransformationsFrameB(Frame frameB, Transformation transformationTransformation) {
 
         int count = 0;
         int previousCount = 0;

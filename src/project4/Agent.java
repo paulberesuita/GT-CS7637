@@ -103,14 +103,14 @@ public class Agent {
             String figure5Path = figures.get("5").getPath();
             String figure6Path = figures.get("6").getPath();
 
-            FrameA frameA = new FrameA(cvutils.processImage(figureAPath));
-            FrameB frameB = new FrameB(cvutils.processImage(figureBPath));
-            FrameC frameC = new FrameC(cvutils.processImage(figureCPath));
-            FrameD frameD = new FrameD(cvutils.processImage(figureDPath));
-            FrameE frameE = new FrameE(cvutils.processImage(figureEPath));
-            FrameF frameF = new FrameF(cvutils.processImage(figureFPath));
-            FrameG frameG = new FrameG(cvutils.processImage(figureGPath));
-            FrameH frameH = new FrameH(cvutils.processImage(figureHPath));
+            Frame frameA = new Frame(cvutils.processImage(figureAPath));
+            Frame frameB = new Frame(cvutils.processImage(figureBPath));
+            Frame frameC = new Frame(cvutils.processImage(figureCPath));
+            Frame frameD = new Frame(cvutils.processImage(figureDPath));
+            Frame frameE = new Frame(cvutils.processImage(figureEPath));
+            Frame frameF = new Frame(cvutils.processImage(figureFPath));
+            Frame frameG = new Frame(cvutils.processImage(figureGPath));
+            Frame frameH = new Frame(cvutils.processImage(figureHPath));
 
             allFiguresA = new RavensFigure("Figure A");
             allFiguresB = new RavensFigure("Figure B");
@@ -222,9 +222,9 @@ public class Agent {
             String figure5Path = figures.get("5").getPath();
             String figure6Path = figures.get("6").getPath();
 
-            FrameA frameA = new FrameA(cvutils.processImage(figureAPath));
-            FrameB frameB = new FrameB(cvutils.processImage(figureBPath));
-            FrameC frameC = new FrameC(cvutils.processImage(figureCPath));
+            Frame frameA = new Frame(cvutils.processImage(figureAPath));
+            Frame frameB = new Frame(cvutils.processImage(figureBPath));
+            Frame frameC = new Frame(cvutils.processImage(figureCPath));
 
             allFiguresA = new RavensFigure("Figure A");
             allFiguresB = new RavensFigure("Figure B");

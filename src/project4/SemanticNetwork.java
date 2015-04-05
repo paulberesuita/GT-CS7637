@@ -4,23 +4,45 @@ import java.util.ArrayList;
 
 public class SemanticNetwork {
 
-    FrameA frameA = null;
-    FrameB frameB = null;
-    FrameC frameC = null;
+    Frame frameA = null;
+    Frame frameB = null;
+    Frame frameC = null;
+    Frame frameD = null;
+    Frame frameE = null;
+    Frame frameF = null;
+    Frame frameG = null;
+    Frame frameH = null;
+    Frame frameI = null;
 
     ArrayList<Transformation> ABTransformations = null;
+    ArrayList<Transformation> ACTransformations = null;
+    ArrayList<Transformation> BCTransformations = null;
+    ArrayList<Transformation> DETransformations = null;
+    ArrayList<Transformation> EFTransformations = null;
+    ArrayList<Transformation> GHTransformations = null;
+
     ArrayList<RavensObject> ABRemovals = null;
+    ArrayList<RavensObject> ACRemovals = null;
+//    ArrayList<RavensObject> BCRemovals = null;
+//    ArrayList<RavensObject> DERemovals = null;
+//    ArrayList<RavensObject> EFRemovals = null;
+//    ArrayList<RavensObject> GHRemovals = null;
+
+
     ArrayList<RavensObject> ABAdditions = null;
+    ArrayList<RavensObject> ACAdditions = null;
+//    ArrayList<RavensObject> BCAdditions = null;
+//    ArrayList<RavensObject> DEAdditions = null;
+//    ArrayList<RavensObject> EFAdditions = null;
+//    ArrayList<RavensObject> GHAdditions = null;
+
     int MultipleTransformationAB = 0;
     boolean circleOnlyUnclearRotationAB = false;
 
-    ArrayList<Transformation> ACTransformations = null;
-    ArrayList<RavensObject> ACRemovals = null;
-    ArrayList<RavensObject> ACAdditions = null;
     int MultipleTransformationAC = 0;
     boolean circleOnlyUnclearRotationAC = false;
 
-    public SemanticNetwork(FrameA frameA, FrameB frameB, FrameC frameC) {
+    public SemanticNetwork(Frame frameA, Frame frameB, Frame frameC) {
 
         this.frameA = frameA;
         this.frameB = frameB;
@@ -33,6 +55,37 @@ public class SemanticNetwork {
         ACAdditions = new ArrayList<RavensObject>();
 
     }
+
+    public SemanticNetwork(Frame frameA, Frame frameB, Frame frameC, Frame frameD, Frame frameE, Frame frameF, Frame frameG, Frame frameH, Frame frameI) {
+
+        this.frameA = frameA;
+        this.frameB = frameB;
+        this.frameC = frameC;
+        this.frameD = frameD;
+        this.frameE = frameE;
+        this.frameF = frameF;
+        this.frameG = frameG;
+        this.frameH = frameH;
+        this.frameI = frameI;
+
+        ABTransformations = new ArrayList<Transformation>();
+        ACTransformations = new ArrayList<Transformation>();
+
+        BCTransformations = new ArrayList<Transformation>();
+
+        DETransformations = new ArrayList<Transformation>();
+        EFTransformations = new ArrayList<Transformation>();
+
+        GHTransformations = new ArrayList<Transformation>();
+
+        ABRemovals = new ArrayList<RavensObject>();
+        ACRemovals = new ArrayList<RavensObject>();
+
+        ABAdditions = new ArrayList<RavensObject>();
+        ACAdditions = new ArrayList<RavensObject>();
+
+    }
+
     public void generateTransformations2x1() {
 
         ArrayList<CorrespondenceIndexAndScore> indexAndScoreArrayAB = new ArrayList<CorrespondenceIndexAndScore>();
@@ -46,9 +99,9 @@ public class SemanticNetwork {
             indexAndScoreArrayAB.add(frameBObjectCorrespondence);
 
             //Add corresponding object for frame A object to frame C object
-            CorrespondenceIndexAndScore frameCObjectCorrespondence = Utility.bestCorrespondenceIndex(frameA.getObjects().get(i), frameC.getObjects());
-            frameCObjectCorrespondence.setFrameAObjectIndex(i);
-            indexAndScoreArrayAC.add(frameCObjectCorrespondence);
+//            CorrespondenceIndexAndScore frameCObjectCorrespondence = Utility.bestCorrespondenceIndex(frameA.getObjects().get(i), frameC.getObjects());
+//            frameCObjectCorrespondence.setFrameAObjectIndex(i);
+//            indexAndScoreArrayAC.add(frameCObjectCorrespondence);
         }
 
         if(frameA.getObjects().size() != frameB.getObjects().size()) {
@@ -316,6 +369,92 @@ public class SemanticNetwork {
 
     }
 
+    public void generateTransformations3x3() {
+
+        ArrayList<CorrespondenceIndexAndScore> indexAndScoreArrayAB = new ArrayList<CorrespondenceIndexAndScore>();
+        ArrayList<CorrespondenceIndexAndScore> indexAndScoreArrayBC = new ArrayList<CorrespondenceIndexAndScore>();
+        ArrayList<CorrespondenceIndexAndScore> indexAndScoreArrayDE = new ArrayList<CorrespondenceIndexAndScore>();
+        ArrayList<CorrespondenceIndexAndScore> indexAndScoreArrayEF = new ArrayList<CorrespondenceIndexAndScore>();
+        ArrayList<CorrespondenceIndexAndScore> indexAndScoreArrayGH = new ArrayList<CorrespondenceIndexAndScore>();
+
+        //Frame A to B
+        for(int i=0; i<frameA.getObjects().size(); i++) {
+
+            //Add corresponding object for frame A object to frame B object
+            CorrespondenceIndexAndScore frameBObjectCorrespondence = Utility.bestCorrespondenceIndex(frameA.getObjects().get(i), frameB.getObjects());
+            frameBObjectCorrespondence.setFrameAObjectIndex(i);
+            indexAndScoreArrayAB.add(frameBObjectCorrespondence);
+        }
+
+        //Frame B to C
+        for(int i=0; i<frameB.getObjects().size(); i++) {
+
+            //Add corresponding object for frame B object to frame C object
+            CorrespondenceIndexAndScore frameCObjectCorrespondence = Utility.bestCorrespondenceIndex(frameB.getObjects().get(i), frameC.getObjects());
+            frameCObjectCorrespondence.setFrameAObjectIndex(i);
+            indexAndScoreArrayBC.add(frameCObjectCorrespondence);
+        }
+
+        //Frame D to E
+        for(int i=0; i<frameD.getObjects().size(); i++) {
+
+            //Add corresponding object for frame D object to frame E object
+            CorrespondenceIndexAndScore frameEObjectCorrespondence = Utility.bestCorrespondenceIndex(frameD.getObjects().get(i), frameE.getObjects());
+            frameEObjectCorrespondence.setFrameAObjectIndex(i);
+            indexAndScoreArrayDE.add(frameEObjectCorrespondence);
+        }
+
+        //Frame E to F
+        for(int i=0; i<frameE.getObjects().size(); i++) {
+
+            //Add corresponding object for frame E object to frame F object
+            CorrespondenceIndexAndScore frameFObjectCorrespondence = Utility.bestCorrespondenceIndex(frameE.getObjects().get(i), frameF.getObjects());
+            frameFObjectCorrespondence.setFrameAObjectIndex(i);
+            indexAndScoreArrayDE.add(frameFObjectCorrespondence);
+        }
+
+        //Frame G to H
+        for(int i=0; i<frameG.getObjects().size(); i++) {
+
+            //Add corresponding object for frame G object to frame H object
+            CorrespondenceIndexAndScore frameHObjectCorrespondence = Utility.bestCorrespondenceIndex(frameG.getObjects().get(i), frameH.getObjects());
+            frameHObjectCorrespondence.setFrameAObjectIndex(i);
+            indexAndScoreArrayDE.add(frameHObjectCorrespondence);
+        }
+
+
+        //Create Transformations (A to B)
+        for(int i=0; i<indexAndScoreArrayAB.size(); i++) {
+
+            //Create Transformation between nodes; assuming correspondence
+            Transformation transformation = new Transformation(frameA.getObjects().get(indexAndScoreArrayAB.get(i).getFrameAObjectIndex()), frameB.getObjects().get(indexAndScoreArrayAB.get(i).getCorrespondingObjectIndex()), frameA, frameB, frameC);
+            boolean differenceExist = transformation.checkDifferencesBetweenNodes();
+            if(differenceExist) {
+                ABTransformations.add(transformation);
+            }
+        }
+
+        //Create Transformations (B to C)
+//        for(int i=0; i<indexAndScoreArrayBC.size(); i++) {
+//
+//            //Create Transformation between nodes; assuming correspondence
+//            Transformation transformation = new Transformation(frameA.getObjects().get(indexAndScoreArrayAB.get(i).getFrameAObjectIndex()), frameB.getObjects().get(indexAndScoreArrayAB.get(i).getCorrespondingObjectIndex()), frameA, frameB, frameC);
+//            boolean differenceExist = transformation.checkDifferencesBetweenNodes();
+//            if(differenceExist) {
+//                ABTransformations.add(transformation);
+//            }
+//        }
+
+        //Create Transformations (D to E)
+
+        //Create Transformations (E to F)
+
+        //Create Transformations (G to H)
+
+
+        System.out.println("removals have been checked");
+    }
+
     public ArrayList<Transformation> getABTransformations() {
         return ABTransformations;
     }
@@ -348,27 +487,27 @@ public class SemanticNetwork {
         this.ACRemovals = ACRemovals;
     }
 
-    public FrameC getFrameC() {
+    public Frame getFrameC() {
         return frameC;
     }
 
-    public void setFrameC(FrameC frameC) {
+    public void setFrameC(Frame frameC) {
         this.frameC = frameC;
     }
 
-    public FrameA getFrameA() {
+    public Frame getFrameA() {
         return frameA;
     }
 
-    public void setFrameA(FrameA frameA) {
+    public void setFrameA(Frame frameA) {
         this.frameA = frameA;
     }
 
-    public FrameB getFrameB() {
+    public Frame getFrameB() {
         return frameB;
     }
 
-    public void setFrameB(FrameB frameB) {
+    public void setFrameB(Frame frameB) {
         this.frameB = frameB;
     }
 

@@ -16,11 +16,11 @@ public class Transformation {
     ArrayList<RavensObject> leftOfObjects = null;
     ArrayList<RavensObject> rightOfObjects = null;
 
-    FrameA frameA = null;
-    FrameB frameB = null;
-    FrameC frameC = null;
+    Frame frameA = null;
+    Frame frameB = null;
+    Frame frameC = null;
 
-    public Transformation(RavensObject firstObject, RavensObject secondObject, FrameA frameA, FrameB frameB, FrameC frameC) {
+    public Transformation(RavensObject firstObject, RavensObject secondObject, Frame frameA, Frame frameB, Frame frameC) {
 
         this.firstObject = firstObject;
         this.secondObject = secondObject;
@@ -343,27 +343,27 @@ public class Transformation {
         this.aboveObjects = aboveObjects;
     }
 
-    public FrameA getFrameA() {
+    public Frame getFrameA() {
         return frameA;
     }
 
-    public void setFrameA(FrameA frameA) {
+    public void setFrameA(Frame frameA) {
         this.frameA = frameA;
     }
 
-    public FrameB getFrameB() {
+    public Frame getFrameB() {
         return frameB;
     }
 
-    public void setFrameB(FrameB frameB) {
+    public void setFrameB(Frame frameB) {
         this.frameB = frameB;
     }
 
-    public FrameC getFrameC() {
+    public Frame getFrameC() {
         return frameC;
     }
 
-    public void setFrameC(FrameC frameC) {
+    public void setFrameC(Frame frameC) {
         this.frameC = frameC;
     }
 

@@ -12,7 +12,7 @@ public class Utility {
      * @param frameC
      * @return
      */
-    public static RavensObject returnObject(String objectName, FrameA frameA, FrameB frameB, FrameC frameC) {
+    public static RavensObject returnObject(String objectName, Frame frameA, Frame frameB, Frame frameC) {
 
         RavensObject object = null;
 
@@ -43,7 +43,7 @@ public class Utility {
         return object;
     }
 
-    public static RavensObject returnObjectInFrameB(String objectName, FrameB frameB) {
+    public static RavensObject returnObjectInFrameB(String objectName, Frame frameB) {
 
         RavensObject object = null;
 
@@ -58,7 +58,7 @@ public class Utility {
         return object;
     }
 
-    public static RavensObject returnObjectInFrameA(String objectName, FrameA frameA) {
+    public static RavensObject returnObjectInFrameA(String objectName, Frame frameA) {
 
         RavensObject object = null;
 
