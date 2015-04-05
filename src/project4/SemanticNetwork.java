@@ -12,7 +12,6 @@ public class SemanticNetwork {
     Frame frameF = null;
     Frame frameG = null;
     Frame frameH = null;
-    Frame frameI = null;
 
     ArrayList<Transformation> ABTransformations = null;
     ArrayList<Transformation> ACTransformations = null;
@@ -23,18 +22,9 @@ public class SemanticNetwork {
 
     ArrayList<RavensObject> ABRemovals = null;
     ArrayList<RavensObject> ACRemovals = null;
-//    ArrayList<RavensObject> BCRemovals = null;
-//    ArrayList<RavensObject> DERemovals = null;
-//    ArrayList<RavensObject> EFRemovals = null;
-//    ArrayList<RavensObject> GHRemovals = null;
-
 
     ArrayList<RavensObject> ABAdditions = null;
     ArrayList<RavensObject> ACAdditions = null;
-//    ArrayList<RavensObject> BCAdditions = null;
-//    ArrayList<RavensObject> DEAdditions = null;
-//    ArrayList<RavensObject> EFAdditions = null;
-//    ArrayList<RavensObject> GHAdditions = null;
 
     int MultipleTransformationAB = 0;
     boolean circleOnlyUnclearRotationAB = false;
@@ -583,5 +573,77 @@ public class SemanticNetwork {
 
     public void setCircleOnlyUnclearRotationAC(boolean circleOnlyUnclearRotationAC) {
         this.circleOnlyUnclearRotationAC = circleOnlyUnclearRotationAC;
+    }
+
+    public Frame getFrameD() {
+        return frameD;
+    }
+
+    public void setFrameD(Frame frameD) {
+        this.frameD = frameD;
+    }
+
+    public Frame getFrameE() {
+        return frameE;
+    }
+
+    public void setFrameE(Frame frameE) {
+        this.frameE = frameE;
+    }
+
+    public Frame getFrameF() {
+        return frameF;
+    }
+
+    public void setFrameF(Frame frameF) {
+        this.frameF = frameF;
+    }
+
+    public Frame getFrameG() {
+        return frameG;
+    }
+
+    public void setFrameG(Frame frameG) {
+        this.frameG = frameG;
+    }
+
+    public Frame getFrameH() {
+        return frameH;
+    }
+
+    public void setFrameH(Frame frameH) {
+        this.frameH = frameH;
+    }
+
+    public ArrayList<Transformation> getBCTransformations() {
+        return BCTransformations;
+    }
+
+    public void setBCTransformations(ArrayList<Transformation> BCTransformations) {
+        this.BCTransformations = BCTransformations;
+    }
+
+    public ArrayList<Transformation> getDETransformations() {
+        return DETransformations;
+    }
+
+    public void setDETransformations(ArrayList<Transformation> DETransformations) {
+        this.DETransformations = DETransformations;
+    }
+
+    public ArrayList<Transformation> getEFTransformations() {
+        return EFTransformations;
+    }
+
+    public void setEFTransformations(ArrayList<Transformation> EFTransformations) {
+        this.EFTransformations = EFTransformations;
+    }
+
+    public ArrayList<Transformation> getGHTransformations() {
+        return GHTransformations;
+    }
+
+    public void setGHTransformations(ArrayList<Transformation> GHTransformations) {
+        this.GHTransformations = GHTransformations;
     }
 }
