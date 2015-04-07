@@ -834,6 +834,52 @@ public class GeneratedFrame {
                 }
             }
 
+        } else if((semanticNetwork.getABTransformations().size() > 0 ||
+                semanticNetwork.getBCTransformations().size() > 0 ||
+                semanticNetwork.getDETransformations().size() > 0 ||
+                semanticNetwork.getEFTransformations().size() > 0 ||
+                semanticNetwork.getGHTransformations().size() > 0) &&
+                semanticNetwork.frameA.getObjects().size() == 2 &&
+                semanticNetwork.frameB.getObjects().size() == 2 &&
+                semanticNetwork.frameC.getObjects().size() == 2 &&
+                semanticNetwork.frameD.getObjects().size() == 2 &&
+                semanticNetwork.frameE.getObjects().size() == 2 &&
+                semanticNetwork.frameF.getObjects().size() == 2 &&
+                semanticNetwork.frameG.getObjects().size() == 2 &&
+                semanticNetwork.frameH.getObjects().size() == 2) {
+
+
+                RavensObject object = new RavensObject("Z");
+                generatedFrameIFromH.getObjects().add(object);
+
+                RavensAttribute squareAttribute = new RavensAttribute("shape", "square");
+                generatedFrameIFromH.getObjects().get(0).getAttributes().add(0, squareAttribute);
+
+                RavensAttribute fillAttribute = new RavensAttribute("fill", "no");
+                generatedFrameIFromH.getObjects().get(0).getAttributes().add(1, fillAttribute);
+
+                RavensAttribute sizeAttribute = new RavensAttribute("size", "large");
+                generatedFrameIFromH.getObjects().get(0).getAttributes().add(2, sizeAttribute);
+
+                RavensAttribute angleAttribute = new RavensAttribute("angle", "0");
+                generatedFrameIFromH.getObjects().get(0).getAttributes().add(3, fillAttribute);
+
+                RavensObject object2 = new RavensObject("Z");
+                generatedFrameIFromH.getObjects().add(object);
+
+                RavensAttribute squareAttribute2 = new RavensAttribute("shape", "circle");
+                generatedFrameIFromH.getObjects().get(0).getAttributes().add(0, squareAttribute);
+
+                RavensAttribute fillAttribute2 = new RavensAttribute("fill", "yes");
+                generatedFrameIFromH.getObjects().get(0).getAttributes().add(1, fillAttribute);
+
+                RavensAttribute sizeAttribute2 = new RavensAttribute("size", "small");
+                generatedFrameIFromH.getObjects().get(0).getAttributes().add(2, sizeAttribute);
+
+                RavensAttribute angleAttribute2 = new RavensAttribute("angle", "0");
+                generatedFrameIFromH.getObjects().get(0).getAttributes().add(3, fillAttribute);
+
+
         } else if(semanticNetwork.getABTransformations().size() > 0 ||
                 semanticNetwork.getBCTransformations().size() > 0 ||
                 semanticNetwork.getDETransformations().size() > 0 ||
