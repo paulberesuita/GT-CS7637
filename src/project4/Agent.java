@@ -325,8 +325,12 @@ public class Agent {
             System.out.println("Finished Running 2x2 Problems");
 
         } else {
+
             semanticNetwork.generateTransformations3x3();
             GeneratedFrame generatedSolution = new GeneratedFrame(semanticNetwork);
+            generatedSolution.createFrame3x3();
+            String finalSolution = Utility.solution2x1(figuresNoVisual, generatedSolution.generatedFrameIFromH, generatedSolution.isUncertainRotation());
+            solution = finalSolution;
 
             System.out.println("Finished Running 3x3 Problems");
             System.out.println("Finished Running 3x3 Problems");
