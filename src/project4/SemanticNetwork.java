@@ -399,7 +399,7 @@ public class SemanticNetwork {
             //Add corresponding object for frame E object to frame F object
             CorrespondenceIndexAndScore frameFObjectCorrespondence = Utility.bestCorrespondenceIndex(frameE.getObjects().get(i), frameF.getObjects());
             frameFObjectCorrespondence.setFrameAObjectIndex(i);
-            indexAndScoreArrayDE.add(frameFObjectCorrespondence);
+            indexAndScoreArrayEF.add(frameFObjectCorrespondence);
         }
 
         //Frame G to H
@@ -408,7 +408,7 @@ public class SemanticNetwork {
             //Add corresponding object for frame G object to frame H object
             CorrespondenceIndexAndScore frameHObjectCorrespondence = Utility.bestCorrespondenceIndex(frameG.getObjects().get(i), frameH.getObjects());
             frameHObjectCorrespondence.setFrameAObjectIndex(i);
-            indexAndScoreArrayDE.add(frameHObjectCorrespondence);
+            indexAndScoreArrayGH.add(frameHObjectCorrespondence);
         }
 
 

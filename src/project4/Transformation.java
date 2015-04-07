@@ -185,6 +185,10 @@ public class Transformation {
                 difference =  "change to square";
             } else if(firstNodeValue.equals("triangle") && secondNodeValue.equals("circle")) {
                 difference =  "change to circle";
+            } else if(firstNodeValue.equals("circle") && secondNodeValue.equals("plus")) {
+                difference =  "change to circle to plus";
+            } else if(firstNodeValue.equals("plus") && secondNodeValue.equals("square")) {
+                difference =  "change to plus to square";
             } else {
             }
 
