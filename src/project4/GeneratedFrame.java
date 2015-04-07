@@ -1,5 +1,7 @@
 package project4;
 
+import java.util.ArrayList;
+
 public class GeneratedFrame {
 
     SemanticNetwork semanticNetwork = null;
@@ -831,6 +833,51 @@ public class GeneratedFrame {
 
                 }
             }
+
+        } else if(semanticNetwork.getABTransformations().size() > 0 ||
+                semanticNetwork.getBCTransformations().size() > 0 ||
+                semanticNetwork.getDETransformations().size() > 0 ||
+                semanticNetwork.getEFTransformations().size() > 0 ||
+                semanticNetwork.getGHTransformations().size() > 0) {
+
+            String shapeOfFrameH = semanticNetwork.getFrameH().getObjects().get(0).getAttributes().get(0).getValue();
+
+            ArrayList<String> typeOfTransformation = new ArrayList<>();
+
+            if(semanticNetwork.getABTransformations().get(0).getTransformations().get(0).equals("change to plus to square") ||
+                semanticNetwork.getBCTransformations().get(0).getTransformations().get(0).equals("change to plus to square") ||
+                semanticNetwork.getDETransformations().get(0).getTransformations().get(0).equals("change to plus to square") ||
+                semanticNetwork.getEFTransformations().get(0).getTransformations().get(0).equals("change to plus to square") ||
+                semanticNetwork.getGHTransformations().get(0).getTransformations().get(0).equals("change to plus to square") ) {
+
+                RavensObject object = new RavensObject("Z");
+                generatedFrameIFromH.getObjects().add(object);
+
+                RavensAttribute squareAttribute = new RavensAttribute("shape", "square");
+                generatedFrameIFromH.getObjects().get(0).getAttributes().add(0, squareAttribute);
+
+                RavensAttribute fillAttribute = new RavensAttribute("fill", "yes");
+                generatedFrameIFromH.getObjects().get(0).getAttributes().add(1, fillAttribute);
+
+            } else if(semanticNetwork.getABTransformations().get(0).getTransformations().get(0).equals("change to plus to circle") ||
+                    semanticNetwork.getBCTransformations().get(0).getTransformations().get(0).equals("change to plus to circle") ||
+                    semanticNetwork.getDETransformations().get(0).getTransformations().get(0).equals("change to plus to circle") ||
+                    semanticNetwork.getEFTransformations().get(0).getTransformations().get(0).equals("change to plus to circle") ||
+                    semanticNetwork.getGHTransformations().get(0).getTransformations().get(0).equals("change to plus to circle")) {
+
+                RavensObject object = new RavensObject("Z");
+                generatedFrameIFromH.getObjects().add(object);
+
+                RavensAttribute squareAttribute = new RavensAttribute("shape", "circle");
+                generatedFrameIFromH.getObjects().get(0).getAttributes().add(0, squareAttribute);
+
+                RavensAttribute fillAttribute = new RavensAttribute("fill", "yes");
+                generatedFrameIFromH.getObjects().get(0).getAttributes().add(1, fillAttribute);
+
+            } else {
+
+            }
+
 
         } else {
             //GENERATE A GENERAL SOLUTION
