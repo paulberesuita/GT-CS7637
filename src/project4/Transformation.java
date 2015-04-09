@@ -202,6 +202,10 @@ public class Transformation {
                 difference =  "yes large";
             } else if(firstNodeValue.equals("large") && secondNodeValue.equals("small")) {
                 difference =  "no large";
+            } else if(firstNodeValue.equals("small") && secondNodeValue.equals("medium")) {
+                difference =  "change small to medium";
+            } else if(firstNodeValue.equals("medium") && secondNodeValue.equals("large")) {
+                difference =  "change medium to large";
             } else {
             }
 

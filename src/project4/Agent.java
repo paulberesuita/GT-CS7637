@@ -64,7 +64,7 @@ public class Agent {
 
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
-//        if (problem.getName().equals("3x3 Basic Problem 03")) {
+//        if (problem.getName().equals("3x3 Basic Problem 07")) {
 
             //Get All figures
             HashMap<String, VisualRavensFigure> figures = problem.getFigures();
@@ -105,14 +105,14 @@ public class Agent {
                 String figure5Path = figures.get("5").getPath();
                 String figure6Path = figures.get("6").getPath();
 
-                Frame frameA = new Frame(cvutils.processImage(figureAPath));
-                Frame frameB = new Frame(cvutils.processImage(figureBPath));
-                Frame frameC = new Frame(cvutils.processImage(figureCPath));
-                Frame frameD = new Frame(cvutils.processImage(figureDPath));
-                Frame frameE = new Frame(cvutils.processImage(figureEPath));
-                Frame frameF = new Frame(cvutils.processImage(figureFPath));
-                Frame frameG = new Frame(cvutils.processImage(figureGPath));
-                Frame frameH = new Frame(cvutils.processImage(figureHPath));
+                Frame frameA = new Frame(cvutils.processImage(figureAPath, problem.getProblemType()));
+                Frame frameB = new Frame(cvutils.processImage(figureBPath, problem.getProblemType()));
+                Frame frameC = new Frame(cvutils.processImage(figureCPath, problem.getProblemType()));
+                Frame frameD = new Frame(cvutils.processImage(figureDPath, problem.getProblemType()));
+                Frame frameE = new Frame(cvutils.processImage(figureEPath, problem.getProblemType()));
+                Frame frameF = new Frame(cvutils.processImage(figureFPath, problem.getProblemType()));
+                Frame frameG = new Frame(cvutils.processImage(figureGPath, problem.getProblemType()));
+                Frame frameH = new Frame(cvutils.processImage(figureHPath, problem.getProblemType()));
 
                 allFiguresA = new RavensFigure("Figure A");
                 allFiguresB = new RavensFigure("Figure B");
@@ -130,20 +130,20 @@ public class Agent {
                 allFigures5 = new RavensFigure("Figure 5");
                 allFigures6 = new RavensFigure("Figure 6");
 
-                ArrayList<RavensObject> figureAObjects = cvutils.processImage(figureAPath);
-                ArrayList<RavensObject> figureBObjects = cvutils.processImage(figureBPath);
-                ArrayList<RavensObject> figureCObjects = cvutils.processImage(figureCPath);
-                ArrayList<RavensObject> figureDObjects = cvutils.processImage(figureDPath);
-                ArrayList<RavensObject> figureEObjects = cvutils.processImage(figureEPath);
-                ArrayList<RavensObject> figureFObjects = cvutils.processImage(figureFPath);
-                ArrayList<RavensObject> figureGObjects = cvutils.processImage(figureGPath);
-                ArrayList<RavensObject> figureHObjects = cvutils.processImage(figureHPath);
-                ArrayList<RavensObject> figure1Objects = cvutils.processImage(figure1Path);
-                ArrayList<RavensObject> figure2Objects = cvutils.processImage(figure2Path);
-                ArrayList<RavensObject> figure3Objects = cvutils.processImage(figure3Path);
-                ArrayList<RavensObject> figure4Objects = cvutils.processImage(figure4Path);
-                ArrayList<RavensObject> figure5Objects = cvutils.processImage(figure5Path);
-                ArrayList<RavensObject> figure6Objects = cvutils.processImage(figure6Path);
+                ArrayList<RavensObject> figureAObjects = cvutils.processImage(figureAPath, problem.getProblemType());
+                ArrayList<RavensObject> figureBObjects = cvutils.processImage(figureBPath, problem.getProblemType());
+                ArrayList<RavensObject> figureCObjects = cvutils.processImage(figureCPath, problem.getProblemType());
+                ArrayList<RavensObject> figureDObjects = cvutils.processImage(figureDPath, problem.getProblemType());
+                ArrayList<RavensObject> figureEObjects = cvutils.processImage(figureEPath, problem.getProblemType());
+                ArrayList<RavensObject> figureFObjects = cvutils.processImage(figureFPath, problem.getProblemType());
+                ArrayList<RavensObject> figureGObjects = cvutils.processImage(figureGPath, problem.getProblemType());
+                ArrayList<RavensObject> figureHObjects = cvutils.processImage(figureHPath, problem.getProblemType());
+                ArrayList<RavensObject> figure1Objects = cvutils.processImage(figure1Path, problem.getProblemType());
+                ArrayList<RavensObject> figure2Objects = cvutils.processImage(figure2Path, problem.getProblemType());
+                ArrayList<RavensObject> figure3Objects = cvutils.processImage(figure3Path, problem.getProblemType());
+                ArrayList<RavensObject> figure4Objects = cvutils.processImage(figure4Path, problem.getProblemType());
+                ArrayList<RavensObject> figure5Objects = cvutils.processImage(figure5Path, problem.getProblemType());
+                ArrayList<RavensObject> figure6Objects = cvutils.processImage(figure6Path, problem.getProblemType());
 
                 for (int f = 0; f < figureAObjects.size(); f++) {
                     allFiguresA.getObjects().add(figureAObjects.get(f));
@@ -224,9 +224,9 @@ public class Agent {
                 String figure5Path = figures.get("5").getPath();
                 String figure6Path = figures.get("6").getPath();
 
-                Frame frameA = new Frame(cvutils.processImage(figureAPath));
-                Frame frameB = new Frame(cvutils.processImage(figureBPath));
-                Frame frameC = new Frame(cvutils.processImage(figureCPath));
+                Frame frameA = new Frame(cvutils.processImage(figureAPath, problem.getProblemType()));
+                Frame frameB = new Frame(cvutils.processImage(figureBPath, problem.getProblemType()));
+                Frame frameC = new Frame(cvutils.processImage(figureCPath, problem.getProblemType()));
 
                 allFiguresA = new RavensFigure("Figure A");
                 allFiguresB = new RavensFigure("Figure B");
@@ -244,15 +244,15 @@ public class Agent {
                 allFigures5 = new RavensFigure("Figure 5");
                 allFigures6 = new RavensFigure("Figure 6");
 
-                ArrayList<RavensObject> figureAObjects = cvutils.processImage(figureAPath);
-                ArrayList<RavensObject> figureBObjects = cvutils.processImage(figureBPath);
-                ArrayList<RavensObject> figureCObjects = cvutils.processImage(figureCPath);
-                ArrayList<RavensObject> figure1Objects = cvutils.processImage(figure1Path);
-                ArrayList<RavensObject> figure2Objects = cvutils.processImage(figure2Path);
-                ArrayList<RavensObject> figure3Objects = cvutils.processImage(figure3Path);
-                ArrayList<RavensObject> figure4Objects = cvutils.processImage(figure4Path);
-                ArrayList<RavensObject> figure5Objects = cvutils.processImage(figure5Path);
-                ArrayList<RavensObject> figure6Objects = cvutils.processImage(figure6Path);
+                ArrayList<RavensObject> figureAObjects = cvutils.processImage(figureAPath, problem.getProblemType());
+                ArrayList<RavensObject> figureBObjects = cvutils.processImage(figureBPath, problem.getProblemType());
+                ArrayList<RavensObject> figureCObjects = cvutils.processImage(figureCPath, problem.getProblemType());
+                ArrayList<RavensObject> figure1Objects = cvutils.processImage(figure1Path, problem.getProblemType());
+                ArrayList<RavensObject> figure2Objects = cvutils.processImage(figure2Path, problem.getProblemType());
+                ArrayList<RavensObject> figure3Objects = cvutils.processImage(figure3Path, problem.getProblemType());
+                ArrayList<RavensObject> figure4Objects = cvutils.processImage(figure4Path, problem.getProblemType());
+                ArrayList<RavensObject> figure5Objects = cvutils.processImage(figure5Path, problem.getProblemType());
+                ArrayList<RavensObject> figure6Objects = cvutils.processImage(figure6Path, problem.getProblemType());
 
                 for (int f = 0; f < figureAObjects.size(); f++) {
                     allFiguresA.getObjects().add(figureAObjects.get(f));

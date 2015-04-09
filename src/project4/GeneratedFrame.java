@@ -880,6 +880,34 @@ public class GeneratedFrame {
                 generatedFrameIFromH.getObjects().get(0).getAttributes().add(3, fillAttribute);
 
 
+        } else if(semanticNetwork.getABTransformations().get(0).getTransformations().get(0).equals("change small to medium") ||
+                semanticNetwork.getBCTransformations().get(0).getTransformations().get(0).equals("change medium to large")) {
+
+
+            RavensObject object = new RavensObject("Z");
+            generatedFrameIFromH.getObjects().add(object);
+
+            for(int j=0; j<semanticNetwork.getFrameH().getObjects().get(0).getAttributes().size(); j++) {
+
+                RavensAttribute attribute = new RavensAttribute(semanticNetwork.getFrameH().getObjects().get(0).getAttributes().get(j).getName(), semanticNetwork.getFrameH().getObjects().get(0).getAttributes().get(j).getValue());
+                generatedFrameIFromH.getObjects().get(0).getAttributes().add(j, attribute);
+
+            }
+
+            String currentSize = semanticNetwork.getFrameH().getObjects().get(0).getAttributes().get(2).getValue();
+
+            if(currentSize == "large") {
+                RavensAttribute attribute = new RavensAttribute("size", "very large");
+                generatedFrameIFromH.getObjects().get(0).getAttributes().set(2, attribute);
+
+            } else if(currentSize == "very large") {
+                RavensAttribute attribute = new RavensAttribute("size", "super large");
+                generatedFrameIFromH.getObjects().get(0).getAttributes().set(2, attribute);
+            } else {
+                RavensAttribute attribute = new RavensAttribute("size", "large");
+                generatedFrameIFromH.getObjects().get(0).getAttributes().set(2, attribute);
+            }
+
         } else if(semanticNetwork.getABTransformations().size() > 0 ||
                 semanticNetwork.getBCTransformations().size() > 0 ||
                 semanticNetwork.getDETransformations().size() > 0 ||
@@ -919,8 +947,6 @@ public class GeneratedFrame {
 
                 RavensAttribute fillAttribute = new RavensAttribute("fill", "yes");
                 generatedFrameIFromH.getObjects().get(0).getAttributes().add(1, fillAttribute);
-
-            } else {
 
             }
 

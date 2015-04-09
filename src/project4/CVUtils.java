@@ -41,7 +41,7 @@ public class CVUtils extends JFrame {
         }
     }
 
-    public static ArrayList<RavensObject> retrieveImageObjects(List<MatOfPoint> contours, Mat hierarchy){
+    public static ArrayList<RavensObject> retrieveImageObjects(List<MatOfPoint> contours, Mat hierarchy, String typeOfProblem){
 
         //Current contour hierarchy
         List<List<String>> hierarchyList = new ArrayList<List<String>>((int)hierarchy.total());
@@ -261,13 +261,35 @@ public class CVUtils extends JFrame {
                 //Check size
                 double squareArea = Imgproc.contourArea(approx);
 
-                if(squareArea < 4400){
-                    RavensAttribute sizeSquare = new RavensAttribute("size" , "small");
-                    ravenObject.getAttributes().add(sizeSquare);
+                if(typeOfProblem.equals("3x3 (Image)")) {
+
+                    if(squareArea < 4400){
+                        RavensAttribute sizeSquare = new RavensAttribute("size" , "small");
+                        ravenObject.getAttributes().add(sizeSquare);
+                    } else if(squareArea > 4400 && squareArea < 7000) {
+                        RavensAttribute sizeSquare = new RavensAttribute("size" , "medium");
+                        ravenObject.getAttributes().add(sizeSquare);
+                    } else if(squareArea > 7000 && squareArea < 11500) {
+                        RavensAttribute sizeSquare = new RavensAttribute("size" , "large");
+                        ravenObject.getAttributes().add(sizeSquare);
+                    } else if(squareArea > 11500 && squareArea < 17500) {
+                        RavensAttribute sizeSquare = new RavensAttribute("size" , "very large");
+                        ravenObject.getAttributes().add(sizeSquare);
+                    } else {
+                        RavensAttribute sizeSquare = new RavensAttribute("size" , "super large");
+                        ravenObject.getAttributes().add(sizeSquare);
+                    }
+
                 } else {
-                    RavensAttribute sizeSquare = new RavensAttribute("size" , "large");
-                    ravenObject.getAttributes().add(sizeSquare);
+                    if(squareArea < 4400){
+                        RavensAttribute sizeSquare = new RavensAttribute("size" , "small");
+                        ravenObject.getAttributes().add(sizeSquare);
+                    } else {
+                        RavensAttribute sizeSquare = new RavensAttribute("size" , "large");
+                        ravenObject.getAttributes().add(sizeSquare);
+                    }
                 }
+
 
                 //check if child
                 if(shapeContourOne && shapeContourTwo) {
@@ -551,7 +573,7 @@ public class CVUtils extends JFrame {
         return ravensObjects;
     }
 
-    public ArrayList<RavensObject> processImage(String imagePath){
+    public ArrayList<RavensObject> processImage(String imagePath, String typeOfProblem){
 
         ArrayList<RavensObject> ravensObjects = null;
 
@@ -565,7 +587,7 @@ public class CVUtils extends JFrame {
 
         Imgproc.findContours(image, contours, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_NONE);
 
-        ravensObjects = retrieveImageObjects(contours, hierarchy);
+        ravensObjects = retrieveImageObjects(contours, hierarchy, typeOfProblem);
 
 //        RotatedRect originalRect = Imgproc.minAreaRect(mop2f);
 
