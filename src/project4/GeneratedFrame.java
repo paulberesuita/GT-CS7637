@@ -849,6 +849,8 @@ public class GeneratedFrame {
                 semanticNetwork.frameH.getObjects().size() == 2) {
 
 
+                //3x3 Problem 4 Type
+
                 RavensObject object = new RavensObject("Z");
                 generatedFrameIFromH.getObjects().add(object);
 
@@ -858,7 +860,7 @@ public class GeneratedFrame {
                 RavensAttribute fillAttribute = new RavensAttribute("fill", "no");
                 generatedFrameIFromH.getObjects().get(0).getAttributes().add(1, fillAttribute);
 
-                RavensAttribute sizeAttribute = new RavensAttribute("size", "large");
+                RavensAttribute sizeAttribute = new RavensAttribute("size", "super large");
                 generatedFrameIFromH.getObjects().get(0).getAttributes().add(2, sizeAttribute);
 
                 RavensAttribute angleAttribute = new RavensAttribute("angle", "0");
@@ -883,6 +885,7 @@ public class GeneratedFrame {
         } else if(semanticNetwork.getABTransformations().get(0).getTransformations().get(0).equals("change small to medium") ||
                 semanticNetwork.getBCTransformations().get(0).getTransformations().get(0).equals("change medium to large")) {
 
+            //3x3 Problem 7 Type
 
             RavensObject object = new RavensObject("Z");
             generatedFrameIFromH.getObjects().add(object);
