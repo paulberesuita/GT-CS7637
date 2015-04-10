@@ -834,11 +834,99 @@ public class GeneratedFrame {
                 }
             }
 
-        } else if((semanticNetwork.getABTransformations().size() > 0 ||
-                semanticNetwork.getBCTransformations().size() > 0 ||
-                semanticNetwork.getDETransformations().size() > 0 ||
-                semanticNetwork.getEFTransformations().size() > 0 ||
-                semanticNetwork.getGHTransformations().size() > 0) &&
+        } else if(semanticNetwork.frameA.getObjects().size() == 2 &&
+                semanticNetwork.frameB.getObjects().size() == 2 &&
+                semanticNetwork.frameC.getObjects().size() == 2 &&
+                semanticNetwork.frameD.getObjects().size() == 2 &&
+                semanticNetwork.frameE.getObjects().size() == 2 &&
+                semanticNetwork.frameF.getObjects().size() == 2 &&
+                semanticNetwork.frameG.getObjects().size() == 2 &&
+                semanticNetwork.frameH.getObjects().size() == 2 && !((semanticNetwork.frameA.getObjects().get(0).getAttributes().get(0).getValue().equals(semanticNetwork.frameB.getObjects().get(0).getAttributes().get(0).getValue()) &&
+                semanticNetwork.frameB.getObjects().get(0).getAttributes().get(0).getValue().equals(semanticNetwork.frameC.getObjects().get(0).getAttributes().get(0).getValue())) ) &&
+                ( (semanticNetwork.frameA.getObjects().get(0).getAttributes().get(0).getValue().equals("circle") &&
+                        semanticNetwork.frameB.getObjects().get(0).getAttributes().get(0).getValue().equals("circle"))  ||
+                        (semanticNetwork.frameB.getObjects().get(0).getAttributes().get(0).getValue().equals("circle") &&
+                                semanticNetwork.frameC.getObjects().get(0).getAttributes().get(0).getValue().equals("circle"))  ||
+                        (semanticNetwork.frameA.getObjects().get(0).getAttributes().get(0).getValue().equals("circle") &&
+                                semanticNetwork.frameC.getObjects().get(0).getAttributes().get(0).getValue().equals("circle")) )    ) {
+
+
+            //Problem 5 Type
+
+            //Get each shape of the frame
+            String frameAShapeOuter = semanticNetwork.frameA.getObjects().get(0).getAttributes().get(0).getValue();
+            String frameBShapeOuter = semanticNetwork.frameB.getObjects().get(0).getAttributes().get(0).getValue();
+            String frameCShapeOuter = semanticNetwork.frameC.getObjects().get(0).getAttributes().get(0).getValue();
+            String frameAShapeInner = semanticNetwork.frameA.getObjects().get(1).getAttributes().get(0).getValue();
+            String frameBShapeInner = semanticNetwork.frameB.getObjects().get(1).getAttributes().get(0).getValue();
+            String frameCShapeInner = semanticNetwork.frameC.getObjects().get(1).getAttributes().get(0).getValue();
+
+            String frameGShapeOuter = semanticNetwork.frameG.getObjects().get(0).getAttributes().get(0).getValue();
+            String frameHShapeOuter = semanticNetwork.frameH.getObjects().get(0).getAttributes().get(0).getValue();
+            String frameGShapeInner = semanticNetwork.frameG.getObjects().get(1).getAttributes().get(0).getValue();
+            String frameHShapeInner = semanticNetwork.frameH.getObjects().get(1).getAttributes().get(0).getValue();
+
+            String outerObjectToadd = "";
+
+            //Get object to add
+            if(!frameAShapeOuter.equals("circle")) {
+                outerObjectToadd = frameAShapeOuter;
+            } else if(!frameBShapeOuter.equals("circle")) {
+                outerObjectToadd = frameBShapeOuter;
+            } else {
+                outerObjectToadd = frameCShapeOuter;
+            }
+
+
+            //Detecting outer object
+            if(frameGShapeOuter.equals("circle") && frameHShapeOuter.equals("circle")) {
+
+                RavensObject object = new RavensObject("Z");
+                generatedFrameIFromH.getObjects().add(object);
+
+                RavensAttribute squareAttribute = new RavensAttribute("shape", outerObjectToadd);
+                generatedFrameIFromH.getObjects().get(0).getAttributes().add(0, squareAttribute);
+
+
+            } else if(frameGShapeOuter.equals("circle") || frameHShapeOuter.equals("circle")) {
+
+                RavensObject object = new RavensObject("Z");
+                generatedFrameIFromH.getObjects().add(object);
+
+                RavensAttribute squareAttribute = new RavensAttribute("shape", "circle");
+                generatedFrameIFromH.getObjects().get(0).getAttributes().add(0, squareAttribute);
+            }
+
+
+            //Detecting Inner Object
+            if(!(frameAShapeInner.equals(frameGShapeInner) || frameAShapeInner.equals(frameHShapeInner))) {
+
+                RavensObject object = new RavensObject("Z");
+                generatedFrameIFromH.getObjects().add(object);
+
+                RavensAttribute squareAttribute = new RavensAttribute("shape", frameAShapeInner);
+                generatedFrameIFromH.getObjects().get(1).getAttributes().add(0, squareAttribute);
+
+            } else if(!(frameBShapeInner.equals(frameGShapeInner) || frameBShapeInner.equals(frameHShapeInner))) {
+
+                RavensObject object = new RavensObject("Z");
+                generatedFrameIFromH.getObjects().add(object);
+
+                RavensAttribute squareAttribute = new RavensAttribute("shape", frameBShapeInner);
+                generatedFrameIFromH.getObjects().get(1).getAttributes().add(0, squareAttribute);
+
+            } else {
+
+                RavensObject object = new RavensObject("Z");
+                generatedFrameIFromH.getObjects().add(object);
+
+                RavensAttribute squareAttribute = new RavensAttribute("shape", frameCShapeInner);
+                generatedFrameIFromH.getObjects().get(1).getAttributes().add(0, squareAttribute);
+            }
+
+
+        } else if(((semanticNetwork.frameA.getObjects().get(0).getAttributes().get(0).getValue().equals(semanticNetwork.frameB.getObjects().get(0).getAttributes().get(0).getValue()) &&
+                semanticNetwork.frameB.getObjects().get(0).getAttributes().get(0).getValue().equals(semanticNetwork.frameC.getObjects().get(0).getAttributes().get(0).getValue())) ) &&
                 semanticNetwork.frameA.getObjects().size() == 2 &&
                 semanticNetwork.frameB.getObjects().size() == 2 &&
                 semanticNetwork.frameC.getObjects().size() == 2 &&
@@ -882,7 +970,7 @@ public class GeneratedFrame {
                 generatedFrameIFromH.getObjects().get(0).getAttributes().add(3, fillAttribute);
 
 
-        } else if(semanticNetwork.getABTransformations().get(0).getTransformations().get(0).equals("change small to medium") ||
+        }  else if(semanticNetwork.getABTransformations().get(0).getTransformations().get(0).equals("change small to medium") ||
                 semanticNetwork.getBCTransformations().get(0).getTransformations().get(0).equals("change medium to large")) {
 
             //3x3 Problem 7 Type
