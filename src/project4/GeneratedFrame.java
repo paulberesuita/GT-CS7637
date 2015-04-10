@@ -814,11 +814,29 @@ public class GeneratedFrame {
     public void performTransformationFromH(){
 
         //Checking if there no transformation horizontally which will also mean vertically
-        if( semanticNetwork.getABTransformations().size() == 0 &&
-            semanticNetwork.getBCTransformations().size() == 0 &&
-            semanticNetwork.getDETransformations().size() == 0 &&
-            semanticNetwork.getEFTransformations().size() == 0 &&
-            semanticNetwork.getGHTransformations().size() == 0){
+        if( semanticNetwork.frameA.getObjects().get(0).getAttributes().get(0).getValue().equals(semanticNetwork.frameB.getObjects().get(0).getAttributes().get(0).getValue()) &&
+                semanticNetwork.frameB.getObjects().get(0).getAttributes().get(0).getValue().equals(semanticNetwork.frameC.getObjects().get(0).getAttributes().get(0).getValue()) &&
+                semanticNetwork.frameC.getObjects().get(0).getAttributes().get(0).getValue().equals(semanticNetwork.frameD.getObjects().get(0).getAttributes().get(0).getValue()) &&
+                semanticNetwork.frameD.getObjects().get(0).getAttributes().get(0).getValue().equals(semanticNetwork.frameE.getObjects().get(0).getAttributes().get(0).getValue()) &&
+                semanticNetwork.frameE.getObjects().get(0).getAttributes().get(0).getValue().equals(semanticNetwork.frameF.getObjects().get(0).getAttributes().get(0).getValue()) &&
+                semanticNetwork.frameF.getObjects().get(0).getAttributes().get(0).getValue().equals(semanticNetwork.frameG.getObjects().get(0).getAttributes().get(0).getValue()) &&
+                semanticNetwork.frameG.getObjects().get(0).getAttributes().get(0).getValue().equals(semanticNetwork.frameH.getObjects().get(0).getAttributes().get(0).getValue()) &&
+                semanticNetwork.frameA.getObjects().get(0).getAttributes().get(2).getValue().equals(semanticNetwork.frameB.getObjects().get(0).getAttributes().get(2).getValue()) &&
+                semanticNetwork.frameB.getObjects().get(0).getAttributes().get(2).getValue().equals(semanticNetwork.frameC.getObjects().get(0).getAttributes().get(2).getValue()) &&
+                semanticNetwork.frameC.getObjects().get(0).getAttributes().get(2).getValue().equals(semanticNetwork.frameD.getObjects().get(0).getAttributes().get(2).getValue()) &&
+                semanticNetwork.frameD.getObjects().get(0).getAttributes().get(2).getValue().equals(semanticNetwork.frameE.getObjects().get(0).getAttributes().get(2).getValue()) &&
+                semanticNetwork.frameE.getObjects().get(0).getAttributes().get(2).getValue().equals(semanticNetwork.frameF.getObjects().get(0).getAttributes().get(2).getValue()) &&
+                semanticNetwork.frameF.getObjects().get(0).getAttributes().get(2).getValue().equals(semanticNetwork.frameG.getObjects().get(0).getAttributes().get(2).getValue()) &&
+                semanticNetwork.frameG.getObjects().get(0).getAttributes().get(2).getValue().equals(semanticNetwork.frameH.getObjects().get(0).getAttributes().get(2).getValue()) &&
+                semanticNetwork.frameA.getObjects().size() == 1 &&
+                semanticNetwork.frameB.getObjects().size() == 1 &&
+                semanticNetwork.frameC.getObjects().size() == 1 &&
+                semanticNetwork.frameD.getObjects().size() == 1 &&
+                semanticNetwork.frameF.getObjects().size() == 1 &&
+                semanticNetwork.frameG.getObjects().size() == 1 &&
+                semanticNetwork.frameH.getObjects().size() == 1){
+
+            //3x3 Problem Type 1
 
 //            generatedFrameIFromH.getObjects().add(object);
             for(int i=0; i<semanticNetwork.getFrameH().getObjects().size(); i++) {
@@ -833,6 +851,57 @@ public class GeneratedFrame {
 
                 }
             }
+
+        } else if( semanticNetwork.frameA.getObjects().get(0).getAttributes().get(0).getValue().equals(semanticNetwork.frameB.getObjects().get(0).getAttributes().get(0).getValue()) &&
+                semanticNetwork.frameB.getObjects().get(0).getAttributes().get(0).getValue().equals(semanticNetwork.frameC.getObjects().get(0).getAttributes().get(0).getValue()) &&
+                semanticNetwork.frameD.getObjects().get(0).getAttributes().get(0).getValue().equals(semanticNetwork.frameE.getObjects().get(0).getAttributes().get(0).getValue()) &&
+                semanticNetwork.frameE.getObjects().get(0).getAttributes().get(0).getValue().equals(semanticNetwork.frameF.getObjects().get(0).getAttributes().get(0).getValue()) &&
+                semanticNetwork.frameG.getObjects().get(0).getAttributes().get(0).getValue().equals(semanticNetwork.frameH.getObjects().get(0).getAttributes().get(0).getValue()) &&
+                semanticNetwork.frameA.getObjects().get(0).getAttributes().get(2).getValue().equals(semanticNetwork.frameB.getObjects().get(0).getAttributes().get(2).getValue()) &&
+                semanticNetwork.frameB.getObjects().get(0).getAttributes().get(2).getValue().equals(semanticNetwork.frameC.getObjects().get(0).getAttributes().get(2).getValue()) &&
+                semanticNetwork.frameD.getObjects().get(0).getAttributes().get(2).getValue().equals(semanticNetwork.frameE.getObjects().get(0).getAttributes().get(2).getValue()) &&
+                semanticNetwork.frameE.getObjects().get(0).getAttributes().get(2).getValue().equals(semanticNetwork.frameF.getObjects().get(0).getAttributes().get(2).getValue()) &&
+                semanticNetwork.frameG.getObjects().get(0).getAttributes().get(2).getValue().equals(semanticNetwork.frameH.getObjects().get(0).getAttributes().get(2).getValue()) &&
+                semanticNetwork.frameA.getObjects().size() == 1 &&
+                semanticNetwork.frameB.getObjects().size() == 1 &&
+                semanticNetwork.frameC.getObjects().size() == 1 &&
+                semanticNetwork.frameD.getObjects().size() == 1 &&
+                semanticNetwork.frameF.getObjects().size() == 1 &&
+                semanticNetwork.frameG.getObjects().size() == 1 &&
+                semanticNetwork.frameH.getObjects().size() == 1){
+
+            //3x3 Problem Type 2
+
+//            generatedFrameIFromH.getObjects().add(object);
+            for(int i=0; i<semanticNetwork.getFrameH().getObjects().size(); i++) {
+
+                RavensObject object = new RavensObject("Z");
+                generatedFrameIFromH.getObjects().add(object);
+
+                for(int j=0; j<semanticNetwork.getFrameH().getObjects().get(0).getAttributes().size(); j++) {
+
+                    RavensAttribute attribute = new RavensAttribute(semanticNetwork.getFrameH().getObjects().get(0).getAttributes().get(j).getName(), semanticNetwork.getFrameH().getObjects().get(0).getAttributes().get(j).getValue());
+                    generatedFrameIFromH.getObjects().get(0).getAttributes().add(j, attribute);
+
+                }
+            }
+
+        } else if(semanticNetwork.frameA.getObjects().size() == 1 && semanticNetwork.frameB.getObjects().size() ==2 && semanticNetwork.frameD.getObjects().size() ==2  && semanticNetwork.frameC.getObjects().size() == 3 && semanticNetwork.frameG.getObjects().size() == 3) {
+
+                //3x3 Problem Type 6
+
+                String frameGShape = semanticNetwork.frameH.getObjects().get(0).getAttributes().get(0).getValue();
+                int objectsInG = semanticNetwork.frameH.getObjects().size();
+
+                for(int i=0; i<objectsInG + 1; i++) {
+
+                    RavensObject object = new RavensObject("Z");
+                    generatedFrameIFromH.getObjects().add(object);
+
+                    RavensAttribute squareAttribute = new RavensAttribute("shape", frameGShape);
+                    generatedFrameIFromH.getObjects().get(0).getAttributes().add(0, squareAttribute);
+                }
+
 
         } else if(semanticNetwork.frameA.getObjects().size() == 2 &&
                 semanticNetwork.frameB.getObjects().size() == 2 &&
