@@ -903,6 +903,78 @@ public class GeneratedFrame {
                 }
 
 
+        } else if(semanticNetwork.frameA.getObjects().size() == 1 &&
+                semanticNetwork.frameB.getObjects().size() == 1 &&
+                semanticNetwork.frameC.getObjects().size() == 1 &&
+                semanticNetwork.frameD.getObjects().size() == 1 &&
+                semanticNetwork.frameE.getObjects().size() == 1 &&
+                semanticNetwork.frameF.getObjects().size() == 1 &&
+                semanticNetwork.frameG.getObjects().size() == 1 &&
+                semanticNetwork.frameH.getObjects().size() == 1 && (semanticNetwork.frameA.getObjects().get(0).getAttributes().get(2).getValue().equals("large") || semanticNetwork.frameA.getObjects().get(0).getAttributes().get(2).getValue().equals("medium")) &&
+                ( !semanticNetwork.frameA.getObjects().get(0).getAttributes().get(2).getValue().equals(semanticNetwork.frameB.getObjects().get(0).getAttributes().get(2).getValue()) &&
+                  !semanticNetwork.frameB.getObjects().get(0).getAttributes().get(2).getValue().equals(semanticNetwork.frameC.getObjects().get(0).getAttributes().get(2).getValue()) &&
+                  !semanticNetwork.frameA.getObjects().get(0).getAttributes().get(2).getValue().equals(semanticNetwork.frameC.getObjects().get(0).getAttributes().get(2).getValue()) )  ) {
+
+
+            //3x3 Problem 8 Type - Frame A can be medium or large; it does not have to begin with small
+
+            System.out.print("problem 8 type");
+
+            String sizeOfFrameA = semanticNetwork.frameA.getObjects().get(0).getAttributes().get(2).getValue();
+            String sizeOfFrameB = semanticNetwork.frameB.getObjects().get(0).getAttributes().get(2).getValue();
+            String sizeOfFrameC = semanticNetwork.frameC.getObjects().get(0).getAttributes().get(2).getValue();
+
+            String sizeOfFrameG = semanticNetwork.frameA.getObjects().get(0).getAttributes().get(2).getValue();
+            String sizeOfFrameH = semanticNetwork.frameB.getObjects().get(0).getAttributes().get(2).getValue();
+
+            String shapeOfG = semanticNetwork.frameA.getObjects().get(0).getAttributes().get(0).getValue();
+            String fillOfG = semanticNetwork.frameA.getObjects().get(0).getAttributes().get(1).getValue();
+
+            if(!(sizeOfFrameA.equals(sizeOfFrameG) && sizeOfFrameA.equals(sizeOfFrameH))) {
+
+                RavensObject object = new RavensObject("Z");
+                generatedFrameIFromH.getObjects().add(object);
+
+                RavensAttribute shapeAttribute = new RavensAttribute("shape", shapeOfG);
+                generatedFrameIFromH.getObjects().get(0).getAttributes().add(0, shapeAttribute);
+
+                RavensAttribute fillAttribute = new RavensAttribute("fill", fillOfG);
+                generatedFrameIFromH.getObjects().get(0).getAttributes().add(1, fillAttribute);
+
+                RavensAttribute sizeAttribute = new RavensAttribute("size", sizeOfFrameA);
+                generatedFrameIFromH.getObjects().get(0).getAttributes().add(0, sizeAttribute);
+
+            } else if(!(sizeOfFrameB.equals(sizeOfFrameG) && sizeOfFrameB.equals(sizeOfFrameH))) {
+
+                RavensObject object = new RavensObject("Z");
+                generatedFrameIFromH.getObjects().add(object);
+
+                RavensAttribute shapeAttribute = new RavensAttribute("shape", shapeOfG);
+                generatedFrameIFromH.getObjects().get(0).getAttributes().add(0, shapeAttribute);
+
+                RavensAttribute fillAttribute = new RavensAttribute("fill", fillOfG);
+                generatedFrameIFromH.getObjects().get(0).getAttributes().add(1, fillAttribute);
+
+                RavensAttribute sizeAttribute = new RavensAttribute("size", sizeOfFrameB);
+                generatedFrameIFromH.getObjects().get(0).getAttributes().add(0, sizeAttribute);
+
+            } else {
+
+                RavensObject object = new RavensObject("Z");
+                generatedFrameIFromH.getObjects().add(object);
+
+                RavensAttribute shapeAttribute = new RavensAttribute("shape", shapeOfG);
+                generatedFrameIFromH.getObjects().get(0).getAttributes().add(0, shapeAttribute);
+
+                RavensAttribute fillAttribute = new RavensAttribute("fill", fillOfG);
+                generatedFrameIFromH.getObjects().get(0).getAttributes().add(1, fillAttribute);
+
+                RavensAttribute sizeAttribute = new RavensAttribute("size", sizeOfFrameC);
+                generatedFrameIFromH.getObjects().get(0).getAttributes().add(0, sizeAttribute);
+
+            }
+
+
         } else if(semanticNetwork.frameA.getObjects().size() == 2 &&
                 semanticNetwork.frameB.getObjects().size() == 2 &&
                 semanticNetwork.frameC.getObjects().size() == 2 &&
@@ -1113,6 +1185,18 @@ public class GeneratedFrame {
 
         } else {
             //GENERATE A GENERAL SOLUTION
+            for(int i=0; i<semanticNetwork.getFrameH().getObjects().size(); i++) {
+
+                RavensObject object = new RavensObject("Z");
+                generatedFrameIFromH.getObjects().add(object);
+
+                for(int j=0; j<semanticNetwork.getFrameH().getObjects().get(0).getAttributes().size(); j++) {
+
+                    RavensAttribute attribute = new RavensAttribute(semanticNetwork.getFrameH().getObjects().get(0).getAttributes().get(j).getName(), semanticNetwork.getFrameH().getObjects().get(0).getAttributes().get(j).getValue());
+                    generatedFrameIFromH.getObjects().get(0).getAttributes().add(j, attribute);
+
+                }
+            }
         }
     }
 

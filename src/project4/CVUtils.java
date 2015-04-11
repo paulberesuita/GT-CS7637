@@ -520,13 +520,31 @@ public class CVUtils extends JFrame {
                 //Check size
                 double circleArea = Imgproc.contourArea(approx);
 
-                if(circleArea < 6000){
-                    RavensAttribute sizeCircle = new RavensAttribute("size" , "small");
-                    ravenObject.getAttributes().add(sizeCircle);
+                if(typeOfProblem.equals("3x3 (Image)")) {
+
+                    if(circleArea < 6000){
+                        RavensAttribute sizeCircle = new RavensAttribute("size" , "small");
+                        ravenObject.getAttributes().add(sizeCircle);
+                    }
+                    else if(circleArea > 5000 && circleArea < 7000) {
+                        RavensAttribute sizeCircle = new RavensAttribute("size" , "medium");
+                        ravenObject.getAttributes().add(sizeCircle);
+                    }
+                    else {
+                        RavensAttribute sizeCircle = new RavensAttribute("size" , "large");
+                        ravenObject.getAttributes().add(sizeCircle);
+                    }
+
                 } else {
-                    RavensAttribute sizeCircle = new RavensAttribute("size" , "large");
-                    ravenObject.getAttributes().add(sizeCircle);
+                    if(circleArea < 6000){
+                        RavensAttribute sizeCircle = new RavensAttribute("size" , "small");
+                        ravenObject.getAttributes().add(sizeCircle);
+                    } else {
+                        RavensAttribute sizeCircle = new RavensAttribute("size" , "large");
+                        ravenObject.getAttributes().add(sizeCircle);
+                    }
                 }
+
 
                 //check if child
                 if(shapeContourOne && shapeContourTwo) {
