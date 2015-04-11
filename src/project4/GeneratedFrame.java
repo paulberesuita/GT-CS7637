@@ -886,7 +886,10 @@ public class GeneratedFrame {
                 }
             }
 
-        } else if(semanticNetwork.frameA.getObjects().size() == 1 && semanticNetwork.frameB.getObjects().size() ==2 && semanticNetwork.frameD.getObjects().size() ==2  && semanticNetwork.frameC.getObjects().size() == 3 && semanticNetwork.frameG.getObjects().size() == 3) {
+        } else if(semanticNetwork.frameB.getObjects().size() == semanticNetwork.frameA.getObjects().size() + 1 &&
+                  semanticNetwork.frameC.getObjects().size() == semanticNetwork.frameA.getObjects().size() + 2 &&
+                  semanticNetwork.frameE.getObjects().size() ==  semanticNetwork.frameD.getObjects().size() + 1 &&
+                  semanticNetwork.frameF.getObjects().size() ==  semanticNetwork.frameD.getObjects().size() + 2 ) {
 
                 //3x3 Problem Type 6
 
@@ -1165,6 +1168,32 @@ public class GeneratedFrame {
             int objectsInFramH = semanticNetwork.getFrameH().getObjects().size();
 
             for(int i=0; i<objectsInFramH-1; i++) {
+
+                RavensObject object = new RavensObject("Z");
+                generatedFrameIFromH.getObjects().add(object);
+
+                RavensAttribute shapeAttribute = new RavensAttribute("shape", shapeOfFrameH);
+                generatedFrameIFromH.getObjects().get(i).getAttributes().add(0, shapeAttribute);
+
+            }
+
+
+        } else if(semanticNetwork.frameB.getObjects().size() == semanticNetwork.frameA.getObjects().size() + semanticNetwork.frameA.getObjects().size() &&
+                semanticNetwork.frameC.getObjects().size() == semanticNetwork.frameA.getObjects().size() + semanticNetwork.frameA.getObjects().size() + semanticNetwork.frameA.getObjects().size() &&
+                semanticNetwork.frameE.getObjects().size() == semanticNetwork.frameD.getObjects().size() + semanticNetwork.frameD.getObjects().size() &&
+                semanticNetwork.frameF.getObjects().size() == semanticNetwork.frameD.getObjects().size() + semanticNetwork.frameD.getObjects().size() + semanticNetwork.frameD.getObjects().size() &&
+                semanticNetwork.frameA.getObjects().get(0).getAttributes().get(0).getValue().equals(semanticNetwork.frameB.getObjects().get(0).getAttributes().get(0).getValue()) &&
+                semanticNetwork.frameB.getObjects().get(0).getAttributes().get(0).getValue().equals(semanticNetwork.frameC.getObjects().get(0).getAttributes().get(0).getValue()) ) {
+
+            //3x3 Problem 9 Type - Frame A, B, C size increase by the initial count and they are the same shape
+
+            String shapeOfFrameH = semanticNetwork.getFrameH().getObjects().get(0).getAttributes().get(0).getValue();
+
+            int objectsInFramG = semanticNetwork.getFrameG().getObjects().size();
+
+            int count = objectsInFramG + objectsInFramG + objectsInFramG;
+
+            for(int i=0; i<count; i++) {
 
                 RavensObject object = new RavensObject("Z");
                 generatedFrameIFromH.getObjects().add(object);
