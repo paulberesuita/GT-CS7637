@@ -1111,8 +1111,20 @@ public class GeneratedFrame {
                 generatedFrameIFromH.getObjects().get(0).getAttributes().add(3, fillAttribute);
 
 
-        }  else if(semanticNetwork.getABTransformations().get(0).getTransformations().get(0).equals("change small to medium") ||
-                semanticNetwork.getBCTransformations().get(0).getTransformations().get(0).equals("change medium to large")) {
+        } else if(semanticNetwork.frameA.getObjects().size() == 1 &&
+                semanticNetwork.frameB.getObjects().size() == 1 &&
+                semanticNetwork.frameC.getObjects().size() == 1 &&
+                semanticNetwork.frameD.getObjects().size() == 1 &&
+                semanticNetwork.frameE.getObjects().size() == 1 &&
+                semanticNetwork.frameF.getObjects().size() == 1 &&
+                semanticNetwork.frameG.getObjects().size() == 1 &&
+                semanticNetwork.frameH.getObjects().size() == 1 &&
+                ( !semanticNetwork.frameA.getObjects().get(0).getAttributes().get(2).getValue().equals(semanticNetwork.frameB.getObjects().get(0).getAttributes().get(2).getValue()) &&
+                        !semanticNetwork.frameB.getObjects().get(0).getAttributes().get(2).getValue().equals(semanticNetwork.frameC.getObjects().get(0).getAttributes().get(2).getValue()) &&
+                        !semanticNetwork.frameA.getObjects().get(0).getAttributes().get(2).getValue().equals(semanticNetwork.frameC.getObjects().get(0).getAttributes().get(2).getValue()) ) ) {
+
+//        else if(semanticNetwork.getABTransformations().get(0).getTransformations().get(0).equals("change small to medium") ||
+//                semanticNetwork.getBCTransformations().get(0).getTransformations().get(0).equals("change medium to large")) {
 
             //3x3 Problem 7 Type
 
@@ -1139,6 +1151,29 @@ public class GeneratedFrame {
                 RavensAttribute attribute = new RavensAttribute("size", "large");
                 generatedFrameIFromH.getObjects().get(0).getAttributes().set(2, attribute);
             }
+
+        } else if(semanticNetwork.frameA.getObjects().size() == 4 &&
+                semanticNetwork.frameB.getObjects().size() == 3 &&
+                semanticNetwork.frameC.getObjects().size() == 2 &&
+                semanticNetwork.frameA.getObjects().get(0).getAttributes().get(0).getValue().equals(semanticNetwork.frameB.getObjects().get(0).getAttributes().get(0).getValue()) &&
+                semanticNetwork.frameB.getObjects().get(0).getAttributes().get(0).getValue().equals(semanticNetwork.frameC.getObjects().get(0).getAttributes().get(0).getValue()) ) {
+
+            //3x3 Problem 10 Type - Frame A, B, C size decrease by 1 and they are the same shape
+
+            String shapeOfFrameH = semanticNetwork.getFrameH().getObjects().get(0).getAttributes().get(0).getValue();
+
+            int objectsInFramH = semanticNetwork.getFrameH().getObjects().size();
+
+            for(int i=0; i<objectsInFramH-1; i++) {
+
+                RavensObject object = new RavensObject("Z");
+                generatedFrameIFromH.getObjects().add(object);
+
+                RavensAttribute shapeAttribute = new RavensAttribute("shape", shapeOfFrameH);
+                generatedFrameIFromH.getObjects().get(i).getAttributes().add(0, shapeAttribute);
+
+            }
+
 
         } else if(semanticNetwork.getABTransformations().size() > 0 ||
                 semanticNetwork.getBCTransformations().size() > 0 ||

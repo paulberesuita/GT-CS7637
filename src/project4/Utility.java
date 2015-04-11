@@ -392,6 +392,9 @@ public class Utility {
         if(solution == 1) {
             System.out.println("Return: " + solution);
             return "1";
+        } else if(solution == 0) {
+            System.out.println("Return: " + solution);
+            return "1";
         } else if(solution == 2) {
             System.out.println("Return: " + solution);
             return "2";
