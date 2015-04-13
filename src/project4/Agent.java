@@ -64,8 +64,6 @@ public class Agent {
 
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
-//        if (problem.getName().equals("3x3 Basic Problem 03")) {
-
             //Get All figures
             HashMap<String, VisualRavensFigure> figures = problem.getFigures();
 
@@ -337,8 +335,6 @@ public class Agent {
                 System.out.println("Finished Running 3x3 Problems");
 
             }
-
-//        } //Specific Problem
 
         return solution;
     }
